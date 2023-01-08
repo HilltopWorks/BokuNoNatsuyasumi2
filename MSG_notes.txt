@@ -1,0 +1,10 @@
+MSG (MAP.1):
+
+Header:
+[int num tables] [0xC table entry]
+
+Table Entry:
+[int ???]
+[short table size]
+[short ??(id?)]
+[int table offset]
