@@ -7,6 +7,9 @@ import polib
 MAP_DIR = "MAP_RIP"
 MAP_SCRIPT_DIR = "SCRIPT/MAP"
 
+IMG_DIR = "IMG_RIP"
+IMG_SCRIPT_DIR ="SCRIPT/IMG" 
+
 false_positives = ['  {STOP}', '、 輪{STOP}', '、 ♂{STOP}', '゜ ;?{STOP}', '、 路{STOP}', '、 ユ{STOP}', '、 告{STOP}', '゜ マ告{STOP}', '、 航{STOP}', '、 ム{STOP}',
 '゜ 路マ{STOP}', '゜ マユ{STOP}', ', マ値修{STOP}', '、 修{STOP}', '. マ値修゛{STOP}', '、 狭{STOP}', '゜ 狭ユ{STOP}', '、 ゛{STOP}', '、 蒸{STOP}', '、 ゜{STOP}', '゜ メ辞{STOP}', '、 辞{STOP}', '、 勘{STOP}', '゜ 勘詳{STOP}',
 '・ 的狭ユ;?{STOP}', '、 マ{STOP}', '゜ ゜詳{STOP}', '、 ,{STOP}', '゜ 的商{STOP}', '゜ 商マ{STOP}', '、 商{STOP}', '゜ 商!{STOP}', '、 戻{STOP}', '、 働{STOP}', '゜ 的働{STOP}', '゜ 戻マ{STOP}', '゜ 戻的{STOP}', '、 然{STOP}',
@@ -18,6 +21,33 @@ false_positives = ['  {STOP}', '、 輪{STOP}', '、 ♂{STOP}', '゜ ;?{STOP}',
 '゜ ヤマ{STOP}', '、  {STOP}', '、 力{STOP}', '、 郎{STOP}', '、 勝{STOP}', '゜ ～郎{STOP}', '゜ 怖勝{STOP}', '゜ 輪勝{STOP}', '゜ ラ～{STOP}', '゜  詳{STOP}', '、 』{STOP}', '、 儲{STOP}', '、 …{STOP}', '゜ _ラ{STOP}',
 '、 々{STOP}', '゜ ?ユ{STOP}', '、 警{STOP}', '、 /{STOP}', '゜ /詳{STOP}', ', 々 ゛{STOP}', '゜ 詳±{STOP}', '゜  警{STOP}', '. ↓012{STOP}', '゜ !ョ{STOP}', '産伸儲;#労汽、二 {STOP}']
 
+IMG_MSG_FILES = ["fish\\fishing.msg",
+                "system\\system.msg",
+                "system\\eat\\eat.msg",
+                "system\\namemsg\\namemsg.msg",
+                "system\\namemsg\\quiz.msg",
+                "system\\submenu\\memories.msg",
+                "system\\submenu\\fish\\fish_info.msg",
+                "system\\submenu\\fish\\fish_menu.msg",
+                "system\\submenu\\fish\\fish_name.msg",
+                "system\\submenu\\fish\\turi_info.msg",
+                "system\\submenu\\insect\\insect_cage.msg",
+                "system\\submenu\\insect\\insect_menu.msg",
+                "system\\submenu\\insect\\insect_name.msg",
+                "system\\submenu\\insect\\memo_name.msg",
+                "system\\submenu\\insect\\nick_name_a.msg",
+                "system\\submenu\\insect\\nick_name_b.msg",
+                "system\\submenu\\insect\\nick_name_menu.msg",
+                "system\\submenu\\item\\item.msg",
+                "system\\submenu\\item\\item_info.msg",
+                "system\\submenu\\item\\item_name.msg",
+                "system\\submenu\\item\\okan_info.msg",
+                "system\\submenu\\item\\phot_info.msg",
+                "system\\submenu\\msg\\config\\config.msg",
+                "system\\wrestling\\msg\\technique.msg"
+             ]
+
+#Dictionary modes
 INSERTION = 0
 EXTRACTION = 1
 
@@ -27,16 +57,9 @@ MSG_MODE = 1 #Single-table file
 
 NULL_ENTRY = -1
 
-class MAP:
-    def __init__(self):
-        self.this = "ok"
-
-class MSG:
-    def __init__(self, lines):
-        self.lines = lines
-        
 
 def unpackMapMSG(path):
+    '''Converts a binary MAP MSG file into a list of MSG list objects [[Table params],[MSG LIST]]'''
     f = open(path, 'rb')
 
     numTables = resource.readInt(f)
@@ -48,13 +71,20 @@ def unpackMapMSG(path):
         magic2 = resource.readShort(f)
         tableOffset = resource.readShort(f)
         f.seek(tableOffset)
-        msg = readMSG(path, tableOffset, tableSize)
+        msg = readMSG(path, tableOffset, tableSize, MAP_MODE)
         msgs.append(msg)
     f.close()
 
     return msgs
 
-def readMSG(filepath, offset, tableSize):
+def unpackMSG(path):
+    '''Converts a binary IMG MSG file into a MSG list object '''
+    tableSize = os.stat(path).st_size
+    msg = readMSG(path, 0, tableSize, MSG_MODE)
+    return msg
+
+def readMSG(filepath, offset, tableSize, mode):
+    '''Turns a MSG at given offset into a file and returns list of lines'''
     f = open(filepath, 'rb')
     f.seek(offset)
     msgs = []
@@ -63,7 +93,10 @@ def readMSG(filepath, offset, tableSize):
 
     #Get line starts
     for x in range(n_entries):
-        f.seek(offset + 4 + x*0x4)
+        if mode == MAP_MODE:
+            f.seek(offset + 4 + x*0x4)
+        elif mode == MSG_MODE:
+            f.seek(offset + 4 + x*0x8)
         start_offset = resource.readInt(f)
         
         starts.append(start_offset)
@@ -94,6 +127,7 @@ def readMSG(filepath, offset, tableSize):
     return msgs
 
 def readFont(path, startval, mode):
+    '''Converts a font into a TBL dictionary for injection or extraction'''
     font = open(path, "r", encoding="utf-8")
     dict = {}
 
@@ -117,6 +151,7 @@ def readFont(path, startval, mode):
 
 
 def convertRawToText(dict, raw):
+    '''binary -> string'''
     string = ""
     bytes_read = 0
     while True:
@@ -139,6 +174,7 @@ def convertRawToText(dict, raw):
     return string
 
 def convertTextToRaw(dict, text):
+    '''string -> binary'''
     buffer = b""
 
     while True:
@@ -171,18 +207,9 @@ def convertTextToRaw(dict, text):
     
     return buffer + b'\x00\x80'
 
-
-def testConvert(hex):
-    dict = readFont("font.txt",0, EXTRACTION)
-    dict[0x8001] = "\n"
-    dict[0x8000] = "{END}\n"
-    dict[0xcdcd] = "" #Pads to align(4)
-
-    text = convertRawToText(dict, bytes.fromhex(hex))
-    print(text)
-    return
-
+#-------------OBSOLETE-----------------
 def addComments(text):
+    '''OBSOLETED'''
     split_text = text.split("\n")
     buffer = ""
     for x in range(len(split_text)):
@@ -195,7 +222,7 @@ def addComments(text):
     return buffer
 
 def convertMapFile(path):
-
+    '''OBSOLETED'''
     dict = readFont("font.txt",0, EXTRACTION)
     dict[0x8001] = "\n"
     dict[0x8000] = "{END}"
@@ -241,14 +268,21 @@ def convertMapFile(path):
 
     
     return buffer
+#-----------OBSOLETE END---------------
 
-def convertMapFilePO(path):
 
+def convertToPO(path, mode):
+    '''Converts binary text file to .PO for Weblate'''
     dict = readFont("font.txt",0, EXTRACTION)
     dict[0x8001] = "\\n"
     dict[0x8000] = "{END}"
     dict[0xcdcd] = "" #Pads to align(4)
-    tables = unpackMapMSG(path)
+    if mode == MAP_MODE:
+        tables = unpackMapMSG(path)
+    elif mode == MSG_MODE:
+        tables = [unpackMSG(path)]
+    else:
+        assert False, "UNIDENTIFIED FILE MODE!!!"
     buffer = "msgid \"\"\nmsgstr \"\"\n\"Project-Id-Version: PACKAGE VERSION\\n\"\n\"Language: en\\n\"\n\"MIME-Version: 1.0\\n\"\n\"Content-Type: text/plain; charset=UTF-8\\n\"\n\n"
     #buffer = "#. File " + path + "\n\n"
 
@@ -306,7 +340,7 @@ def extractMAPs():
                 continue
 
             bin_path = os.path.join(root, file)
-            text = convertMapFilePO(bin_path)
+            text = convertToPO(bin_path, MAP_MODE)
             
             if len(text) == 0:
                 continue
@@ -325,7 +359,30 @@ def extractMAPs():
             
     return
 
+def extractMSGs():
+    '''Converts all specified .MSG files from IMG into PO's'''
+    for msg_path in IMG_MSG_FILES:
+        file_path = os.path.join(IMG_DIR, msg_path)
+        text = convertToPO(file_path, MSG_MODE)
+
+        if len(text) == 0:
+            continue
+        outpath = os.path.join(IMG_SCRIPT_DIR,"en",file_path.split("\\", 1)[1]) + ".po"
+        outdir = os.path.dirname(outpath)
+        os.makedirs(outdir, exist_ok=True)
+        outfile = open(outpath, 'w', encoding="utf-8")
+        outfile.write(text)
+        outfile.close()
+
+        outpath = os.path.join(IMG_SCRIPT_DIR,"en",file_path.split("\\", 1)[1]) + ".pot"
+        outdir = os.path.dirname(outpath)
+
+        outfile = open(outpath, 'w', encoding="utf-8")
+        outfile.write(text)
+        outfile.close()
+
 def fixPO(path):
+    '''Fixes single space issue with PO files'''
     f = open(path, "r", encoding="utf-8")
     text = f.read()
     text = text.replace("#.Table", "#. Table")
@@ -337,6 +394,7 @@ def fixPO(path):
 
 
 def findEndpoint(file, offset, n_entries, entry_number, table_size):
+    
     return_point = file.tell()
     if entry_number == n_entries - 1:
         return offset + table_size
@@ -355,64 +413,15 @@ def findEndpoint(file, offset, n_entries, entry_number, table_size):
             return(offset + next_offset)
             
 
-def injectPO2(binary_path, po_path, mode, dict):
-    #TODO
-    
-    fixPO(po_path)
-    source = open(binary_path, "rb")
-    po = polib.pofile(po_path)
-
-    for entry in po:
-        table_line = entry.comment
-        split_table = table_line.split("-")
-        table_number = int(split_table[0].split(":")[1])
-        line_number = int(split_table[1].split(":")[1])
-
-        if entry.msgstr == "":
-            continue
-
-        raw_line = convertTextToRaw(dict, entry.msgstr)
-        
-        if mode == MAP_MODE:
-            source.seek(4 + table_number*0xC + 4)
-            table_size = resource.readShort(source)
-            source.seek(4 + table_number*0xC + 8)
-            table_offset = resource.readInt(source)
-            source.seek(table_offset)
-            n_table_entries = resource.readInt(source)
-            source.seek(table_offset + 4 + 4*line_number)
-            line_offset = resource.readInt(source)
-
-            #Get difference in size
-            if line_number == n_table_entries - 1:
-                line_difference = len(raw_line) - (table_size - line_offset)
-            else:
-                for x in range(n_table_entries - line_number - 1):
-                    source.seek(table_offset + 4 + 4*line_number + 4*x)
-                    next_offset = resource.readInt(source)
-                    
-                    if x == n_table_entries - line_number - 2 and next_offset == 0:
-                        line_difference = len(raw_line) - (table_size - line_offset)
-                    elif next_offset == 0:
-                        continue
-                    else:
-                        line_difference = len(raw_line) - (next_offset - line_offset)
-            
-            source.seek(table_offset + 4 + 4*line_number + 4*x)
-
-            source.seek()
-        
-    return
-
 def repackMap(map):
-    msgs = []
+
     n_entries = len(map)
     header_buffer = n_entries.to_bytes(4, "little")
     msg_buffer = b''
 
     msg_offset = 4 + n_entries * 0xC
     for x in range(len(map)):
-        msg = repackMsg(map[x][1])
+        msg = repackMsg(map[x][1], MAP_MODE)
 
         msg_buffer += msg
 
@@ -430,7 +439,9 @@ def repackMap(map):
 
     return header_buffer + msg_buffer
 
-def repackMsg(msg):
+
+#MSG Mode: Offset + size, MAP Mode: Offset
+def repackMsg(msg, mode):
     n_lines = len(msg)
     header = n_lines.to_bytes(4, "little")
     
@@ -443,10 +454,13 @@ def repackMsg(msg):
             continue
 
         header += lines_offset.to_bytes(4, "little")
+        
         #print(lines_offset.to_bytes(4, "little").hex())
         lines_buffer += msg[x]
         line_length = len(msg[x])
         lines_offset += line_length
+        if mode == MSG_MODE:
+            header += line_length.to_bytes(4, "little")
 
     return header + lines_buffer
 
@@ -485,7 +499,24 @@ def splitMap(path):
 
     return msgs
 
+def splitMsg(path):
+    msg = []
+    f = open(path, "rb")
+
+    numLines = resource.readInt(f)
+
+    for x in range(numLines):
+        f.seek(4 + x*8)
+        line_offset = resource.readInt(f)
+        line_size = resource.readInt(f)
+        f.seek(line_offset)
+        line = f.read(line_size)
+        msg.append(line)
+
+    return msg
+
 def injectPO(binary_path, po_path, mode, dict):
+    '''Convert a PO file into a game binary'''
     fixPO(po_path)
     source = open(binary_path, "rb")
     po = polib.pofile(po_path)
@@ -502,11 +533,11 @@ def injectPO(binary_path, po_path, mode, dict):
                 continue
             
             raw_line = convertTextToRaw(dict, entry.msgstr)
-
+            if len(raw_line) % 4 == 2:
+                raw_line += b"\xCD\xCD"
             map[table_number][1][line_number] = raw_line
         
-        raw_map = repackMap(map)
-            
+        bin = repackMap(map)
 
     elif mode == MSG_MODE:
         msg = splitMsg(binary_path)
@@ -518,9 +549,16 @@ def injectPO(binary_path, po_path, mode, dict):
                 continue
             
             raw_line = convertTextToRaw(dict, entry.msgstr)
-
+            if len(raw_line) % 4 == 2:
+                raw_line += b"\xCD\xCD"
             msg[line_number] = raw_line
-        raw_msg = repackMsg(msg)
+
+        bin = repackMsg(msg, MSG_MODE)
+
+    source.close()
+    out = open(binary_path, 'wb')
+    out.write(bin)
+    out.close()
 
 def testMAPs():
     for root, subdirectories, files in os.walk(MAP_DIR):
@@ -529,15 +567,150 @@ def testMAPs():
                 continue
 
             bin_path = os.path.join(root, file)
-            text = convertMapFilePO(bin_path)
+            text = convertToPO(bin_path, MAP_MODE)
             
             if len(text) == 0:
                 continue
     return
 
 
-m = splitMap("MAP_RIP/M_B09200/1.BIN")
-n = repackMap(m)
+def testRaw(hex_string):
+    dict= readFont("font.txt",0, EXTRACTION)
+    dict[0x8000] = "{END}\n"
+    dict[0x8001] = "\n"
+    print(convertRawToText(dict, bytes.fromhex(hex_string)))
+
+    return
+
+
+dict= readFont("font.txt",0, INSERTION)
+
+testRaw("""05 00 00 00 70 17 00 00 A0 00 69 6C 40 00 00 00
+71 17 00 00 24 01 74 36 E0 00 00 00 72 17 00 00
+8A 00 6D 67 04 02 00 00 73 17 00 00 40 02 32 5C
+8E 02 00 00 74 17 00 00 84 02 69 6E CE 04 00 00
+05 00 00 00 18 00 00 00 1C 00 00 00 20 00 00 00
+00 00 00 00 60 00 00 00 00 00 00 00 00 00 00 00
+17 05 AC 00 00 00 F7 FE 00 14 1F 02 00 00 15 04
+30 00 3C FF 14 00 1E 02 14 00 1D 02 64 00 11 06
+00 CD 00 00 00 00 00 CD 01 00 28 02 78 00 1D 02
+65 00 15 04 01 00 3C FF 14 00 1E 02 14 00 18 01
+72 06 66 00 64 00 5C 00 5F 00 66 00 6E 00 03 00
+77 06 6B 00 5F 00 60 00 6A 00 77 06 60 00 6A 00
+77 06 6B 00 58 00 59 00 63 00 5C 00 77 06 34 00
+77 06 63 00 60 00 65 00 5C 00 77 06 38 00 00 80
+07 00 00 00 20 00 00 00 24 00 00 00 38 00 00 00
+00 00 00 00 F8 00 00 00 00 00 00 00 0E 01 00 00
+00 00 00 00 10 00 00 00 00 CD CD 01 CD CD CD CD
+09 23 03 01 00 00 00 CD 15 04 02 00 3C FF 00 00
+07 06 03 00 D7 00 00 00 59 FF 00 00 17 05 06 0C
+00 80 00 00 00 14 1F 02 00 00 15 04 01 00 3C FF
+14 00 13 03 FF 00 7F 00 1D 02 64 00 11 06 00 CD
+00 00 00 00 00 CD 01 00 28 02 3C 00 24 03 01 02
+01 00 1D 02 65 00 05 04 0A 00 FF 00 01 00 05 04
+1E 00 FF 00 02 00 03 02 30 00 17 05 63 0A 00 80
+00 00 00 14 1F 02 00 00 15 04 07 00 3C FF 14 00
+1E 02 28 00 06 03 01 00 0A 00 06 03 18 00 00 00
+06 03 02 00 0A 00 03 02 18 00 17 05 F5 F4 00 80
+00 00 00 14 1F 02 00 00 15 04 07 00 3C FF 14 00
+1E 02 28 00 06 03 01 00 0A 00 06 03 3C 00 00 00
+06 03 02 00 0A 00 18 01 6B 00 77 06 35 00 77 06
+63 00 60 00 65 00 5C 00 77 06 38 00 00 80 6B 00
+77 06 35 00 77 06 63 00 60 00 65 00 5C 00 77 06
+3A 00 00 80 05 00 00 00 18 00 00 00 1C 00 00 00
+20 00 00 00 00 00 00 00 6C 00 00 00 00 00 00 00
+00 00 00 00 17 05 69 00 00 00 D3 FF 00 14 1F 02
+00 00 15 04 30 00 3C FF 14 00 1E 02 0A 00 15 04
+31 00 3C FF 14 00 1E 02 14 00 1D 02 64 00 11 06
+00 CD 00 00 00 00 00 CD 01 00 28 02 2C 01 1D 02
+65 00 15 04 01 00 3C FF 14 00 1E 02 14 00 18 01
+6B 00 58 00 59 00 63 00 5C 00 77 06 73 06 77 06
+63 00 60 00 65 00 5C 00 77 06 38 00 00 80 03 00
+00 00 10 00 00 00 14 00 00 00 18 00 00 00 00 00
+00 00 00 00 00 00 2F 02 00 00 2F 02 00 06 2F 02
+00 04 0A 06 00 00 49 30 33 00 FF FF 00 00 15 04
+01 00 3C FF 14 00 17 05 F4 FF 00 00 4B 01 00 14
+1E 02 28 00 0B 03 49 30 33 00 2B 07 78 FF 00 00
+CC 01 62 FD 00 00 00 01 0D 01 06 03 1E 00 04 00
+2F 02 00 00 2F 02 00 0A 0A 06 00 00 41 30 31 00
+FF FF 00 00 17 05 A7 09 00 80 00 00 00 14 1F 02
+00 00 15 04 31 00 3C FE 14 00 1E 02 0C 00 29 04
+C0 FF 14 00 00 00 07 06 05 00 9F FF 00 00 9C 01
+00 00 15 04 38 00 3C FE 02 00 1E 02 05 00 15 04
+39 00 3C FE 0C 00 1E 02 0C 00 15 04 46 00 50 FE
+0C 00 05 04 06 00 6A 00 03 00 03 02 2F 00 1E 02
+64 00 15 04 3D 00 3C FE 14 00 1E 02 50 00 15 04
+55 00 3C FE 3C 00 17 05 DF FD 00 80 00 00 00 28
+29 04 9C FF 0A 00 00 00 07 06 05 00 BB FF 00 00
+8F 01 00 00 1F 02 00 00 15 04 57 00 3C FE 14 00
+1E 02 50 00 15 04 58 00 3C FE 14 00 1E 02 78 00
+15 04 60 00 3C FE 14 00 06 03 14 00 00 00 05 04
+2C 00 6A 00 03 00 29 04 00 00 0A 00 00 00 15 04
+09 00 3C FE 00 00 07 06 0A 00 78 FF 00 00 D0 01
+00 00 1F 02 00 00 15 04 31 00 3C FE 06 00 1E 02
+0A 00 15 04 31 00 3C FE 0C 00 0F 04 00 08 00 50
+CD CD 1E 02 0A 00 15 04 01 00 3C FE 14 00 1E 02
+14 00 03 02 51 00 15 04 5D 00 50 FE 3C 00 1E 02
+50 00 23 02 0C 00 06 03 45 00 28 00 1E 02 20 00
+0B 03 41 30 31 00 2B 07 28 00 9C FF E9 FF 5B 0B
+85 00 0A 01 0D 01 23 02 00 00 29 04 00 00 08 00
+00 00 07 06 05 00 25 00 00 00 A4 FF 00 00 1F 02
+00 00 0F 04 00 04 11 50 CD CD 15 04 2C 00 32 FE
+0A 00 1E 02 0A 00 0F 04 00 04 13 50 CD CD 1E 02
+50 00 15 04 30 00 3C FE 28 00 19 02 00 00 15 04
+01 00 3C FE 28 00 17 05 B1 FE 00 80 00 00 00 14
+1F 02 00 00 15 04 16 00 50 FE 14 00 1E 02 50 00
+03 02 0D 00 0B 03 41 30 31 00 2B 07 0F 00 00 00
+B6 FF C5 FF 00 00 00 01 0D 01 18 01 00 00 07 00
+00 00 20 00 00 00 28 00 00 00 2C 00 00 00 00 00
+00 00 48 02 00 00 00 00 00 00 66 02 00 00 01 00
+00 00 00 06 CD CD 00 00 00 00 05 04 6A 00 3D 01
+02 00 05 04 C2 00 3D 01 03 00 17 05 AC FE 00 80
+00 00 00 14 15 04 02 00 32 FE 00 00 07 06 02 00
+CE FF 00 00 48 FF 00 00 1F 02 00 00 15 04 01 00
+3C FE 14 00 1E 02 14 00 15 04 31 00 3C FE 14 00
+1E 02 0C 00 07 06 0A 00 A0 FF 00 00 97 FF 00 00
+15 04 09 00 3C FE 14 00 2E 02 00 00 1F 02 00 00
+15 04 38 00 3C FE 02 00 1E 02 05 00 0F 04 00 04
+0A 50 CD CD 15 04 39 00 3C FE 0C 00 1E 02 0C 00
+15 04 46 00 50 FE 0C 00 06 03 14 00 00 00 15 04
+01 00 3C FE 0A 00 07 06 0A 00 CA FF 00 00 47 FF
+00 00 2E 02 00 01 1F 02 00 00 0F 04 00 08 00 7F
+CD CD 15 04 0B 00 3C FE 06 00 1E 02 0A 00 15 04
+01 00 3C FE 14 00 1E 02 14 00 03 02 A4 00 15 04
+02 00 3C FF 00 00 07 06 0A 00 CA FF 00 00 47 FF
+00 00 1F 02 00 00 15 04 30 00 3C FF 14 00 17 05
+6F 0A 00 80 00 00 00 14 1E 02 14 00 1D 02 64 00
+11 06 00 CD 00 00 00 00 00 CD 01 00 28 02 3C 00
+24 03 00 00 01 00 1D 02 65 00 05 04 0C 00 FF 00
+02 00 15 04 01 00 3C FF 14 00 1E 02 14 00 03 02
+72 00 13 03 3D 01 03 00 0A 06 00 00 41 30 31 00
+FF FF 00 00 06 03 01 00 3C 00 0B 03 41 30 31 00
+0D 01 06 03 02 00 3C 00 15 04 0B 00 3C FF 28 00
+1E 02 3C 00 17 05 F8 FD 00 80 00 00 00 10 1F 02
+00 00 15 04 0A 00 3C FF 14 00 23 02 0D 00 1E 02
+3C 00 03 02 48 00 2F 02 00 00 0A 06 00 00 49 33
+30 00 FF FF 00 00 15 04 02 00 3C FF 00 00 07 06
+02 00 CE FF 00 00 48 FF 00 00 1F 02 00 00 15 04
+30 00 3C FF 14 00 17 05 6F 0A 00 80 00 00 00 14
+1E 02 14 00 0B 03 49 33 30 00 2B 07 00 00 00 00
+00 00 00 00 00 00 00 00 0D 01 2F 02 00 00 0A 06
+00 00 41 30 31 00 FF FF 00 00 06 03 14 00 00 00
+0B 03 41 30 31 00 2B 07 D3 FF 00 00 40 FF 6F 0A
+00 00 00 01 0D 01 15 04 01 00 3C FF 14 00 1E 02
+14 00 18 01 00 00 6B 00 58 00 59 00 63 00 5C 00
+77 06 38 00 77 06 63 00 60 00 65 00 5C 00 77 06
+38 00 00 80 6B 00 58 00 59 00 63 00 5C 00 77 06
+38 00 77 06 63 00 60 00 65 00 5C 00 77 06 3A 00
+00 80
+""")
+
+#injectPO("1.bin", "M_A01000.po", MAP_MODE, dict)
+#text = convertToPO("1.bin", MAP_MODE)
+#print(text)
+#extractMAPs()
+#m = splitMap("MAP_RIP/M_B09200/1.BIN")
+#n = repackMap(m)
 #print(len(n))
 #print(n.hex())
 #injectPO("binary_path", "boku-no-natsuyasumi-2/m_a01000/MAP/en/M_A01000.po")
