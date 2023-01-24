@@ -352,7 +352,7 @@ def unpackIMGTIM2s():
                         os.makedirs(directory, exist_ok=True)
                         im.save(img_file_path)
 
-unpackIMGTIM2s()
+
 
 def unpackFont(filepath):
     font_file = open(filepath, 'rb')
@@ -524,7 +524,7 @@ def prepareInsertionFiles():
 
 
 #ripTIMpack(MAP_FOLDER + "/M_I01000/6.bin", MAP_TYPE)
-
+#unpackIMGTIM2s()
 #unpackMap()
 #TIM2_to_PNG("C:\dev\\boku2\IMG_RIP\\system\\bumper2.tm2", 0x80)
 #packTEX("C:\dev\maid\MAP_0x1521800_0x1546e00.TEX", 0x92d00, "C:\dev\maid\GFXrip\MAP_0x1521800_0x1546e00_offset_0x92d00 - Copy copy.png")

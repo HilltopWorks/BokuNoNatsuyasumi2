@@ -32,6 +32,7 @@ FILENAMES_START = 0x8140
 INDEX_PATH = os.path.join(ORIGINAL_RIP_PATH, "boku2.idx")
 IMG_PATH   = os.path.join(ORIGINAL_RIP_PATH, "boku2.img")
 IMG_RIP_DIR = 'IMG_RIP'
+IMG_EDITS_DIR = "IMG_RIP_EDITS"
 
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
@@ -95,6 +96,63 @@ def unpackMaps():
             
             map_file.close()
 
+
+    return
+
+def packMaps(maps_dir, outdir):
+    map_list = []
+    
+    for root, subdirectories, files in os.walk(os.path.join(ORIGINAL_RIP_PATH, MAP_DIR)):
+        for file in files:
+            
+            map_name = file.split(".")[0]
+            map_dir = os.path.join(maps_dir, map_name)
+            original_file_path = os.path.join(root, file)
+            original_file = open(original_file_path, "rb")
+            n_entries = resource.readInt(original_file)
+            table_size = resource.readInt(original_file)
+
+            header_buffer = n_entries.to_bytes(4, "little") #+ table_size.to_bytes(4, "little")
+            data_buffer = b''
+
+            file_cursor = table_size
+            for x in range(n_entries):
+                component_path = os.path.join(map_dir,  str(x) + ".bin")
+                if not os.path.exists(component_path):
+                    #Null entry
+                    header_buffer += b'\x00\x00\x00\x00' + b'\x00\x00\x00\x00'
+                    continue
+
+                component_file = open(component_path, 'rb')
+                component_data = component_file.read()
+
+                component_size = len(component_data)
+
+                while len(component_data) % 0x10 != 0:
+                    component_data += b'\x00'
+
+                header_buffer += file_cursor.to_bytes(4, "little")
+                header_buffer += component_size.to_bytes(4,"little")
+
+                data_buffer += component_data
+                file_cursor += component_size + (0x10 - (component_size % 0x10) ) % 0x10
+            
+            #Pad header to original size
+            while len(header_buffer) < table_size:
+                header_buffer += b'\x00'
+
+            os.makedirs(outdir, exist_ok=True)
+            out_path = os.path.join(outdir, file)
+            out_file = open(out_path, 'wb')
+            out_file.write(header_buffer + data_buffer)
+            out_file.close()
+            
+            
+
+
+    for map in map_list:
+        map_dir = os.path.join(maps_dir, map)
+        buffer = b''
 
     return
 
@@ -195,6 +253,71 @@ def unpackIMG():
 
     return
 
+def packIMG(input_dir, output_dir):
+    IDX = getIDX()
 
+    dir_stack = []
+    data_cursor = 0
+    img_buffer = b''
+    
+    shutil.copyfile(INDEX_PATH, os.path.join(output_dir, "boku2.idx"))
+    idx_file = open(os.path.join(output_dir, "boku2.idx"), 'r+b')
+    #shutil.copyfile(IMG_PATH, os.path.join(output_dir, "boku2.img"))
+
+    is_escape_dir = False
+    for x in range(len(IDX)):
+        IDX_entry = IDX[x]
+        if IDX_entry['is_dir'] != 0:
+            dir_stack.append(IDX_entry['filename']) # Stack entries are [dirname, files remaining]
+            if IDX_entry['dir_info'] == 0: #Immediately remove empty directories after creating empty dir
+                #os.makedirs(createDirPath(dir_stack, IMG_RIP_DIR), exist_ok=True)
+                is_escape_dir = True
+                #dir_stack.pop()
+            continue
+        
+        
+        file_path = os.path.join(createDirPath(dir_stack, input_dir), IDX_entry['filename'])
+        
+        file_data = open(file_path, 'rb').read()
+
+        idx_file.seek(x*0x10 + 0x18)
+        idx_file.write(data_cursor.to_bytes(4, "little"))
+        idx_file.write(len(file_data).to_bytes(4, "little"))
+        if len(file_data) % 0x800 != 0:
+            file_data += bytes((0x800 - (len(file_data)%0x800))%0x800)
+
+        img_buffer += file_data
+        
+        
+        data_cursor += len(file_data)//0x800
+        
+        if IDX_entry['dir_info'] == 0:
+            print("Packing",file_path)
+            try:
+                dir_stack.pop()
+                if is_escape_dir == True:
+                    dir_stack.pop()
+                    is_escape_dir = False
+            except IndexError:
+                if x == len(IDX) - 1:
+                    log("IDX pack completed successfully")
+                    break
+                else:
+                    assert False, "IDX INDEX ERROR"
+    
+    img_file = open(os.path.join(output_dir, "boku2.img"), 'wb')
+    img_file.write(img_buffer)
+    img_file.close()
+    idx_file.close()
+
+    return
+
+def unzipPOs():
+    os.system('cmd /c "tar -xf boku-no-natsuyasumi-2.zip"')
+    return
+
+#unpackIMG()
+packIMG("IMG_RIP_EDITS","BUILD")
+#packMaps("MAP_RIP","MAP_BUILD")
 #unpackIMG()
 #unpackMaps()
