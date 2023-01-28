@@ -187,12 +187,12 @@ def convertTextToRaw(dict, text):
         #    return buffer + b'\x00\x80'
         elif text.startswith("\n"):
             buffer += b'\x01\x80'
-            chars_read = 2
+            chars_read = 1
         elif text.startswith("{WAIT="):
             endpoint = text.find("}")
             wait_amount = int(text[6:endpoint],16).to_bytes(2, byteorder="little")
             buffer += b'\x02\x80' + wait_amount
-            chars_read = endpoint + 3
+            chars_read = endpoint + 2
         else:
             try:
                 val = dict[text[0]]
@@ -445,7 +445,11 @@ def repackMsg(msg, mode):
     n_lines = len(msg)
     header = n_lines.to_bytes(4, "little")
     
-    lines_offset = 4 + n_lines*4
+    if mode == MAP_MODE:
+        lines_offset = 4 + n_lines*4
+    elif mode == MSG_MODE:
+        lines_offset = 4 + n_lines*8
+        
     lines_buffer = b''
     for x in range(len(msg)):
         if msg[x] == NULL_ENTRY:
@@ -544,7 +548,9 @@ def injectPO(binary_path, po_path, mode, dict):
         msg = splitMsg(binary_path)
         for entry in po:
             table_line = entry.comment
-            line_number = int(table_line.split(":")[1])
+            split_table = table_line.split("-")
+            table_number = int(split_table[0].split(":")[1])
+            line_number = int(split_table[1].split(":")[1])
 
             if entry.msgstr == "":
                 continue

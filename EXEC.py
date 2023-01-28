@@ -17,7 +17,7 @@ MAP_DIR = 'map'
 MAP_EDITS_DIR = "MAP_RIP_EDITS"
 IMG_EDITS_DIR = "IMG_RIP_EDITS"
 
-inject_dict = MSG.readFont("font.txt", MSG.INSERTION)
+inject_dict = MSG.readFont("font-inject.txt", 0, MSG.INSERTION)
 
 def injectMAPs():
     for root, subdirectories, files in os.walk(os.path.join(ORIGINAL_RIP_PATH, MAP_DIR)):
@@ -28,6 +28,9 @@ def injectMAPs():
             map_stem = file.replace(".bin", "")
             bin_path = os.path.join(MAP_EDITS_DIR, map_stem, "1.bin")
 
+            if not os.path.exists(po_path):
+                print("Skipping MAP ",file)
+                continue
             MSG.injectPO(bin_path,po_path, MSG.MAP_MODE, inject_dict)
     return
 
@@ -40,17 +43,27 @@ def injectIMGs():
 
 def build():
     #Pack text
+    print("____BUILD: Unzipping POs")
     UNPACK.unzipPOs()
+    print("____BUILD: Injecting MAPs")
     injectMAPs()
+    print("____BUILD: Injecting IMGs")
     injectIMGs()
 
     #TODO pack graphics
 
     #Generate bin files
+    print("____BUILD: Packing MAP files")
     UNPACK.packMaps("MAP_RIP_EDITS","BUILD")
+    print("____BUILD: Packing IMG")
     UNPACK.packIMG("IMG_RIP_EDITS", "BUILD")
-    
+    #UNPACK.updateCRCs(IMG_EDITS_DIR)
     #TODO apply ASM patches
+    #CRC bypass: 
+    #0x1bff98       nop
+    #0x1bff9c       ori v0,zero,0
 
     #TODO build game disc?
     return
+
+build()

@@ -14,7 +14,8 @@ from datetime import datetime
 
 
 LOG_DIR = 'log'
-ORIGINAL_RIP_PATH = 'ISO_RIP'
+ISO_RIP_DIR = 'ISO_RIP'
+ISO_EDIT_DIR = 'ISO_EDITS'
 now = datetime.now()
 date_time = now.strftime("%m-%d-%Y_%H-%M-%S")
 
@@ -29,8 +30,8 @@ IDX_ENTRY_SIZE = 0x10
 FILENAMES_START = 0x8140
 
 #IMG File
-INDEX_PATH = os.path.join(ORIGINAL_RIP_PATH, "boku2.idx")
-IMG_PATH   = os.path.join(ORIGINAL_RIP_PATH, "boku2.img")
+INDEX_PATH = os.path.join(ISO_RIP_DIR, "boku2.idx")
+IMG_PATH   = os.path.join(ISO_RIP_DIR, "boku2.img")
 IMG_RIP_DIR = 'IMG_RIP'
 IMG_EDITS_DIR = "IMG_RIP_EDITS"
 
@@ -40,17 +41,17 @@ if not os.path.exists(LOG_DIR):
 log_file = open(os.path.join(LOG_DIR, date_time + ".log"), 'w')
 
 def log(msg):
-    print(msg)
+    #print(msg)
     log_file.write(msg + '\n')
     return
 
 def unpackMaps():
     '''Separates every individual file in the map dir'''
-    for root, subdirectories, files in os.walk(os.path.join(ORIGINAL_RIP_PATH, MAP_DIR)):
+    for root, subdirectories, files in os.walk(os.path.join(ISO_RIP_DIR, MAP_DIR)):
         for file in files:
             log("Unpacking map " + file)
             stem = Path(file).stem
-            map_path = os.path.join(ORIGINAL_RIP_PATH, MAP_DIR, file)
+            map_path = os.path.join(ISO_RIP_DIR, MAP_DIR, file)
 
             map_file = open(map_path, 'rb')
 
@@ -102,7 +103,7 @@ def unpackMaps():
 def packMaps(maps_dir, outdir):
     map_list = []
     
-    for root, subdirectories, files in os.walk(os.path.join(ORIGINAL_RIP_PATH, MAP_DIR)):
+    for root, subdirectories, files in os.walk(os.path.join(ISO_RIP_DIR, MAP_DIR)):
         for file in files:
             
             map_name = file.split(".")[0]
@@ -268,11 +269,11 @@ def packIMG(input_dir, output_dir):
     for x in range(len(IDX)):
         IDX_entry = IDX[x]
         if IDX_entry['is_dir'] != 0:
+            idx_file.seek(x*0x10 + 0x18)
+            idx_file.write(data_cursor.to_bytes(4, "little"))
             dir_stack.append(IDX_entry['filename']) # Stack entries are [dirname, files remaining]
             if IDX_entry['dir_info'] == 0: #Immediately remove empty directories after creating empty dir
-                #os.makedirs(createDirPath(dir_stack, IMG_RIP_DIR), exist_ok=True)
                 is_escape_dir = True
-                #dir_stack.pop()
             continue
         
         
@@ -316,8 +317,145 @@ def unzipPOs():
     os.system('cmd /c "tar -xf boku-no-natsuyasumi-2.zip"')
     return
 
+def crc16(data : bytearray, offset , length):
+    if data is None or offset < 0 or offset > len(data)- 1 and offset+length > len(data):
+        return 0
+    crc = 0xFFFF
+    for i in range(0, length):
+        crc ^= data[offset + i] << 8
+        for j in range(0,8):
+            if (crc & 0x8000) > 0:
+                crc =(crc << 1) ^ 0x1021
+            else:
+                crc = crc << 1
+    return crc & 0xFFFF
+
+def crcFile(path):
+    f = open(path, 'rb')
+    data = f.read(0x80)
+    
+    if len(data) < 0x80:
+        length = len(data)
+    else:
+        length = 0x80
+    crc = crc16(data, 0, length)
+    #print(hex(crc))
+    return crc
+
+
+def getCRCdict(path):
+    crc_path = "ISO_RIP/boku2.crc"
+    crc_file = open(crc_path, "rb")
+    
+    n_entries = resource.readInt(crc_file)
+    dir_start = resource.readInt(crc_file)
+    dir_size = resource.readInt(crc_file)
+    crc_data_offset = resource.readInt(crc_file)
+    crc_data_size = resource.readInt(crc_file)
+
+    crcs = []
+    file_names = []
+    file_paths = []
+    entry_numbers = []
+
+    crc_matches = {}
+    for x in range(n_entries):
+        crc_file.seek(x * 0x20 + dir_start)
+        resource.readShort(crc_file)
+        entry_number = resource.readShort(crc_file)
+        type = resource.readShort(crc_file)
+        entry_number_2 = resource.readShort(crc_file)
+        file_name = resource.ReadString(crc_file)
+        
+        file_names.append(file_name)
+        entry_numbers.append(entry_number)
+
+    for y in range(crc_data_size//2):
+        crc_file.seek(crc_data_offset + y*2)
+        file_crc = resource.readShort(crc_file)
+        crcs.append(file_crc)
+
+
+    for root, subdirectories, files in os.walk(path):
+        for file in files:
+            file_path = os.path.join(root,file)
+            base_path = os.path.join(root,file).split("\\",1)[1]
+            file_name = os.path.basename(file)
+            if file_names.count(file_name) > 1:
+                matches = [i for i, z in enumerate(file_names) if z == file_name]
+
+                match_found = False
+                for index in matches:
+                    base_crc = crcs[entry_numbers[index]]
+                    calc_crc = crcFile(file_path)
+                    if base_crc == calc_crc:
+                        match_found = True
+                        if not base_path in crc_matches:
+                            crc_matches[base_path] = [index]
+                        else:
+                            crc_matches[base_path] = crc_matches[base_path] + [index]
+                        print(file)
+                        print("crc number " + hex(index) + " -> " + file_path)
+                if not match_found:
+                    print("CRC FAILURE: " +  file)
+                    print("BASE: " + hex(base_crc), "CALC: " + hex(calc_crc))
+            else:
+                if not file_name in file_names:
+                    print("MISSING FILE " + file)
+                index = file_names.index(file_name)
+                base_crc = crcs[entry_numbers[index]]
+                calc_crc = crcFile(file_path)
+                crc_matches[base_path] = [index]
+                if base_crc != calc_crc:
+                    print("CRC FAILURE: " +  file)
+                    print("BASE: " + hex(base_crc), "CALC: " + hex(calc_crc))
+    return crc_matches
+            
+
+def setCRC(crc_file, indices, crc):
+    crc_file.seek(0)
+    n_entries = resource.readInt(crc_file)
+    dir_start = resource.readInt(crc_file)
+    dir_size = resource.readInt(crc_file)
+    crc_data_offset = resource.readInt(crc_file)
+    crc_data_size = resource.readInt(crc_file)
+    for index in indices:
+        crc_file.seek(crc_data_offset + index*2)
+        crc_file.write(crc.to_bytes(2, "little"))
+    return
+
+def updateCRCs(path):
+    crc_dict = getCRCdict(IMG_RIP_DIR)
+    map_crc_dict = getCRCdict("ISO_RIP\\map")
+    
+    crc_dict.update(map_crc_dict)
+
+    crc_file = open(os.path.join(ISO_EDIT_DIR, "boku2.crc"), 'r+b')
+
+    for root, subdirectories, files in os.walk(path):
+        for file in files:
+            file_path_base =  os.path.join(root,file).split("\\",1)[1]
+            file_path = os.path.join(root,file)
+            new_crc = crcFile(file_path)
+            indices = crc_dict[file_path_base]
+
+            setCRC(crc_file, indices, new_crc)
+    crc_file.close()
+    return
+
+updateCRCs(IMG_EDITS_DIR)
+#updateCRCs(MAP_DIR)
+
+#getCRC("ISO_RIP\\map")
+#c = getCRCdict(IMG_RIP_DIR)
+#print(str(c["system\submenu\img_bak\msg.tm2"]))
+
+#updateCRCs()
+#crcFile("IMG_RIP\system\submenu\img\phot_20.tm2.arn")
+#testCRC()
+#packIMG("IMG_RIP_EDITS", "BUILD")
 #unpackIMG()
-packIMG("IMG_RIP_EDITS","BUILD")
+#packIMG("IMG_RIP_EDITS","BUILD")
 #packMaps("MAP_RIP","MAP_BUILD")
 #unpackIMG()
 #unpackMaps()
