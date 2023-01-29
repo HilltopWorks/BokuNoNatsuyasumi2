@@ -443,7 +443,7 @@ def updateCRCs(path):
     crc_file.close()
     return
 
-updateCRCs(IMG_EDITS_DIR)
+#updateCRCs(IMG_EDITS_DIR)
 #updateCRCs(MAP_DIR)
 
 #getCRC("ISO_RIP\\map")

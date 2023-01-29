@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 from pathlib import Path
 import resource
 import polib
@@ -16,6 +17,9 @@ MAP_DIR = 'map'
 
 MAP_EDITS_DIR = "MAP_RIP_EDITS"
 IMG_EDITS_DIR = "IMG_RIP_EDITS"
+
+ISO_EDITS_DIR = "ISO_EDITS"
+ISO_OUTPUT_PATH = "BUILD/boku2_patched.iso"
 
 inject_dict = MSG.readFont("font-inject.txt", 0, MSG.INSERTION)
 
@@ -41,10 +45,27 @@ def injectIMGs():
         MSG.injectPO(bin_path,po_path, MSG.MSG_MODE, inject_dict)
     return
 
+def build_ISO(input, output):
+    #build_disc = 'cmd /c  ultraiso.exe -imax -l -d "' + input + '" -out "' + output + '"'
+    build_disc = 'cmd /c  ultraiso.exe -in "' + output + '" -d "' + input + '"'
+    os.system(build_disc)
+
+    return
+
+
 def build():
+    #Pull text from weblate
+    os.chdir("boku-no-natsuyasumi-2\\fishing-msg")
+    os.system("git fetch")
+    os.system("git reset --hard HEAD")
+    os.system("git merge origin/main")
+    os.chdir("..\\m_a01000")
+    os.system("git fetch")
+    os.system("git reset --hard HEAD")
+    os.system("git merge origin/main")
+    os.chdir("..\\..")
+
     #Pack text
-    print("____BUILD: Unzipping POs")
-    UNPACK.unzipPOs()
     print("____BUILD: Injecting MAPs")
     injectMAPs()
     print("____BUILD: Injecting IMGs")
@@ -54,16 +75,17 @@ def build():
 
     #Generate bin files
     print("____BUILD: Packing MAP files")
-    UNPACK.packMaps("MAP_RIP_EDITS","BUILD")
+    UNPACK.packMaps("MAP_RIP_EDITS","ISO_EDITS\\map")
     print("____BUILD: Packing IMG")
-    UNPACK.packIMG("IMG_RIP_EDITS", "BUILD")
+    UNPACK.packIMG("IMG_RIP_EDITS", "ISO_EDITS")
     #UNPACK.updateCRCs(IMG_EDITS_DIR)
-    #TODO apply ASM patches
-    #CRC bypass: 
-    #0x1bff98       nop
-    #0x1bff9c       ori v0,zero,0
 
-    #TODO build game disc?
+    #TODO apply ASM patches
+    subprocess.call(['armips.exe', 'assembly.asm'])
+
+    #Build game disc
+    build_ISO(ISO_EDITS_DIR, ISO_OUTPUT_PATH)
     return
 
+#build_ISO(ISO_EDITS_DIR, ISO_OUTPUT_PATH)
 build()
