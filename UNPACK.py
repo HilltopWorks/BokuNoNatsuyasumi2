@@ -35,6 +35,14 @@ IMG_PATH   = os.path.join(ISO_RIP_DIR, "boku2.img")
 IMG_RIP_DIR = 'IMG_RIP'
 IMG_EDITS_DIR = "IMG_RIP_EDITS"
 
+IMG_MAP_FILES_TYPE_0 = ["diary.bin","system\\saveload.bin"]
+
+IMG_MAP_FILES = [
+                "map",
+                "data\\map\\evt\\on_mem_event.bin"
+                ]
+
+
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
 
@@ -45,58 +53,90 @@ def log(msg):
     log_file.write(msg + '\n')
     return
 
+def unpackMap(map_path, output_dir, type):
+    
+
+    map_file = open(map_path, 'rb')
+
+    header_ID = resource.readInt(map_file) #Usually (always?) 0xE
+    log("\tHeader ID: " + hex(header_ID))
+    header_length = resource.readInt(map_file) #First offset entry. Usually (always?) 0x80
+    log("\tHeader length: " + hex(header_length))
+    map_file.seek(4) #Return to dir start
+
+    if type == 0:
+        entry_size = 0xC
+    else:
+        entry_size = 8
+
+    cursor = 4
+
+    while cursor + 4 < header_length:
+
+        map_file.seek(cursor)
+        log("\t\tUnpacking file from map #" + str((cursor - 4)//8))
+        file_offset = resource.readInt(map_file)
+        file_size = resource.readInt(map_file)
+
+        log("\t\tOffset/Size: " + hex(file_offset) + "/" + hex(file_size))
+        
+
+        if file_offset == 0:
+            log("\t\t\tEntry skipped (null)")
+            cursor += entry_size
+            continue #Null directory entry
+        
+        map_file.seek(file_offset)
+
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir, exist_ok=True)
+
+        fileNumber = (cursor - 4)//entry_size
+        output_file_name = str(fileNumber) + '.bin'
+        output_file = open(os.path.join(output_dir, output_file_name ), 'wb')
+
+        output_file.write(map_file.read(file_size))
+
+        output_file.close()
+
+        log("\t\t\tFile unpacked")
+
+        cursor += entry_size
+    
+    map_file.close()
+
+    return
+
 def unpackMaps():
     '''Separates every individual file in the map dir'''
+
+    for entry in IMG_MAP_FILES:
+        file = os.path.join(IMG_RIP_DIR, entry)
+        
+        log("Unpacking IMG map " + file)
+        
+        stem = Path(file).stem
+        dir = os.path.dirname(file)
+        unpackMap(file, os.path.join(dir, "~" + stem), 1)
+    
+    for entry in IMG_MAP_FILES_TYPE_0:
+        file = os.path.join(IMG_RIP_DIR, entry)
+        
+        log("Unpacking IMG map TYPE 0" + file)
+        
+        stem = Path(file).stem
+        dir = os.path.dirname(file)
+        unpackMap(file, os.path.join(dir, "~" + stem), 0)
+
     for root, subdirectories, files in os.walk(os.path.join(ISO_RIP_DIR, MAP_DIR)):
         for file in files:
             log("Unpacking map " + file)
             stem = Path(file).stem
             map_path = os.path.join(ISO_RIP_DIR, MAP_DIR, file)
+            output_dir = os.path.join(MAP_RIP_DIR, stem)
+            unpackMap(map_path, os.path.join(MAP_RIP_DIR, stem), 1)
 
-            map_file = open(map_path, 'rb')
-
-            header_ID = resource.readInt(map_file) #Usually (always?) 0xE
-            log("\tHeader ID: " + hex(header_ID))
-            header_length = resource.readInt(map_file) #First offset entry. Usually (always?) 0x80
-            log("\tHeader length: " + hex(header_length))
-            map_file.seek(4) #Return to dir start
-
-            cursor = 4
-
-            while cursor + 4 < header_length:
-
-                map_file.seek(cursor)
-                log("\t\tUnpacking file from map #" + str((cursor - 4)//8))
-                file_offset = resource.readInt(map_file)
-                file_size = resource.readInt(map_file)
-
-                log("\t\tOffset/Size: " + hex(file_offset) + "/" + hex(file_size))
-                
-
-                if file_offset == 0:
-                    log("\t\t\tEntry skipped (null)")
-                    cursor += 8
-                    continue #Null directory entry
-                
-                map_file.seek(file_offset)
-
-                if not os.path.exists(os.path.join(MAP_RIP_DIR, stem)):
-                    os.makedirs(os.path.join(MAP_RIP_DIR, stem), exist_ok=True)
-
-                fileNumber = (cursor - 4)//8
-                output_file_name = str(fileNumber) + '.bin'
-                output_file = open(os.path.join(MAP_RIP_DIR,stem, output_file_name ), 'wb')
-
-                output_file.write(map_file.read(file_size))
-
-                output_file.close()
-
-                log("\t\t\tFile unpacked")
-
-                cursor += 8
-            
-            map_file.close()
-
+    
 
     return
 
@@ -458,4 +498,5 @@ def updateCRCs(path):
 #packIMG("IMG_RIP_EDITS","BUILD")
 #packMaps("MAP_RIP","MAP_BUILD")
 #unpackIMG()
+#unpackMaps()
 #unpackMaps()

@@ -11,6 +11,8 @@ import TIM2
 
 MAP_PO_PATH = "boku-no-natsuyasumi-2\\m_a01000\\MAP\\en"
 IMG_PO_PATH = "boku-no-natsuyasumi-2\\fishing-msg\\IMG\\en"
+RAW_PO_PATH = "boku-no-natsuyasumi-2\\diary\\en"
+OFFSET_ONLY_PO_PATH = "boku-no-natsuyasumi-2\\diary\\en"
 
 ORIGINAL_RIP_PATH = 'ISO_RIP'
 MAP_DIR = 'map'
@@ -43,6 +45,16 @@ def injectIMGs():
         po_path = os.path.join(IMG_PO_PATH, img_msg + ".po")
         bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
         MSG.injectPO(bin_path,po_path, MSG.MSG_MODE, inject_dict)
+    
+    for img_msg in MSG.RAW_MSG_FILES:
+        po_path = os.path.join(RAW_PO_PATH, img_msg + ".po")
+        bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
+        MSG.injectPO(bin_path,po_path, MSG.RAW_MODE, inject_dict)
+    
+    for img_msg in MSG.OFFSET_ONLY_MSG_FILES:
+        po_path = os.path.join(OFFSET_ONLY_PO_PATH, img_msg + ".po")
+        bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
+        MSG.injectPO(bin_path,po_path, MSG.OFFSET_ONLY_MODE, inject_dict)
     return
 
 def build_ISO(input, output):
@@ -53,39 +65,48 @@ def build_ISO(input, output):
     return
 
 
-def build():
-    #Pull text from weblate
-    os.chdir("boku-no-natsuyasumi-2\\fishing-msg")
-    os.system("git fetch")
-    os.system("git reset --hard HEAD")
-    os.system("git merge origin/main")
-    os.chdir("..\\m_a01000")
-    os.system("git fetch")
-    os.system("git reset --hard HEAD")
-    os.system("git merge origin/main")
-    os.chdir("..\\..")
+def build(mode):
+    if mode > 0:
+        #Pull text from weblate
+        print("____BUILD: Pulling text files")
+        os.chdir("boku-no-natsuyasumi-2\\fishing-msg")
+        os.system("git fetch")
+        os.system("git reset --hard HEAD")
+        os.system("git merge origin/main")
+        os.chdir("..\\m_a01000")
+        os.system("git fetch")
+        os.system("git reset --hard HEAD")
+        os.system("git merge origin/main")
+        os.chdir("..\\..")
 
-    #Pack text
-    print("____BUILD: Injecting MAPs")
-    injectMAPs()
-    print("____BUILD: Injecting IMGs")
-    injectIMGs()
+        #Pack text
+        print("____BUILD: Injecting MAPs")
+        injectMAPs()
+        print("____BUILD: Injecting IMGs")
+        injectIMGs()
 
-    #TODO pack graphics
+        #TODO pack graphics
 
-    #Generate bin files
-    print("____BUILD: Packing MAP files")
-    UNPACK.packMaps("MAP_RIP_EDITS","ISO_EDITS\\map")
-    print("____BUILD: Packing IMG")
-    UNPACK.packIMG("IMG_RIP_EDITS", "ISO_EDITS")
-    #UNPACK.updateCRCs(IMG_EDITS_DIR)
+        #Generate bin files
+        print("____BUILD: Packing MAP files")
+        UNPACK.packMaps("MAP_RIP_EDITS","ISO_EDITS\\map")
+        print("____BUILD: Packing IMG")
+        UNPACK.packIMG("IMG_RIP_EDITS", "ISO_EDITS")
+        #UNPACK.updateCRCs(IMG_EDITS_DIR)
 
-    #TODO apply ASM patches
-    subprocess.call(['armips.exe', 'assembly.asm'])
+    #TODO apply all ASM patches
+    print("____BUILD: Applying ASM patches")
+    subprocess.call(['armips.exe', 'scps_150.26.asm'])
 
     #Build game disc
+    print("____BUILD: Rebuilding ISO")
     build_ISO(ISO_EDITS_DIR, ISO_OUTPUT_PATH)
     return
 
-#build_ISO(ISO_EDITS_DIR, ISO_OUTPUT_PATH)
-build()
+FULL = 1
+ASM_ONLY = 0
+
+mode = ASM_ONLY
+
+#injectIMGs()
+build(mode)
