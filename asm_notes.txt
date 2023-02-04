@@ -1,0 +1,106 @@
+;vwf
+
+la v0, vwf_table
+addiu v0,v0, char
+lb v0, 0x0(v0)
+
+
+;Set main font color
+	la v0, white
+	sw v0, 0x0(gpu_call)
+	
+	;autopilot    		; a2 = base_y, 
+	mfhi	a3 			; a3 = char%17
+	mflo	a1 			; a1 = char/17
+	mult	v0,v1,v0 	; v0 = newlines*spacing
+	mult	a1,a1,s7 	; a1 = (char/17)*0x16, aka glyph height x row aka v
+	mult	zero,a3,s7 	; lo = (char%0x17)*0x16, aka glyph width x column aka u
+	addu	s2,a2,v0 	; s2 = base_y + (newlines*spacing)
+	andi	a2,a1,0xFFFF; a2 = font row
+	mflo	a3			; a3 = u
+	addiu	a1,a2,0x17	; a1 = v_bottom
+	addiu	a0,a3,0x17	; a0 = u_bottom
+	sll		a1,a1,0x04	; a1 = v_gpu_bottom
+	sll		a0,a0,0x04  ; a0 = u_gpu_bottom
+
+	sll	v0,a3,0x04		; a3 = u_gpu
+	sll	v1,a2,0x04		; a2 = v_gpu
+	sh	v0,0x8(gpu_call)		; STORE u_gpu
+	sh	v1,0xA(gpu_call)		; STORE v_gpu
+	sh	a0,0x18(gpu_call)		; STORE u_bottom_gpu
+	jal	pos_0012D3C8	; v0 = frame_buffer_y
+	sh	a1,0x1A(gpu_call)		; STORE v_bottom_gpu	^
+	
+	
+
+	sll	v1,s2,0x04		; v1 = (base_y + (newlines*spacing)) *0x10 aka y_gpu unf
+	addu	v0,v1		; v0 = y_gpu unf + frame_buffer_y aka y_gpu
+	jal	pos_0012D390	; v0 = frame_buffer_x
+	sh	v0,0x12(gpu_call)		; STORE y_gpu			^
+	addu	v0,current_x		; v0 = frame_buffer_x + current_x aka x_gpu
+	jal	pos_0012D3C8	; v0 = frame_buffer_y
+	sh	v0,0x10(gpu_call)		; STORE x_gpu			^
+	addiu	v1,s2,0x17	; v1 = y_gpu_unf + 0x17 aka y_gpu_bottom unf
+	sll	v1,v1,0x04		; v1 = y_gpu_right unf << 4 aka y_bottom
+	addu	v0,v1		; v0 = frame_buffer_y + y_bottom aka y_gpu_bottom
+	jal	pos_0012D390	; v0 = frame_buffer_x
+	sh	v0,0x22(gpu_call)		; STORE y_gpu_bottom
+	addiu	v1,current_x,0xb8	; v1 = current_x + 0xb8 aka x_right
+	addu	v0,v1		; v0 = x_right + frame_buffer_x aka x_gpu_right
+	sh	v0,0x20(gpu_call)		; STORE x_gpu_right
+	addiu	gpu_call,0x28		; gpu_cursor += 0x28
+
+
+;;;;;ORIGINAL
+
+;autopilot    		; a2 = base_x, 
+	mfhi	a3 			; a3 = char%17
+	mflo	a1 			; a1 = char/17
+	mult	v0,v1,v0 	; v0 = newlines*spacing
+	mult	a1,a1,s7 	; a1 = (char/17)*0x16, aka glyph height x row aka v
+	li		v1,0x80
+	mult	zero,a3,s7 	; lo = (char%0x17)*0x16, aka glyph width x column aka u
+	sb		v1,0x3(s0)
+	subu	s2,a2,v0 	; s2 = base_x - (newlines*spacing)
+	andi	a2,a1,0xFFFF; a2 = font row
+	mflo	a3			; a3 = u
+	addiu	a1,a2,0x17	; a1 = v_bottom
+	addiu	a0,a3,0x17	; a0 = u_bottom
+	sll		a1,a1,0x04	; a1 = v_gpu_bottom
+	sll		a0,a0,0x04  ; a0 = u_gpu_bottom
+
+	sll	v0,a3,0x04		; a3 = u_gpu
+	sll	v1,a2,0x04		; a2 = v_gpu
+	sh	v0,0x8(s0)		; STORE u_gpu
+	sh	v1,0xA(s0)		; STORE v_gpu
+	sh	a0,0x18(s0)		; STORE u_bottom_gpu
+	jal	pos_0012D390	; v0 = frame_buffer_x
+	sh	a1,0x1A(s0)		; STORE v_bottom_gpu	^
+
+
+
+	sll	v1,s2,0x04		; v1 = (base_x - (newlines*spacing)) *0x10 aka x_gpu unf
+	addu	v0,v1		; v0 = x_gpu unf + frame_buffer_x aka x_gpu
+	jal	pos_0012D3C8	; v0 = frame_buffer_y
+	sh	v0,0x10(s0)		; STORE x_gpu			^
+	addu	v0,s4		; v0 = frame_buffer_y + current_y aka y_gpu
+	sw	zero,0x14(s0)	; STORE 0? test...nothing? skippable
+	jal	pos_0012D390	; v0 = frame_buffer_x
+	sh	v0,0x12(s0)		; STORE y_gpu			^
+	addiu	v1,s2,0x17	; v1 = x_gpu_unf + 0x17 aka x_gpu_right unf
+	sll	v1,v1,0x04		; v1 = x_gpu_right unf << 4 aka x_right
+	addu	v0,v1		; v0 = frame_buffer_x + x_right aka x_gpu_right
+	jal	pos_0012D3C8	; v0 = frame_buffer_y
+	sh	v0,0x20(s0)		; STORE x_gpu_right
+	addiu	v1,s4,0xb8	; v1 = current_y + 0xb8 aka y_bottom
+	sw	zero,0x24(s0)	; STORE 0? test... nothing. skippable
+	addu	v0,v1		; v0 = y_bottom + frame_buffer_y aka y_gpu_bottom
+	sh	v0,0x22(s0)		; STORE y_gpu_bottom
+	addiu	s0,0x28		; gpu_cursor += 0x28
+
+
+;Free: v0, a3, a2, a1, s2
+
+;x left = curr_x               ;x right = curr_x + 0x17
+;y top = base_y + (newlines*0x1A) ;y bot = base_y + (newlines*0x1A) + 0x17
+;char = 
