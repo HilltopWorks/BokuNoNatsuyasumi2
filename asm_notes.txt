@@ -104,3 +104,47 @@ lb v0, 0x0(v0)
 ;x left = curr_x               ;x right = curr_x + 0x17
 ;y top = base_y + (newlines*0x1A) ;y bot = base_y + (newlines*0x1A) + 0x17
 ;char = 
+
+
+	sll	v1,s2,0x04			; v1 = (base_y + (newlines*spacing)) *0x10 aka y_gpu unf
+	addu	v0,v1			; v0 = y_gpu unf + frame_buffer_y aka y_gpu
+	jal	get_fb_x			; v0 = frame_buffer_x
+	sh	v0,0x12(gpu_call)	; STORE y_gpu			^
+	addu	v0,curr_x		; v0 = frame_buffer_x + curr_x aka x_gpu
+	jal	get_fb_y			; v0 = frame_buffer_y
+	sh	v0,0x10(gpu_call)	; STORE x_gpu			^
+
+	sll		s2,s2,0x04		; s2 = y_gpu << 4
+	addiu	v1,s2,0xB8		; v1 = y_gpu + 0xb8 aka y_gpu_bottom
+
+
+	addu	v0,v1			; v0 = frame_buffer_y + y_bottom aka y_gpu_bottom
+	jal	get_fb_x			; v0 = frame_buffer_x
+	
+	addiu	v1,curr_x,0x170	; v1 = curr_x + 0xb8 aka x_right
+	addu	v0,v1			; v0 = x_right + frame_buffer_x aka x_gpu_right
+	sh	v0,0x20(gpu_call)	; STORE x_gpu_right
+	addiu	gpu_call,0x28	; gpu_cursor += 0x28
+
+-----------------
+
+
+jal	get_fb_x			; v0 = frame_buffer_x
+	nop
+	addiu	v1,curr_x,0x170	; v1 = curr_x + 0xb8 aka x_right
+	addu	v0,v1			; v0 = x_right + frame_buffer_x aka x_gpu_right
+	sh	v0,0x20(gpu_call)	; STORE x_gpu_right
+	addiu	gpu_call,0x28	; gpu_cursor += 0x28
+
+
+la  v1, vwf_table		;v1 = table start
+				lw	s2, 0x0(s5)			;s2 = &text_base
+				lh  s2, 0x0(s2)			
+
+				la	v0, char_offset
+				lw 	v0, 0x0(v0)
+				addu s2, v0, s2
+
+				addu v1, v1, s2			;v1 = &table[char] aka letter width
+				lb v1, 0x0(v1)			;v1 = table[char]
+				sll v1, v1, 0x4			;1 pixel = 0x10 value
