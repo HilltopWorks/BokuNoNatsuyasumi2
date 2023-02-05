@@ -101,6 +101,7 @@ def build(mode):
     #Build game disc
     print("____BUILD: Rebuilding ISO")
     build_ISO(ISO_EDITS_DIR, ISO_OUTPUT_PATH)
+    print("Ding!")
     return
 
 FULL = 1
