@@ -52,32 +52,38 @@ IMG_TYPE = 2
 FILE_ERROR = -1
 
 def readBUV(path, offset):
-    if offset < 0:
-        return -1
-    buv = []
-
-    file = open(path, 'rb')
-    file.seek(offset)
-    n_entries = resource.readInt(file)
-    
-    if n_entries == 0:
-        return -1
-
-    for x in range(n_entries):
-        slice = {}
-        slice['u'] = resource.readShort(file)
-        slice['v'] = resource.readShort(file)
-        slice['w'] = resource.readShort(file)
-        slice['h'] = resource.readShort(file)
-        slice['clut_number'] = resource.readShort(file)
-        slice['padding'] = resource.readShort(file)
-
-        if slice['padding'] != 0xCDCD:
-            #print("PADDING MISMATCH: " + path + " #" + str(x))
+    for i in range(8):
+        offset = offset - i*0x80
+        if offset < 0:
             return -1
-        buv.append(slice)
+        buv = []
 
-    return buv
+        file = open(path, 'rb')
+        file.seek(offset)
+        n_entries = resource.readInt(file)
+        
+        if n_entries == 0:
+            continue
+
+        for x in range(n_entries):
+            slice = {}
+            slice['u'] = resource.readShort(file)
+            slice['v'] = resource.readShort(file)
+            slice['w'] = resource.readShort(file)
+            slice['h'] = resource.readShort(file)
+            slice['clut_number'] = resource.readShort(file)
+            slice['padding'] = resource.readShort(file)
+
+            if slice['padding'] != 0xCDCD:
+                #print("PADDING MISMATCH: " + path + " #" + str(x))
+                continue
+            buv.append(slice)
+        
+        if len(buv) != n_entries:
+            continue
+
+        return buv
+    return -1
 
 def TIM2_to_PNG(tim2_file_path, offset):
     stem = Path(tim2_file_path).stem
@@ -94,7 +100,6 @@ def TIM2_to_PNG(tim2_file_path, offset):
     version = resource.readByte(TIM2_file)
     TIM2_format = resource.readByte(TIM2_file)
 
-    
 
     num_images = resource.readShort(TIM2_file)
 
@@ -464,20 +469,28 @@ def getAlpha(palette):
     #print("ERROR: ALPHA NOT FOUND!!!!")
     return 0
 
-def get_palette(target_TEX_path, offset):
+def get_palette(target_TEX_path, offset, bpp):
     tex_file = open(target_TEX_path, 'rb')
-    tex_file.seek(offset + PALETTE_START)
+    tex_file.seek(offset)
 
     palette = []
     CLUT_array = numpy.zeros((16, 16 , 4), dtype=numpy.uint8)
-    for x in range(256):
+
+    if bpp == 8:
+        n_clut_entries = 256
+    elif bpp == 4:
+        n_clut_entries = 16
+    else:
+        print("UNSUPPORTED BPP IN " + target_TEX_path, bpp) 
+
+    for x in range(n_clut_entries):
         palette += [int.from_bytes(tex_file.read(4), "little")]
 
         red =    palette[x] &       0xFF
         green = (palette[x] &     0xFF00) >> 8
         blue =  (palette[x] &   0xFF0000) >> 16
         alpha = (palette[x] & 0xFF000000) >> 24
-        if x % 32 >= 8 and x % 32 < 24:
+        if x % 32 >= 8 and x % 32 < 24 and n_clut_entries == 256:
             flipper = x % 16
             if flipper >= 8:
                 CLUT_array[1 + (x//16)][x%8] = (red, green, blue, alpha)
@@ -488,35 +501,119 @@ def get_palette(target_TEX_path, offset):
     
     return CLUT_array
 
-def packTEX2(target_TEX_path, offset, reference_PNG_path, edited_PNG_path):
+def PNG_to_TIM2(target_TIM_path, offset, reference_PNG_path, edited_PNG_path, clut_number):
     stem = Path(reference_PNG_path).stem
     basename = os.path.basename(reference_PNG_path)
 
     ref_im = Image.open(reference_PNG_path)
     edited_im = Image.open(edited_PNG_path)
     edited_im = edited_im.convert("RGBA")
-    target_file = open(target_TEX_path, "r+b")
+    TIM2_file = open(target_TIM_path, "r+b")
 
-    target_file.seek(offset)
+    TIM2_file.seek(offset)
 
-    #index_image = ref_im.convert('P', dither=Image.NONE, palette=Image.ADAPTIVE, colors=256)
-    parent_tex = os.path.join("BD_EXTRACT", stem.split("_offset_")[0] + ".TEX")
-    parent_offset = int(stem.split("_offset_0x")[1], base=16)
-    palette_2D = get_palette(parent_tex, parent_offset)#ref_im.palette.colors
+    fileType = TIM2_file.read(4).decode()
+
+    if fileType != "TIM2":
+        print("TIM2 FILE MISSING HEADER!!! Filename: " +  basename )
+        return FILE_ERROR
+
+    version = resource.readByte(TIM2_file)
+    TIM2_format = resource.readByte(TIM2_file)
+
+
+    num_images = resource.readShort(TIM2_file)
+
+    whitespace1 = resource.readInt(TIM2_file)
+
+    buffer = 0
+    #literally why
+    if whitespace1 == 0x4001a0 or TIM2_format == 1:
+        buffer = 0x70
+
+    if num_images != 1:
+        print("!!!!!!!!! UH OH, NUM IMAGES IN TIM2 != 0! IT'S " + str(num_images))
+    TIM2_file.seek(buffer + offset +0x10)
+
+
+    total_image_size = resource.readInt(TIM2_file)
+    palette_size = resource.readInt(TIM2_file)
+
+    
+    pxl_size = resource.readInt(TIM2_file)
+    header_size = resource.readShort(TIM2_file)
+    n_palette_entries = resource.readShort(TIM2_file)
+
+    #(0=8bbp indexed)
+    color_depth = resource.readByte(TIM2_file)
+    n_mipmaps = resource.readByte(TIM2_file)
+    #(1=16bbp, 2=24bpp, 3=32bbp, 4=4bbp, 5=8bpp)
+    CLUT_format = resource.readByte(TIM2_file)
+    #(1=16bbp, 2=24bpp, 3=32bbp, 4=4bbp, 5=8bpp)
+    image_format = resource.readByte(TIM2_file)
+
+    if image_format == 1:
+        bpp = 16
+    elif image_format == 2:
+        bpp = 24
+    elif image_format == 3:
+        bpp = 32
+    elif image_format == 4:
+        bpp = 4
+    elif image_format == 5:
+        bpp = 8
+    elif image_format == 0:
+        bpp = 0
+
+    if CLUT_format == 1:
+        clut_entry_width = 16
+    elif CLUT_format == 2:
+        clut_entry_width = 24
+    elif CLUT_format == 3:
+        clut_entry_width = 32
+    elif CLUT_format == 4:
+        clut_entry_width = 4
+    elif CLUT_format == 5:
+        clut_entry_width = 8
+    elif CLUT_format == 0:
+        clut_entry_width = 0    
+
+    CLUT_size = n_palette_entries*clut_entry_width//8
+    if CLUT_size > 0:
+       nPalettes = int(palette_size//CLUT_size)
+
+    im_width = resource.readShort(TIM2_file)
+    im_height = resource.readShort(TIM2_file)
+
+    GsTEX0 = resource.readLong(TIM2_file)
+    GsTEX1 = resource.readLong(TIM2_file)
+
+    GsRegs = resource.readInt(TIM2_file)
+    GsTexClut = resource.readInt(TIM2_file)
+    
+
+    if CLUT_format & 0x80 != 0:
+        linear_CLUT = True
+    else:
+        linear_CLUT = False
+    
+    CLUT_format = CLUT_format & 0x7F
+
+    #------------------
+    clut_offset = total_image_size + offset
+    palette_2D = get_palette(target_TIM_path, clut_offset, image_format)#ref_im.palette.colors
     palette = []
-    for y in range(16):
+    
+    for y in range(n_palette_entries//16):
         for x in range(16):
             palette += [palette_2D[y][x]]
-    palette_array = []
-    #for x in range(256):
-    #    palette_array = palette_array + [palette[x]]
 
     for v in range(ref_im.height):
         for u in range(ref_im.width):
             ref_color = np.asarray(ref_im.getpixel((u,v)))
-            ref_color[3] = min(255, ref_color[3]*2)
+            ref_color[3] = min(255, ref_color[3])
             edited_color = np.asarray(edited_im.getpixel((u,v)))
-            edited_color[3] = min(255, edited_color[3]*2)
+            edited_color[3] = min(255, edited_color[3])
 
             if not np.array_equiv(ref_color, edited_color):
                 if edited_color[3] == 0:
@@ -526,8 +623,19 @@ def packTEX2(target_TEX_path, offset, reference_PNG_path, edited_PNG_path):
                     closest_color = closest(palette, edited_color)
                 
                 graphics_val = closest_color
-                target_file.seek(offset + v*ref_im.width + u)
-                target_file.write(graphics_val.to_bytes(1, "little"))
+                if bpp == 8:
+                    TIM2_file.seek(buffer + offset + header_size + 0x10 +  v*ref_im.width + u)
+                    #TIM2_file.seek(offset + v*ref_im.width + u)
+                    TIM2_file.write(graphics_val.to_bytes(1, "little"))
+                elif bpp == 4:
+                    TIM2_file.seek(buffer + offset + header_size + 0x10 + (v*ref_im.width + u)//2)
+
+                    tim_byte = resource.readByte(TIM2_file, go_back = True)
+                    push_back = ((v*ref_im.width + u) %2)*4
+                    push_back_mask = 4 - push_back
+                    mask = 0b1111
+                    new_byte = (tim_byte & (mask<< push_back_mask)) + ( graphics_val << push_back)
+                    TIM2_file.write(new_byte.to_bytes(1, "little"))
 
     return
 
@@ -584,7 +692,7 @@ def prepareInsertionFiles():
 #ripTIMpack(MAP_FOLDER + "/M_I01000/6.bin", MAP_TYPE)
 #unpackIMGTIM2s()
 #unpackMap()
-#TIM2_to_PNG("C:\dev\\boku2\IMG_RIP\\system\\bumper2.tm2", 0x80)
+
 #packTEX("C:\dev\maid\MAP_0x1521800_0x1546e00.TEX", 0x92d00, "C:\dev\maid\GFXrip\MAP_0x1521800_0x1546e00_offset_0x92d00 - Copy copy.png")
 #convertTo8Bit("C:/Users/alibu/Desktop/MAP_0x1521800_0x15a8c00_133632.png")
 #packTEX2("C:\dev\maid\BD_EDITS\MAP_0x7639000_0x7639040.TEX", 0, "C:\dev\maid\GFXrip\MAP_0x7639000_0x7639040_offset_0x0.png", "C:\dev\maid\IMAGE_EDITS\MAP_0x7639000_0x7639040_offset_0x0.png")
@@ -592,3 +700,7 @@ def prepareInsertionFiles():
 #unpackTEX2("C:\dev\maid\BD_EDITS\MAP_0x7639000_0x7639040.TEX")
 #unpackAllTex()
 #repack()
+
+#PNG_to_TIM2("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80, "IMG_GFX_RIP\\system\\bk_font.tms_0x80_0.png", "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png", 0)
+#Tims = TIM2_to_PNG("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80)
+#Tims[0].show()

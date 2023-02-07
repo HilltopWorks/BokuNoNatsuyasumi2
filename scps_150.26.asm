@@ -53,24 +53,22 @@
 .definelabel	font_color_l, 0x15c8
 
 
-shadow_x equ 0x20
-shadow_y equ 0x10
-
-curr_x equ  s4
-newlines equ v1
-gpu_call equ s0
-
+shadow_x equ 0x28
+shadow_y equ 0x14
 text_padding equ 2
 base_x equ 0x330
 base_y equ 0xAD
 ;font_width equ 0x160	 ; kerning
 font_spacing equ 0xC ; newline spacing
+
 white  equ 0x7FFFFFFF
 black  equ 0x7F000000
 yellow equ 0x7F00FFFF
 
-;TODO: make this loop another time with black text
-;	   and slight x/y offset.
+curr_x equ  s4
+newlines equ v1
+gpu_call equ s0
+
 
 .org draw_dialogue_char_start
 .area draw_dialogue_char_end - draw_dialogue_char_start,0
@@ -145,7 +143,7 @@ font_loop:
 .org func_vwf
 	;vwf
 	la v1, vwf_table
-	la s2, char_pointer
+	la s2, char_pointer		;s2 = &text_base
 	lw v0, 0x10(s2)			;v0 = char_offset/2
 	sll v0, v0, 0x1			;v0 = char_offset
 	lw s2, 0x0(s2)			;s2 = text_base

@@ -107,7 +107,7 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = ASM_ONLY
+mode = FULL
 
 #injectIMGs()
 build(mode)

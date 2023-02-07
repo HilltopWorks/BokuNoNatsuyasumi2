@@ -47,23 +47,35 @@ def ReadString(file, go_back = False):
                 read_string += byte.decode()'''
 
 #Reads little endian long from file and advances cursor
-def readLong(file):
+def readLong(file, go_back = False):
+    initial_pos = file.tell()
     integer = int.from_bytes(file.read(8), byteorder='little')
+    if go_back:
+                file.seek(initial_pos)
     return integer
 
 #Reads little endian int from file and advances cursor
-def readInt(file):
+def readInt(file, go_back = False):
+    initial_pos = file.tell()
     integer = int.from_bytes(file.read(4), byteorder='little')
+    if go_back:
+        file.seek(initial_pos)
     return integer
 
 #Reads little endian short from file and advances cursor
-def readShort(file):
+def readShort(file, go_back = False):
+    initial_pos = file.tell()
     readShort = int.from_bytes(file.read(2), byteorder='little')
+    if go_back:
+        file.seek(initial_pos)
     return readShort
 
 #Reads little endian byte from file and advances cursor
-def readByte(file):
+def readByte(file, go_back = False):
+    initial_pos = file.tell()
     readByte = int.from_bytes(file.read(1), byteorder='little')
+    if go_back:
+        file.seek(initial_pos)
     return readByte
 
 def readPXLEntries(file, PMODE, fileLength):
