@@ -1,3 +1,5 @@
+;TV STARTS AT 335 in VOICE
+
 ;vwf
 
 la v0, vwf_table

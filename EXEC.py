@@ -86,6 +86,8 @@ def build(mode):
         injectIMGs()
 
         #TODO pack graphics
+        TIM2.PNG_to_TIM2("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80, "IMG_GFX_RIP\\system\\bk_font.tms_0x80_0.png", "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png", 0)
+
 
         #Generate bin files
         print("____BUILD: Packing MAP files")
@@ -94,7 +96,7 @@ def build(mode):
         UNPACK.packIMG("IMG_RIP_EDITS", "ISO_EDITS")
         #UNPACK.updateCRCs(IMG_EDITS_DIR)
 
-    #TODO apply all ASM patches
+
     print("____BUILD: Applying ASM patches")
     subprocess.call(['armips.exe', 'scps_150.26.asm'])
 

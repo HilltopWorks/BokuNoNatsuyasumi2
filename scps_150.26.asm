@@ -25,6 +25,14 @@
 .org 0x20a978
 	addiu	a0, a0, -0x11b0
 
+; ################		   Native Horizontal text fixes
+
+; Hori text texel 23->22 fix
+.org 0x018077c
+	addiu v1, a2, 0x16
+.org 0x0180794
+	addiu v0, a0, 0x16
+
 ; ################		   Load vwf table				####################
 .org vwf_table
 .import "font_kerning.bin"
