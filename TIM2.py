@@ -462,7 +462,7 @@ def closest(colors,color):
     return index_of_smallest 
 
 def getAlpha(palette):
-    for color_num in range(256):
+    for color_num in range(len(palette)):
         if palette[color_num][3] == 0:
             return color_num
 

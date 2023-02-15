@@ -8,16 +8,55 @@
 .definelabel func_vwf, 0x028eb34
 .definelabel text_loop_space, 0x00290538 ;free debug text space
 
-
+.definelabel 	get_fb_y, 0x0012D3C8
+.definelabel 	get_fb_x, 0x0012D390
 ; ################         Removing the CRC Check            ####################
 .org 0x1bff98
 	nop
 	ori v0, zero, 0x0
 
-; ################         Removing the dialogue background            ####################
-.org 0x1ff530
-	nop
-	nop
+; ################         Edit the dialogue background            ####################
+;;Disable BG
+;.org 0x1ff530
+;	nop
+;	nop
+
+bg_alpha equ 0x34
+bg_tone  equ 0x10
+
+bg_y_start equ 0xA40
+
+;set bg alpha value
+.org 0x0180248
+	li v0, bg_alpha
+
+.org 0x001801f8  
+	li v1, bg_alpha
+
+;bg_fade amount per frame and end point
+.org 0x00180238 
+	addiu  v0,v0, bg_alpha >> 4
+	slti v1,v0, bg_alpha + 1
+
+;bg fade amount per frame (end point is 0)
+.org 0x0018025c
+	addiu  v0,v0,-bg_alpha >> 4
+
+;bg greyscale value
+.org 0x00180290  
+	li    s1, bg_tone
+
+;bg_left (stay at framebuffer left) and top
+.org 0x0018030c 
+	jal get_fb_y
+	sh v0, 0x8(s0)
+	addiu v0, v0, bg_y_start
+
+;disable gradient
+.org 0x0018037c
+	li   v0, 0x0
+.org 0x001803a0
+	li   v0, 0x0
 
 ; ################         Enable debug mode            ####################
 .org 0x020a970
@@ -27,11 +66,97 @@
 
 ; ################		   Native Horizontal text fixes
 
+mfw equ 0xb ;Meny font width
+
 ; Hori text texel 23->22 fix
 .org 0x018077c
 	addiu v1, a2, 0x16
 .org 0x0180794
 	addiu v0, a0, 0x16
+; Char H/W 23->22 fix
+.org 0x01807d0 
+	addiu  v1,s2, 0x16
+.org 0x01807e4
+	addiu  v1,s3, 0x16
+
+; Hori text kerning updates
+
+.org 0x0155e94 
+	addiu s2,s2,mfw
+
+.org 0x155ee8
+	addiu s2,s2,mfw
+
+.org 0x0156044  
+	addiu s2,s2,-mfw
+
+.org 0x0156098
+	addiu s2,s2,-mfw
+
+.org 0x0015a4bc
+	li v1,mfw + 3
+
+.org 0x015a4c4
+	li v0,mfw
+	li v1,mfw
+	li v0,mfw + 3
+
+;;.org 0x019d290  ;VERTICAL TEXT
+;	addiu s2,s2,mfw
+
+.org 0x001a7998  
+	addiu s1,s1,mfw
+
+.org 0x001a7a78  
+	addiu  s1,s1,mfw
+
+.org 0x001a7b30  
+	addiu  s1,s1,mfw
+
+.org 0x001a7d4c
+	addiu  s1,s1,mfw
+
+
+.org 0x001a81f8 
+	addiu s1,s1,mfw
+
+.org 0x001a7ef8  
+	addiu s1,s1,mfw
+
+.org 0x001a7fdc
+	addiu  s1,s1,mfw
+
+;.org 0x001a8380  
+	;l;i t4,mfw ; this is an odd one
+
+.org 0x001a868c  
+	addiu  s1,s1,mfw
+
+.org 0x001e7738  
+	addiu  s1,s1,mfw
+
+.org 0x001e7780 
+	addiu s1,s1,mfw
+
+.org 0x001fb15c  
+	li    s4,mfw
+
+.org 0x001fcb80  
+	li     a3,mfw
+
+.org 0x001fcc18  
+	li     a3,mfw
+
+
+.org 0x001b47c4  
+	li     t1,mfw
+
+.org 0x001b47cc  
+	li     v0,mfw
+
+
+
+
 
 ; ################		   Load vwf table				####################
 .org vwf_table
@@ -50,8 +175,7 @@
 .definelabel	set_x_top,   0x1fde34
 .definelabel	set_x_top_2, 0x001fdd40
 .definelabel	set_y_base, 0x1fde98
-.definelabel 	get_fb_y, 0x0012D3C8
-.definelabel 	get_fb_x, 0x0012D390
+
 
 .definelabel	char_pointer, 0x0027bbc0
 .definelabel	char_offset, 0x0027bbd0
