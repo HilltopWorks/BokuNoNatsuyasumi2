@@ -191,7 +191,7 @@ text_padding equ 2
 base_x equ 0x330
 base_y equ 0xAD
 ;font_width equ 0x160	 ; kerning
-font_spacing equ 0xC ; newline spacing
+font_spacing equ 0xD ; newline spacing
 
 white  equ 0x7FFFFFFF
 black  equ 0x7F000000

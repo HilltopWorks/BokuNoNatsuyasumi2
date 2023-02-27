@@ -51,6 +51,14 @@ MAP_TYPE = 1
 IMG_TYPE = 2
 FILE_ERROR = -1
 
+IMG_BUV_SPECIALS =  {
+                    os.path.join(IMG_FOLDER,"system\\submenu\\img\\root.bin"):
+                           {0x30:   [os.path.join(IMG_FOLDER,"system\\submenu\\img\\root.buv"), 0],
+                            0xe6330:[os.path.join(IMG_FOLDER,"system\\submenu\\img\\root.bin"), 0xefbf0]
+                                                     }
+                    }
+
+
 def readBUV(path, offset):
     for i in range(8):
         offset = offset - i*0x80
@@ -62,7 +70,7 @@ def readBUV(path, offset):
         file.seek(offset)
         n_entries = resource.readInt(file)
         
-        if n_entries == 0:
+        if n_entries == 0 or n_entries > 0x200:
             continue
 
         for x in range(n_entries):
@@ -145,9 +153,11 @@ def TIM2_to_PNG(tim2_file_path, offset):
     elif CLUT_format == 0:
         bpp = 0
     
-
+    
     CLUT_size = n_palette_entries*bpp/8
     if CLUT_size > 0:
+       if image_format == 4:
+           CLUT_size = min(palette_size,0x100)
        nPalettes = int(palette_size//CLUT_size)
 
     im_width = resource.readShort(TIM2_file)
@@ -166,6 +176,7 @@ def TIM2_to_PNG(tim2_file_path, offset):
         linear_CLUT = False
     
     CLUT_format = CLUT_format & 0x7F
+    
     TIM2_file.seek(buffer + offset + header_size + 0x10)
 
     graphics = []
@@ -195,14 +206,18 @@ def TIM2_to_PNG(tim2_file_path, offset):
     else:
         assert False, "OH NO, CLUT FORMAT NOT 32 bit or DIRECT COLOR!!! File: " + tim2_file_path + " OFFSET:" + str(offset)
 
+
+    CLUT_start = TIM2_file.tell()
     if CLUT_format == 3:
         ims = []
         for x in range(nPalettes):
+            if image_format == 4:
+                TIM2_file.seek(CLUT_start + x*0x100)
             CLUT_array = numpy.zeros((16, 16 , 4), dtype=numpy.uint8)
             palette = []
 
-
             for x in range(n_palette_entries):
+                
                 palette += [int.from_bytes(TIM2_file.read(4), "little")]
 
                 red =    palette[x] &       0xFF
@@ -363,14 +378,65 @@ def findTIM2s(file_path):
 
     return matches
 
+def unpackIMGTIM2(path):
+    f=open(path,'rb')
+    if not os.path.isfile(path):
+        return
+    
+    print("Checking " + path)
+    TIM2_offsets = findTIM2s(path)
 
+    for offset in TIM2_offsets:
+        print("Unpacking offset ", hex(offset))
+        ims = TIM2_to_PNG(path, offset)
+        buv_path = path.replace(".tm2", "") + ".buv"
+
+        if path in IMG_BUV_SPECIALS:
+            buv = IMG_BUV_SPECIALS[path]
+            if offset in buv:
+                buv = readBUV(IMG_BUV_SPECIALS[path][offset][0], IMG_BUV_SPECIALS[path][offset][1])
+            else:
+                buv = -1
+        elif os.path.exists(buv_path):
+            buv = readBUV(buv_path, 0)
+        else:
+            buv = readBUV(path, offset - 0x80)
+        
+        if len(ims) > 1 and buv != -1:
+            width = ims[0].width
+            height = ims[0].height
+            im_buffer = Image.new("RGBA", (width, height), (0,0,0,0))
+
+            for slice in buv:
+                slice_coords = (slice['u'], slice['v'], slice['u'] + slice['w'], slice['v'] + slice['h'] )
+                slice_im = ims[slice["clut_number"]].crop(slice_coords)
+                im_buffer.paste(slice_im, (slice['u'], slice['v']))
+
+            img_file_path = path.replace(IMG_FOLDER, IMG_GFX_FOLDER)
+            img_file_path = img_file_path + "_" + hex(offset) + '.png'
+            directory = str(Path(img_file_path).parent)
+            os.makedirs(directory, exist_ok=True)
+            im_buffer.save(img_file_path)
+            #im_buffer.show()
+
+        else:
+            for x in range(len(ims)):
+                im = ims[x]
+                img_file_path = path.replace(IMG_FOLDER, IMG_GFX_FOLDER)
+                img_file_path = img_file_path + "_" + hex(offset)  + "_" + str(x) +  '.png'
+                directory = str(Path(img_file_path).parent)
+                os.makedirs(directory, exist_ok=True)
+                im.save(img_file_path)
 
 def unpackIMGTIM2s():
-
     for subdir, dirs, files in os.walk(IMG_FOLDER):
         for file in files:
             # checking if it is a file
             path = os.path.join(subdir, file)
+
+            unpackIMGTIM2(path)
+
+            '''
             f=open(path,'rb')
             if not os.path.isfile(path):
                 continue
@@ -382,7 +448,9 @@ def unpackIMGTIM2s():
                 ims = TIM2_to_PNG(path, offset)
                 buv_path = path.replace(".tm2", "") + ".buv"
 
-                if os.path.exists(buv_path):
+                if path in IMG_BUV_SPECIALS:
+                    buv = readBUV(IMG_BUV_SPECIALS[path][offset][0], IMG_BUV_SPECIALS[path][offset][1])
+                elif os.path.exists(buv_path):
                     buv = readBUV(buv_path, 0)
                 else:
                     buv = readBUV(path, offset - 0x80)
@@ -413,7 +481,7 @@ def unpackIMGTIM2s():
                         os.makedirs(directory, exist_ok=True)
                         im.save(img_file_path)
                     
-                
+                '''
 
 
 
@@ -688,7 +756,12 @@ def prepareInsertionFiles():
         if extension == ".png" or extension == ".PNG":
             parent_name = basename.split("_offset_")[0] + ".TEX"
 
-#unpackIMGTIM2s()
+
+#readBUV("IMG_RIP\system\submenu\img\\root.buv", 0)
+
+#unpackIMGTIM2(os.path.join(IMG_FOLDER,"system\\submenu\\img\\root.bin" ))
+
+unpackIMGTIM2s()
 #ripTIMpack(MAP_FOLDER + "/M_I01000/6.bin", MAP_TYPE)
 #unpackIMGTIM2s()
 #unpackMap()
