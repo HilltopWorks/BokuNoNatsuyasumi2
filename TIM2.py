@@ -55,7 +55,14 @@ IMG_BUV_SPECIALS =  {
                     os.path.join(IMG_FOLDER,"system\\submenu\\img\\root.bin"):
                            {0x30:   [os.path.join(IMG_FOLDER,"system\\submenu\\img\\root.buv"), 0],
                             0xe6330:[os.path.join(IMG_FOLDER,"system\\submenu\\img\\root.bin"), 0xefbf0]
-                                                     }
+                            },
+                    os.path.join(IMG_FOLDER,"fish\\img\\fish_on_mem.bin"):
+                           {0xa0:   [os.path.join(IMG_FOLDER,"fish\\img\\fish_on_mem.bin"), 0x35fe0],
+                            0x32e0:[os.path.join(IMG_FOLDER,"fish\\img\\fish_on_mem.bin"), 0x36010],
+                            0x4720:[os.path.join(IMG_FOLDER,"fish\\img\\fish_on_mem.bin"), 0x36020],
+                            0x14f60:[os.path.join(IMG_FOLDER,"fish\\img\\fish_on_mem.bin"), 0x360c0],
+                            0x257a0:[os.path.join(IMG_FOLDER,"fish\\img\\fish_on_mem.bin"), 0x36160]
+                           }             
                     }
 
 
@@ -105,7 +112,7 @@ def TIM2_to_PNG(tim2_file_path, offset):
         print("TIM2 FILE MISSING HEADER!!! Filename: " +  basename )
         return FILE_ERROR
 
-    version = resource.readByte(TIM2_file)
+    version = resource.readByte(TIM2_file) #Always 4?
     TIM2_format = resource.readByte(TIM2_file)
 
 
@@ -759,9 +766,9 @@ def prepareInsertionFiles():
 
 #readBUV("IMG_RIP\system\submenu\img\\root.buv", 0)
 
-#unpackIMGTIM2(os.path.join(IMG_FOLDER,"system\\submenu\\img\\root.bin" ))
+#unpackIMGTIM2(os.path.join(IMG_FOLDER,"fish\\img\\fish_on_mem.bin" ))
 
-unpackIMGTIM2s()
+#unpackIMGTIM2s()
 #ripTIMpack(MAP_FOLDER + "/M_I01000/6.bin", MAP_TYPE)
 #unpackIMGTIM2s()
 #unpackMap()

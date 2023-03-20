@@ -576,6 +576,13 @@ def injectPO(binary_path, po_path, mode, dict):
     source = open(binary_path, "rb")
     po = polib.pofile(po_path)
 
+    all_lines = {}
+
+    for entry in po:
+        if entry.msgstr != "":
+            all_lines[entry.msgid] = entry.msgstr
+
+
     if mode == MAP_MODE:
         map = splitMap(binary_path)
         for entry in po:
@@ -583,6 +590,9 @@ def injectPO(binary_path, po_path, mode, dict):
             split_table = table_line.split("-")
             table_number = int(split_table[0].split(":")[1])
             line_number = int(split_table[1].split(":")[1])
+
+            if entry.msgid in all_lines:
+                entry.msgstr = all_lines[entry.msgid]
 
             if entry.msgstr == "":
                 continue
