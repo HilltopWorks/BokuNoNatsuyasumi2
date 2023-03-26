@@ -12,6 +12,9 @@ from scipy import ndimage
 day_strings = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 day_colors = [(144,53,40,255), (53,53,53,255), (151,77,46,255), (33,41,122,255), (85,57,47,255) ,(40,74,61,255), (144,53,40,255)]
 
+
+diary_base_path = "FONT/diary_base.png"
+
 def printBottleCap(img_path, string):
     sourceImage = Image.open(img_path)#.convert("RGBA")
 
@@ -136,15 +139,52 @@ def printCalendar(img_path, string, color):
     #cleanIm.show()
     cleanIm.save(img_path)
 
-desc = """Chinese Peacock
 
+def printDiary(img_path,stringL, stringR):
+    sourceImage = Image.open(img_path)
+    baseImage = Image.open(diary_base_path)
+
+    sourceImage = sourceImage.crop((0,0,512,195))
+
+    baseImage.paste(sourceImage)
+
+    
+
+    draw = ImageDraw.Draw(baseImage)
+
+    font = "FONT\\VarelaRound-Regular.ttf"
+    #font = "FONT\\FOT-Seurat Pro DB.otf"
+    fontSize = 21
+    fontColor = (0, 0, 0, 255)
+    imFont = ImageFont.truetype(font, fontSize)
+
+    draw.text( (8,196), stringL, fontColor, imFont, "la", 7, 'left')
+    draw.text( (262,196), stringR, fontColor, imFont, "la", 7, 'left')
+
+    baseImage.show()
+    baseImage.save(img_path)
+    return
+
+desc = """Chinese Peacock
 These large butterflies
 suddenly pop out when
 I step into the woods.
 Their inky black wings
 shine so pretty."""
 
-printBugInfo("imgTestBUG.PNG", desc)
+desc1 = """I finally made it to my
+uncle's beach house!
+The big summery sun
+shined down all the
+way to the port.
+"""
+
+desc2 = """Listening close from
+my bed, I can hear
+the sound of the
+waves."""
+printDiary("nik001.tm2_0x0_0.png", desc1, desc2)
+#printBugInfo("imgTestBUG.PNG", desc)
 #printBottleCap("IMG_GFX_EDITS\\system\\submenu\\img\\okan_23.tm2.arn_0x0_0.png", "24. Relict Dragonfly")
 #printCalendar("IMG_GFX_EDITS\\system\\submenu\\img\\a_cal7.tm2_0x0_0.png", "Sat", (41,105,140,255))
 #printCalendar("IMG_GFX_EDITS\\system\\submenu\\img\\a_cal1.tm2_0x0_0.png", "Sun", (144,53,40,255))

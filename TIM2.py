@@ -1,11 +1,12 @@
 from PIL import Image,ImageDraw
 import os
 import numpy
-import copy
+import filecmp
 import shutil
 import numpy as np
 from pathlib import Path
 import resource
+import math
 import re
 
 PALETTE_END_ADDR = 0x28
@@ -42,10 +43,13 @@ OUTPUT_FOLDER = "GFXrip" #TEST / GFXrip
 
 IMG_PATH = "ISO_RIP/boku2.img"
 IMG_FOLDER = "IMG_RIP"
+IMG_EDITS = "IMG_RIP_EDITS"
 IMG_GFX_FOLDER = "IMG_GFX_RIP"
+IMG_GFX_EDITS = "IMG_GFX_EDITS"
 
 MAP_FOLDER = "MAP_RIP"
 MAP_GFX_FOLDER = "MAP_GFX_RIP"
+MAP_GFX_EDITS = "MAP_GFX_EDITS" 
 
 MAP_TYPE = 1
 IMG_TYPE = 2
@@ -65,6 +69,12 @@ IMG_BUV_SPECIALS =  {
                            }             
                     }
 
+
+def pixelEquality(ref_color, edited_color):
+    if edited_color[3] == 0 and ref_color[3] == 0:
+        return True
+    else:
+        return np.array_equiv(ref_color, edited_color)
 
 def readBUV(path, offset):
     for i in range(8):
@@ -161,7 +171,7 @@ def TIM2_to_PNG(tim2_file_path, offset):
         bpp = 0
     
     
-    CLUT_size = n_palette_entries*bpp/8
+    CLUT_size = n_palette_entries*bpp//8
     if CLUT_size > 0:
        if image_format == 4:
            CLUT_size = min(palette_size,0x100)
@@ -491,7 +501,6 @@ def unpackIMGTIM2s():
                 '''
 
 
-
 def unpackFont(filepath):
     font_file = open(filepath, 'rb')
     font_file.seek(FONT_START)
@@ -576,7 +585,7 @@ def get_palette(target_TEX_path, offset, bpp):
     
     return CLUT_array
 
-def PNG_to_TIM2(target_TIM_path, offset, reference_PNG_path, edited_PNG_path, clut_number):
+def PNG_to_TIM2(target_TIM_path, offset, reference_PNG_path, edited_PNG_path, clut_number, coords=-1):
     stem = Path(reference_PNG_path).stem
     basename = os.path.basename(reference_PNG_path)
 
@@ -655,6 +664,8 @@ def PNG_to_TIM2(target_TIM_path, offset, reference_PNG_path, edited_PNG_path, cl
 
     CLUT_size = n_palette_entries*clut_entry_width//8
     if CLUT_size > 0:
+       if image_format == 4:
+           CLUT_size = min(palette_size,0x100)
        nPalettes = int(palette_size//CLUT_size)
 
     im_width = resource.readShort(TIM2_file)
@@ -673,47 +684,152 @@ def PNG_to_TIM2(target_TIM_path, offset, reference_PNG_path, edited_PNG_path, cl
         linear_CLUT = False
     
     CLUT_format = CLUT_format & 0x7F
-
-    #------------------
-    clut_offset = total_image_size + offset
-    palette_2D = get_palette(target_TIM_path, clut_offset, image_format)#ref_im.palette.colors
-    palette = []
     
-    for y in range(n_palette_entries//16):
-        for x in range(16):
-            palette += [palette_2D[y][x]]
+    #------------------
+    clut_offset = pxl_size + header_size + buffer + 0x10 + offset + (clut_number * CLUT_size)
+    if CLUT_format != 0:
+        palette_2D = get_palette(target_TIM_path, clut_offset, bpp)#ref_im.palette.colors
+        palette = []
+        
+        for y in range(n_palette_entries//16):
+            for x in range(16):
+                palette_2D[y][x][3] = min(255,palette_2D[y][x][3] *2)
+                palette += [palette_2D[y][x]]
+            
 
-    for v in range(ref_im.height):
-        for u in range(ref_im.width):
+    #Define bounds for edit (for BUV images)
+    if coords == -1:
+        x_start = 0
+        x_end = ref_im.width
+        y_start = 0
+        y_end = ref_im.height
+    else:
+        x_start = coords[0]
+        x_end = coords[2]
+        y_start = coords[1]
+        y_end = coords[3]
+
+    for v in range(y_start, y_end):
+        for u in range(x_start, x_end):
             ref_color = np.asarray(ref_im.getpixel((u,v)))
             ref_color[3] = min(255, ref_color[3])
             edited_color = np.asarray(edited_im.getpixel((u,v)))
             edited_color[3] = min(255, edited_color[3])
 
-            if not np.array_equiv(ref_color, edited_color):
-                if edited_color[3] == 0:
-                    #Find any color with alpha=0
-                    closest_color = getAlpha(palette)
-                else:
-                    closest_color = closest(palette, edited_color)
-                
-                graphics_val = closest_color
-                if bpp == 8:
-                    TIM2_file.seek(buffer + offset + header_size + 0x10 +  v*ref_im.width + u)
-                    #TIM2_file.seek(offset + v*ref_im.width + u)
-                    TIM2_file.write(graphics_val.to_bytes(1, "little"))
-                elif bpp == 4:
-                    TIM2_file.seek(buffer + offset + header_size + 0x10 + (v*ref_im.width + u)//2)
+            if not pixelEquality(ref_color, edited_color):
+                if CLUT_format == 3:
+                    
+                    if edited_color[3] == 0:
+                        #Find any color with alpha=0
+                        closest_color = getAlpha(palette)
+                    else:
+                        closest_color = closest(palette, edited_color)
+                    
+                    graphics_val = closest_color
+                    if bpp == 8:
+                        TIM2_file.seek(buffer + offset + header_size + 0x10 +  v*ref_im.width + u)
+                        #TIM2_file.seek(offset + v*ref_im.width + u)
+                        TIM2_file.write(graphics_val.to_bytes(1, "little"))
+                    elif bpp == 4:
+                        TIM2_file.seek(buffer + offset + header_size + 0x10 + (v*ref_im.width + u)//2)
 
-                    tim_byte = resource.readByte(TIM2_file, go_back = True)
-                    push_back = ((v*ref_im.width + u) %2)*4
-                    push_back_mask = 4 - push_back
-                    mask = 0b1111
-                    new_byte = (tim_byte & (mask<< push_back_mask)) + ( graphics_val << push_back)
-                    TIM2_file.write(new_byte.to_bytes(1, "little"))
+                        tim_byte = resource.readByte(TIM2_file, go_back = True)
+                        push_back = ((v*ref_im.width + u) %2)*4
+                        push_back_mask = 4 - push_back
+                        mask = 0b1111
+                        new_byte = (tim_byte & (mask<< push_back_mask)) + ( graphics_val << push_back)
+                        TIM2_file.write(new_byte.to_bytes(1, "little"))
+                elif CLUT_format == 0:
+                    TIM2_file.seek(buffer + offset + header_size + 0x10 +  (v*ref_im.width + u)*4)
+                    red = edited_color[0].item()
+                    green = edited_color[1].item()
+                    blue = edited_color[2].item()
+                    alpha = math.ceil(edited_color[3].item()/2)
+                    pixel = red + (green << 8) + (blue << 16) + (alpha << 24)
+                    TIM2_file.write(pixel.to_bytes(4, "little"))
+
 
     return
 
+def PNG_to_buvTIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path, buv):
+
+    for slice in buv:
+        x_start = slice['u']
+        y_start = slice['v']
+        x_end = x_start + slice['w']
+        y_end = y_start + slice['h']
+        coords = (x_start, y_start, x_end, y_end)
+        PNG_to_TIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path, slice['clut_number'], coords)
+
+    return
+
+
+def injectTIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path):
+
+    buv_path = target_TM2_path.replace(".tm2", "") + ".buv"
+
+    if target_TM2_path in IMG_BUV_SPECIALS:
+        buv = IMG_BUV_SPECIALS[target_TM2_path]
+        if TM2_offset in buv:
+            buv = readBUV(IMG_BUV_SPECIALS[target_TM2_path][TM2_offset][0], IMG_BUV_SPECIALS[target_TM2_path][TM2_offset][1])
+        else:
+            buv = -1
+    elif os.path.exists(buv_path):
+        buv = readBUV(buv_path, 0)
+    else:
+        buv = readBUV(target_TM2_path, TM2_offset - 0x80)
+
+
+    if buv == -1:
+        PNG_to_TIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path, 0)
+    else:
+        PNG_to_buvTIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path, buv)
+
+
+def injectAll():
+    #Copy clean files
+    for subdir, dirs, files in os.walk(IMG_GFX_FOLDER):
+        for file in files:
+            # checking if it is a file
+            ref_PNG_path = os.path.join(subdir, file)
+            edit_PNG_path = ref_PNG_path.replace(IMG_GFX_FOLDER, IMG_GFX_EDITS)
+
+            if filecmp.cmp(ref_PNG_path, edit_PNG_path):
+                #skip unedited files
+                continue
+            target_TM2_path = edit_PNG_path.replace(IMG_GFX_EDITS, IMG_EDITS)
+            target_TM2_path = target_TM2_path.split("_0x")[0]
+            ref_TM2_path = target_TM2_path.replace(IMG_EDITS, IMG_FOLDER)
+            shutil.copyfile(ref_TM2_path, target_TM2_path)
+
+    for subdir, dirs, files in os.walk(IMG_GFX_FOLDER):
+        for file in files:
+            # checking if it is a file
+            ref_PNG_path = os.path.join(subdir, file)
+            edit_PNG_path = ref_PNG_path.replace(IMG_GFX_FOLDER, IMG_GFX_EDITS)
+
+            if filecmp.cmp(ref_PNG_path, edit_PNG_path):
+                #skip unedited files
+                continue
+            
+            print("Injecting graphic:", edit_PNG_path)
+
+            TM2_offset = file.split("_0x")[1]
+            if "_" in TM2_offset:
+                TM2_offset = TM2_offset.split("_")[0]
+            else:
+                TM2_offset = TM2_offset.replace(".png", '')
+            TM2_offset = int(TM2_offset, 16)
+            target_TM2_path = edit_PNG_path.replace(IMG_GFX_EDITS, IMG_EDITS)
+            target_TM2_path = target_TM2_path.split("_0x")[0]
+            ref_TM2_path = target_TM2_path.replace(IMG_EDITS, IMG_FOLDER)
+            #shutil.copyfile(ref_TM2_path, target_TM2_path)
+            
+            injectTIM2(target_TM2_path, TM2_offset, ref_PNG_path, edit_PNG_path)
+
+
+
+    return
 
 
 #takes path to an image and returns 8 bit indexed image with 32 bit RGBA clut
@@ -764,6 +880,9 @@ def prepareInsertionFiles():
             parent_name = basename.split("_offset_")[0] + ".TEX"
 
 
+#injectTIM2("item_img.tm2", 0, "item_img.tm2_0x0.png", "item_img.tm2_0x0 - Edit.png")
+
+#PNG_to_TIM2("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80, "IMG_GFX_RIP\\system\\bk_font.tms_0x80_0.png", "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png", 0)
 #readBUV("IMG_RIP\system\submenu\img\\root.buv", 0)
 
 #unpackIMGTIM2(os.path.join(IMG_FOLDER,"fish\\img\\fish_on_mem.bin" ))
@@ -780,7 +899,9 @@ def prepareInsertionFiles():
 #unpackTEX2("C:\dev\maid\BD_EDITS\MAP_0x7639000_0x7639040.TEX")
 #unpackAllTex()
 #repack()
-
 #PNG_to_TIM2("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80, "IMG_GFX_RIP\\system\\bk_font.tms_0x80_0.png", "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png", 0)
 #Tims = TIM2_to_PNG("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80)
 #Tims[0].show()
+
+#PNG_to_buvTIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path, buv_path, buv_offset)
+#

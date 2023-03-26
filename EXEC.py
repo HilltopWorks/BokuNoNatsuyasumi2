@@ -67,6 +67,11 @@ def build_ISO(input, output):
 
 def build(mode):
     if mode > 0:
+        #Pack graphics
+        TIM2.injectAll()
+        shutil.copy("IMG_RIP\\system\\bk_font.tms","IMG_RIP_EDITS\\system\\bk_font.tms")
+        TIM2.PNG_to_TIM2("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80, "IMG_GFX_RIP\\system\\bk_font.tms_0x80_0.png", "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png", 0)
+
         #Pull text from weblate
         print("____BUILD: Pulling text files")
         os.chdir("boku-no-natsuyasumi-2\\fishing-msg")
@@ -84,11 +89,6 @@ def build(mode):
         injectMAPs()
         print("____BUILD: Injecting IMGs")
         injectIMGs()
-
-        #TODO pack graphics
-        shutil.copy("IMG_RIP\\system\\bk_font.tms","IMG_RIP_EDITS\\system\\bk_font.tms")
-        TIM2.PNG_to_TIM2("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80, "IMG_GFX_RIP\\system\\bk_font.tms_0x80_0.png", "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png", 0)
-
 
         #Generate bin files
         print("____BUILD: Packing MAP files")
