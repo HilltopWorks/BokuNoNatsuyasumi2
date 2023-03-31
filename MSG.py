@@ -604,7 +604,8 @@ def injectPO(binary_path, po_path, mode, dict):
             
             if len(raw_line) % 4 == 2:
                 #PADDING
-                raw_line += b"\xCD\xCD"
+                #raw_line += b"\xCD\xCD"
+                pass
             map[table_number][1][line_number] = raw_line
         
         bin = repackMap(map)
@@ -627,7 +628,8 @@ def injectPO(binary_path, po_path, mode, dict):
                 raw_line = convertTextToRaw(dict, entry.msgstr)
             if len(raw_line) % 4 == 2:
                 #PADDING
-                raw_line += b"\xCD\xCD"
+                #raw_line += b"\xCD\xCD"
+                pass
             msg[line_number] = raw_line
 
         bin = repackMsg(msg, MSG_MODE)
@@ -645,7 +647,8 @@ def injectPO(binary_path, po_path, mode, dict):
             raw_line = convertTextToRaw(dict, entry.msgstr)
             if len(raw_line) % 4 == 2:
                 #PADDING
-                raw_line += b"\xCD\xCD"
+                #raw_line += b"\xCD\xCD"
+                pass
             msg[line_number] = raw_line
 
         bin = repackMsg(msg, OFFSET_ONLY_MODE)
@@ -654,7 +657,8 @@ def injectPO(binary_path, po_path, mode, dict):
         bin = convertTextToRaw(dict, po[0].msgstr)
         if len(bin) % 4 == 2:
             #PADDING
-            bin += b"\xCD\xCD"
+            #bin += b"\xCD\xCD"
+            pass
     source.close()
     out = open(binary_path, 'wb')
     out.write(bin)

@@ -69,9 +69,12 @@ IMG_BUV_SPECIALS =  {
                            }             
                     }
 
+CALENDAR_BG = (165,165,165)
 
 def pixelEquality(ref_color, edited_color):
-    if edited_color[3] == 0 and ref_color[3] == 0:
+    if len(ref_color) < 4:
+        return np.array_equiv(ref_color, edited_color)
+    elif edited_color[3] == 0 and ref_color[3] == 0:
         return True
     else:
         return np.array_equiv(ref_color, edited_color)
@@ -536,10 +539,16 @@ def unpackFont(filepath):
 
     return
 
+def blendColors(base, top, alpha):
+
+
+    return
 
 def closest(colors,color):
+    
     colors = np.array(colors)
     color = np.array(color)
+    
     distances = np.sqrt(np.sum((colors-color)**2,axis=1))
     index_of_smallest = int(np.where(distances==np.amin(distances))[0][0])
     smallest_distance = colors[index_of_smallest]
@@ -585,7 +594,7 @@ def get_palette(target_TEX_path, offset, bpp):
     
     return CLUT_array
 
-def PNG_to_TIM2(target_TIM_path, offset, reference_PNG_path, edited_PNG_path, clut_number, coords=-1):
+def PNG_to_TIM2(target_TIM_path, offset, reference_PNG_path, edited_PNG_path, clut_number, coords=-1, base_color = -1):
     stem = Path(reference_PNG_path).stem
     basename = os.path.basename(reference_PNG_path)
 
@@ -690,11 +699,21 @@ def PNG_to_TIM2(target_TIM_path, offset, reference_PNG_path, edited_PNG_path, cl
     if CLUT_format != 0:
         palette_2D = get_palette(target_TIM_path, clut_offset, bpp)#ref_im.palette.colors
         palette = []
+        palette_alpha = []
         
         for y in range(n_palette_entries//16):
             for x in range(16):
                 palette_2D[y][x][3] = min(255,palette_2D[y][x][3] *2)
-                palette += [palette_2D[y][x]]
+
+                if base_color != -1:
+                    pal_alpha = palette_2D[y][x][3]
+                    pal_r = (palette_2D[y][x][0] * (pal_alpha/255)) + (base_color[0] * (255-pal_alpha)/255)
+                    pal_g = (palette_2D[y][x][1] * (pal_alpha/255)) + (base_color[1] * (255-pal_alpha)/255)
+                    pal_b = (palette_2D[y][x][2] * (pal_alpha/255)) + (base_color[2] * (255-pal_alpha)/255)
+                    palette += [[pal_r, pal_g, pal_b]]
+                else:
+                    palette += [palette_2D[y][x]]
+                palette_alpha += [palette_2D[y][x]]
             
 
     #Define bounds for edit (for BUV images)
@@ -712,16 +731,20 @@ def PNG_to_TIM2(target_TIM_path, offset, reference_PNG_path, edited_PNG_path, cl
     for v in range(y_start, y_end):
         for u in range(x_start, x_end):
             ref_color = np.asarray(ref_im.getpixel((u,v)))
-            ref_color[3] = min(255, ref_color[3])
-            edited_color = np.asarray(edited_im.getpixel((u,v)))
-            edited_color[3] = min(255, edited_color[3])
+            if base_color == -1:
+                edited_color = np.asarray(edited_im.getpixel((u,v)))
+            else:
+                edited_alpha = edited_im.getpixel((u,v))[3]
+                edited_color = np.asarray(edited_im.getpixel((u,v)))[:3]
+                edited_color = edited_color * (edited_alpha/255) + np.asarray(base_color) * (255-edited_alpha)/255
+                ref_color = ref_color[:3]
 
-            if not pixelEquality(ref_color, edited_color):
+            if not pixelEquality(ref_im.getpixel((u,v)), edited_im.getpixel((u,v))):
                 if CLUT_format == 3:
                     
-                    if edited_color[3] == 0:
+                    if edited_im.getpixel((u,v))[3] == 0:
                         #Find any color with alpha=0
-                        closest_color = getAlpha(palette)
+                        closest_color = getAlpha(palette_alpha)
                     else:
                         closest_color = closest(palette, edited_color)
                     
@@ -768,10 +791,11 @@ def injectTIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path)
 
     buv_path = target_TM2_path.replace(".tm2", "") + ".buv"
 
-    if target_TM2_path in IMG_BUV_SPECIALS:
-        buv = IMG_BUV_SPECIALS[target_TM2_path]
+    buv_target_path = target_TM2_path.replace(IMG_EDITS, IMG_FOLDER)
+    if buv_target_path in IMG_BUV_SPECIALS:
+        buv = IMG_BUV_SPECIALS[buv_target_path]
         if TM2_offset in buv:
-            buv = readBUV(IMG_BUV_SPECIALS[target_TM2_path][TM2_offset][0], IMG_BUV_SPECIALS[target_TM2_path][TM2_offset][1])
+            buv = readBUV(IMG_BUV_SPECIALS[buv_target_path][TM2_offset][0], IMG_BUV_SPECIALS[buv_target_path][TM2_offset][1])
         else:
             buv = -1
     elif os.path.exists(buv_path):
@@ -779,9 +803,13 @@ def injectTIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path)
     else:
         buv = readBUV(target_TM2_path, TM2_offset - 0x80)
 
+    base_col = -1
+
+    if "a_cal" in reference_PNG_path:
+        base_col = CALENDAR_BG
 
     if buv == -1:
-        PNG_to_TIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path, 0)
+        PNG_to_TIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path, 0, base_color=base_col)
     else:
         PNG_to_buvTIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path, buv)
 
@@ -899,8 +927,8 @@ def prepareInsertionFiles():
 #unpackTEX2("C:\dev\maid\BD_EDITS\MAP_0x7639000_0x7639040.TEX")
 #unpackAllTex()
 #repack()
-#PNG_to_TIM2("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80, "IMG_GFX_RIP\\system\\bk_font.tms_0x80_0.png", "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png", 0)
-#Tims = TIM2_to_PNG("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80)
+#PNG_to_TIM2("a_cal1.tm2", 0x0, "IMG_GFX_RIP\\system\\submenu\\img\\a_cal1.tm2_0x0_0.png", "IMG_GFX_EDITS\\system\\submenu\\img\\a_cal1.tm2_0x0_0.png", 0, base_color=CALENDAR_BG)
+#Tims = TIM2_to_PNG("a_cal1.tm2", 0x0)
 #Tims[0].show()
 
 #PNG_to_buvTIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path, buv_path, buv_offset)

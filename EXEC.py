@@ -7,6 +7,7 @@ import polib
 import MSG
 import UNPACK
 import TIM2
+import reprint
 
 
 MAP_PO_PATH = "boku-no-natsuyasumi-2\\m_a01000\\MAP\\en"
@@ -37,6 +38,7 @@ def injectMAPs():
             if not os.path.exists(po_path):
                 print("Skipping MAP ",file)
                 continue
+            print("Injecting MAP script:", file)
             MSG.injectPO(bin_path,po_path, MSG.MAP_MODE, inject_dict)
     return
 
@@ -44,16 +46,20 @@ def injectIMGs():
     for img_msg in MSG.IMG_MSG_FILES:
         po_path = os.path.join(IMG_PO_PATH, img_msg + ".po")
         bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
+        print("Injecting IMG script:", img_msg)
         MSG.injectPO(bin_path,po_path, MSG.MSG_MODE, inject_dict)
+
     
     for img_msg in MSG.RAW_MSG_FILES:
         po_path = os.path.join(RAW_PO_PATH, img_msg + ".po")
         bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
+        print("Injecting IMG script:", img_msg)
         MSG.injectPO(bin_path,po_path, MSG.RAW_MODE, inject_dict)
     
     for img_msg in MSG.OFFSET_ONLY_MSG_FILES:
         po_path = os.path.join(OFFSET_ONLY_PO_PATH, img_msg + ".po")
         bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
+        print("Injecting IMG script:", img_msg)
         MSG.injectPO(bin_path,po_path, MSG.OFFSET_ONLY_MODE, inject_dict)
     return
 
@@ -64,30 +70,39 @@ def build_ISO(input, output):
 
     return
 
+def pullScript():
+    print("____BUILD: Pulling text files")
+    os.chdir("boku-no-natsuyasumi-2\\fishing-msg")
+    os.system("git fetch")
+    os.system("git reset --hard HEAD")
+    os.system("git merge origin/main")
+    os.chdir("..\\m_a01000")
+    os.system("git fetch")
+    os.system("git reset --hard HEAD")
+    os.system("git merge origin/main")
+    os.chdir("..\\..")
+    
+
+    return
 
 def build(mode):
     if mode > 0:
+        #Print automated graphics
+        print("____BUILD: Printing graphics")
+        reprint.printAllCalendars()
+        reprint.printAllBottleCaps()
+
         #Pack graphics
+        print("____BUILD: Injecting graphics")
         TIM2.injectAll()
-        shutil.copy("IMG_RIP\\system\\bk_font.tms","IMG_RIP_EDITS\\system\\bk_font.tms")
-        TIM2.PNG_to_TIM2("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80, "IMG_GFX_RIP\\system\\bk_font.tms_0x80_0.png", "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png", 0)
 
         #Pull text from weblate
-        print("____BUILD: Pulling text files")
-        os.chdir("boku-no-natsuyasumi-2\\fishing-msg")
-        os.system("git fetch")
-        os.system("git reset --hard HEAD")
-        os.system("git merge origin/main")
-        os.chdir("..\\m_a01000")
-        os.system("git fetch")
-        os.system("git reset --hard HEAD")
-        os.system("git merge origin/main")
-        os.chdir("..\\..")
+        #pullScript()
 
         #Pack text
-        print("____BUILD: Injecting MAPs")
+        print("____BUILD: Injecting MAP scripts")
         injectMAPs()
-        print("____BUILD: Injecting IMGs")
+        print("____BUILD: Injecting IMG scripts")
         injectIMGs()
 
         #Generate bin files
@@ -96,12 +111,11 @@ def build(mode):
         print("____BUILD: Packing IMG")
         UNPACK.packIMG("IMG_RIP_EDITS", "ISO_EDITS")
 
-
+    print("____BUILD: Applying ASM patches")
     os.remove("ISO_EDITS\\scps_150.26")
     shutil.copy("ISO_RIP\\scps_150.26", "ISO_EDITS\\scps_150.26")
     os.chmod("ISO_EDITS\\scps_150.26", 777)
     os.system('attrib -r '+"ISO_EDITS\\scps_150.26")
-    print("____BUILD: Applying ASM patches")
     subprocess.call(['armips.exe', 'scps_150.26.asm'])
 
     #Build game disc
@@ -113,7 +127,6 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = FULL
+mode = ASM_ONLY
 
-#injectIMGs()
 build(mode)

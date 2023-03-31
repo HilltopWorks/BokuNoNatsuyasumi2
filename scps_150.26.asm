@@ -21,7 +21,7 @@
 ;	nop
 ;	nop
 
-bg_alpha equ 0x34
+bg_alpha equ 0x44
 bg_tone  equ 0x10
 
 bg_y_start equ 0xA40
@@ -59,14 +59,14 @@ bg_y_start equ 0xA40
 	li   v0, 0x0
 
 ; ################         Enable debug mode            ####################
-.org 0x020a970
-	lui 	a0,0x28
-.org 0x20a978
-	addiu	a0, a0, -0x11b0
+;.org 0x020a970
+;	lui 	a0,0x28
+;.org 0x20a978
+;	addiu	a0, a0, -0x11b0
 
 ; ################		   Native Horizontal text fixes
 
-mfw equ 0xb ;Meny font width
+mfw equ 0xb ;Menu font width
 
 ; Hori text texel 23->22 fix
 .org 0x018077c
@@ -189,7 +189,7 @@ shadow_x equ 0x28
 shadow_y equ 0x14
 text_padding equ 2
 base_x equ 0x330
-base_y equ 0xAD
+base_y equ 0xAA ;AD
 ;font_width equ 0x160	 ; kerning
 font_spacing equ 0xD ; newline spacing
 
@@ -208,6 +208,7 @@ gpu_call equ s0
 	nop
 
 after_text_loop:
+	addiu v1, v1, text_padding<<4	; add padding space to every character
 	nop
 .endarea
 
@@ -228,13 +229,20 @@ font_loop:
 	mult	zero,a3,s7 	; lo = (char%0x17)*0x16, aka glyph width x column aka u ;.w 0x00F70018	
 	andi	a2,a1,0xFFFF; a2 = font row
 	mflo	a3			; a3 = u
-	addiu	a1,a2,0x16	; a1 = v_bottom
-	addiu	a0,a3,0x16	; a0 = u_bottom
-	sll		a1,a1,0x04	; a1 = v_gpu_bottom
-	sll		a0,a0,0x04  ; a0 = u_gpu_right
+	
+	la a0, texel_width  ;-
+	j func_vwf			; v1 = char width
+	nop					;-
 
-	sll	v0,a3,0x04		; a3 = u_gpu
-	sll	v1,a2,0x04		; a2 = v_gpu
+texel_width:
+	addiu	a1,a2,0x16	; a1 = v_bottom
+	sll		a3,a3,0x04	; a3 = u_gpu
+	addu	a0,a3,v1	; a0 = u_gpu_right
+	sll		a1,a1,0x04	; a1 = v_gpu_bottom
+	;sll		a0,a0,0x04  ; a0 = u_gpu_right
+
+	move v0, a3					; v0 = u_gpu
+	sll	v1,a2,0x04				; a2 = v_gpu
 	sh	v0,0x8(gpu_call)		; STORE u_gpu
 	sh	v0,0x30(gpu_call)
 	sh	v1,0xA(gpu_call)		; STORE v_gpu
@@ -259,34 +267,50 @@ font_loop:
 	addu	v0,curr_x		; v0 = frame_buffer_x + curr_x aka x_gpu
 	sh	v0,0x10(gpu_call)	; STORE x_gpu
 	
-	;addiu	v1,curr_x,0x170	; v1 = curr_x + 0xb8 aka x_right
-	addiu	v0,0x160			; v0 = x_right + frame_buffer_x aka x_gpu_right
+
+	;addiu	v0,0x160			; v0 = x_right + frame_buffer_x aka x_gpu_right
+	
+	move a1, v0			;a1 = x_gpu
+	
+	la a0, x_right 		;-
+	j func_vwf			; v1 = char width
+	nop					;-
+	
+	
+x_right:
+	move v0, a1			;v0 = x_gpu
+	move a2, v1			;a2 = char_width
+	addu v0, v1			;v0 = x_gpu + char_width AKA x_gpu_right
 	sh	v0,0x20(gpu_call)	; STORE x_gpu_right
 	addiu 	v0, -shadow_x
 	sh		v0, 0x48(gpu_call)	; STORE x_gpu_right SHADOW
-	addiu	v0, -0x160
+	subu	v0, a2
 	sh v0, 0x38(gpu_call)	; STORE x_gpu SHADOW
 
 	addiu	gpu_call,0x50	; gpu_cursor += 0x50
 	
+	la a0, after_text_loop
 	j	func_vwf
-	nop	
+	nop
+
+	
 
 .org func_vwf
-	;vwf
-	la v1, vwf_table
-	la s2, char_pointer		;s2 = &text_base
-	lw v0, 0x10(s2)			;v0 = char_offset/2
-	sll v0, v0, 0x1			;v0 = char_offset
-	lw s2, 0x0(s2)			;s2 = text_base
-	addu s2, v0, s2			;s2 = char offset + text_base aka &char
-	lh 	s2, 0x0(s2)			;s2 = *&char
+	;vwf, v1 gets width. assume a0 is return address 
 	
-	addu v1, v1, s2			;v1 = &vwf_table[char]
-	lb	v1, 0x0(v1)			;v1 = *&vwf_table[char]
-	addiu v1, v1, text_padding	; add padding space to every character
+	la v0, char_pointer		;v0 = &text_base
+	lw v1, 0x10(v0)			;v1 = char_offset/2
+	sll v1, v1, 0x1			;v1 = char_offset
+	lw v0, 0x0(v0)			;v0 = text_base
+	addu v0, v1, v0			;v0 = char offset + text_base aka &char
+	lh 	v0, 0x0(v0)			;v0 = *&char = char
+	
+	la v1, vwf_table		;v1 = &vwf_table
+	addu v1, v1, v0			;v1 = &vwf_table[char]
+	lb	v1, 0x0(v1)			;v1 = *&vwf_table[char] = vwf_table[char]
+	
 	sll v1, v1, 0x4			;1 pixel = 0x10 value
-	j after_text_loop
+	jr a0
 	nop
 
 

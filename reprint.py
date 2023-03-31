@@ -9,17 +9,21 @@ import re
 import cv2
 from scipy import ndimage
 
+#Calendar
 day_strings = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-day_colors = [(144,53,40,255), (53,53,53,255), (151,77,46,255), (33,41,122,255), (85,57,47,255) ,(40,74,61,255), (144,53,40,255)]
-
-
+day_colors = [(144,53,40,255), (53,53,53,255), (151,77,46,255), (33,41,122,255), (85,57,47,255) ,(40,74,61,255), (41,105,140,255)]
 diary_base_path = "FONT/diary_base.png"
+diary_folder = "IMG_GFX_EDITS\\system\\submenu\\img"
+
+#Bottle Caps
+cap_folder = "IMG_GFX_EDITS\\system\\submenu\\img"
+label_path = "GFX\\bottle_caps.txt"
 
 def printBottleCap(img_path, string):
     sourceImage = Image.open(img_path)#.convert("RGBA")
 
     #Clear away existing text
-    clear_size = (256,21)
+    clear_size = (256,22)
     clear_pos = (0,0)
 
     rect = Image.new("RGBA", clear_size, (0, 0, 0, 0))
@@ -36,12 +40,29 @@ def printBottleCap(img_path, string):
     imFont = ImageFont.truetype(font, fontSize)
     
 
-    draw.text( (7,3),string, shadowColor, imFont, "lt", 0, 'left')
-    draw.text( (6,2),string, fontColor, imFont, "lt", 0, 'left')
+    draw.text( (7,4),string, shadowColor, imFont, "lt", 0, 'left')
+    draw.text( (6,3),string, fontColor, imFont, "lt", 0, 'left')
     #sourceImage.show()
     sourceImage.save(img_path)
 
     return
+
+def printAllBottleCaps():
+
+    label_file = open(label_path, 'r')
+    for x in range(25):
+        print("Printing bottle cap " + str(x + 1))
+        label = label_file.readline()
+
+        if x < 10:
+            digit = "0" + str(x)
+        else:
+            digit = str(x)
+        cap_path = os.path.join(cap_folder, "okan_" + digit + ".tm2.arn_0x0_0.png")
+        printBottleCap(cap_path, str(x + 1) + ". " + label.rstrip("\n"))
+        
+    return
+
 
 def bugInfoTransform(image):
     transformed_image = Image.new("RGBA", (image.width, image.height), (0,0,0,0))
@@ -134,11 +155,19 @@ def printCalendar(img_path, string, color):
     #Rotate
     rect = rect.rotate(16,Image.BILINEAR,expand=True, fillcolor=(0,0,0,0))
 
-    cleanIm.paste(rect, (-10,-15), rect )
+    cleanIm.paste(rect, (-10,-11), rect )
 
     #cleanIm.show()
     cleanIm.save(img_path)
 
+def printAllCalendars():
+
+    for x in range(31):
+        calendar_path = os.path.join(diary_folder, "a_cal" + str(x+1) + ".tm2_0x0_0.png")
+        print("Printing Calendar Day: " + str(x+1))
+        printCalendar(calendar_path, day_strings[x%7], day_colors[x%7])
+
+    return
 
 def printDiary(img_path,stringL, stringR):
     sourceImage = Image.open(img_path)
@@ -183,7 +212,10 @@ desc2 = """Listening close from
 my bed, I can hear
 the sound of the
 waves."""
-printDiary("nik001.tm2_0x0_0.png", desc1, desc2)
+
+#printAllCalendars()
+#printAllBottleCaps()
+#printDiary("nik001.tm2_0x0_0.png", desc1, desc2)
 #printBugInfo("imgTestBUG.PNG", desc)
 #printBottleCap("IMG_GFX_EDITS\\system\\submenu\\img\\okan_23.tm2.arn_0x0_0.png", "24. Relict Dragonfly")
 #printCalendar("IMG_GFX_EDITS\\system\\submenu\\img\\a_cal7.tm2_0x0_0.png", "Sat", (41,105,140,255))
