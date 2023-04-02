@@ -19,6 +19,14 @@ diary_folder = "IMG_GFX_EDITS\\system\\submenu\\img"
 cap_folder = "IMG_GFX_EDITS\\system\\submenu\\img"
 label_path = "GFX\\bottle_caps.txt"
 
+SPACING = 2
+
+
+START_ROW = 15
+END_ROW = 45
+N_COLUMNS = 23
+
+
 def printBottleCap(img_path, string):
     sourceImage = Image.open(img_path)#.convert("RGBA")
 
@@ -62,7 +70,6 @@ def printAllBottleCaps():
         printBottleCap(cap_path, str(x + 1) + ". " + label.rstrip("\n"))
         
     return
-
 
 def bugInfoTransform(image):
     transformed_image = Image.new("RGBA", (image.width, image.height), (0,0,0,0))
@@ -193,6 +200,22 @@ def printDiary(img_path,stringL, stringR):
     baseImage.show()
     baseImage.save(img_path)
     return
+
+
+
+def printFont(img_path, font, map):
+    '''Prints the given font text and compaction map into the image at img_path'''
+    fontImage = Image.open(img_path)
+
+    #Clear away existing font
+    clear_size = (256,22)
+    clear_pos = (0,0)
+
+    rect = Image.new("RGBA", clear_size, (0, 0, 0, 0))
+
+
+    return
+
 
 desc = """Chinese Peacock
 These large butterflies
