@@ -242,8 +242,6 @@ def mapCompactions(po, table_num):
             #print("Total Savings:", total_savings , "bytes")
             break
 
-
-
     #compaction_map = processDuplication(best_compactions, cell_counts, free_cells)
     
     updateKerning(compaction_map, "font_kerning.bin")
@@ -281,8 +279,8 @@ def updateKerning(map, kerning_path):
 
 #print(re.findall("11", "1011101111", overlapped=False))   
 
-po = polib.pofile("boku-no-natsuyasumi-2\\m_a01000\\MAP\\en\\M_B25000.po")
-map = mapCompactions(po,2)
+#po = polib.pofile("boku-no-natsuyasumi-2\\m_a01000\\MAP\\en\\M_B25000.po")
+#map = mapCompactions(po,2)
 #list = findBestCompactions(po, 2)
 #updateKerning(map, "font_kerning.bin")
 pass

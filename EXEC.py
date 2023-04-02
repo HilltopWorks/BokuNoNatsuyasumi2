@@ -91,6 +91,7 @@ def build(mode):
         print("____BUILD: Printing graphics")
         reprint.printAllCalendars()
         reprint.printAllBottleCaps()
+        reprint.printAllFonts()
 
         #Pack graphics
         print("____BUILD: Injecting graphics")

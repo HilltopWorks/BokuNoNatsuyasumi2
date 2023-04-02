@@ -1,4 +1,5 @@
-from PIL import Image,ImageDraw,ImageFont, ImageFilter
+from PIL import Image,ImageDraw,ImageFont
+import PIL
 import os
 import numpy
 import copy
@@ -7,7 +8,10 @@ from pathlib import Path
 import math
 import re
 import cv2
+from MSG import readFont, INSERTION
+import polib
 from scipy import ndimage
+import textCompaction
 
 #Calendar
 day_strings = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -19,13 +23,51 @@ diary_folder = "IMG_GFX_EDITS\\system\\submenu\\img"
 cap_folder = "IMG_GFX_EDITS\\system\\submenu\\img"
 label_path = "GFX\\bottle_caps.txt"
 
-SPACING = 2
 
+#Font
+
+
+SPACING = 2
+SPACE_WIDTH = 6
 
 START_ROW = 15
 END_ROW = 45
 N_COLUMNS = 23
+CELL_WIDTH = 22
 
+KERNING_PATH = "font_kerning.bin"
+FONT_IMAGE_PATH = "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png"
+
+FONTS = {
+        "base": {
+                "typeface":"FONT\\FOT-Seurat Pro M.otf",
+                "font_size":20,
+                "font_map":"font-inject-print.txt",
+                "row_offset":0,
+                "kern":True,
+                "monospace":-1,
+                "baseline_adjust":0
+                },
+        "menu": {
+                "typeface":"FONT\\Gen Jyuu Gothic Monospace Bold.ttf",
+                "font_size":18,
+                "font_map":"font-inject-menus-print.txt",
+                "row_offset":5,
+                "kern":False,
+                "monospace":10,
+                "baseline_adjust":0
+                },
+        "simon":{
+                "typeface":"FONT\\OldStandardTT-Regular.ttf",
+                "font_size":21,
+                "font_map":"font-inject-simon-print.txt",
+                "row_offset":10,
+                "kern":True,
+                "monospace":-1,
+                "baseline_adjust":0
+                }
+
+        }
 
 def printBottleCap(img_path, string):
     sourceImage = Image.open(img_path)#.convert("RGBA")
@@ -201,21 +243,120 @@ def printDiary(img_path,stringL, stringR):
     baseImage.save(img_path)
     return
 
+def getFontMap(font_path, start_row):
+    font_file = open(font_path, "r")
 
+    font = readFont(font_path, start_row*N_COLUMNS, INSERTION)
 
-def printFont(img_path, font, map):
-    '''Prints the given font text and compaction map into the image at img_path'''
-    fontImage = Image.open(img_path)
+    for entry in font:
+        index = font[entry]
+        row = (index//N_COLUMNS)
+        column = index % N_COLUMNS
 
-    #Clear away existing font
-    clear_size = (256,22)
-    clear_pos = (0,0)
+        font[entry] = (column, row)
 
-    rect = Image.new("RGBA", clear_size, (0, 0, 0, 0))
+    return font
 
+def updateKerning(file, index, val):
+    file.seek(index)
+    file.write(val.to_bytes(1, "little"))
 
     return
 
+def getBoundedStringImage(string,im_font,baseline_adj):
+    test_field_width = 512
+    test_field_size = (test_field_width,CELL_WIDTH)
+    font_color = (255, 255, 255, 255)
+    test_field_im = Image.new("RGBA", test_field_size, (0, 0, 0, 0))
+    cursor = 0
+    for char in string:
+        
+        if char == " ":
+            cursor += SPACE_WIDTH + SPACING
+            continue
+
+        char_test_im = Image.new("RGBA", (30,22), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(char_test_im)
+
+        draw.text( (4,17 +baseline_adj ),char, font_color, im_font, "ls", 0, 'left')
+
+        bounds = char_test_im.getbbox()
+        if bounds == None:
+            continue
+        full_bounds = (bounds[0],0, bounds[2], CELL_WIDTH)
+        char_im = char_test_im.crop(full_bounds)
+        #char_im.show()
+
+        test_field_im.paste(char_im, (cursor,0))
+        cursor += char_im.width + SPACING
+    
+    string_bounds = test_field_im.getbbox()
+    if string_bounds == None:
+        #handle no bounding box (only spaces)
+        space_count = string.count(" ")
+        string_bounds = (0,0, space_count*(SPACE_WIDTH), CELL_WIDTH)
+
+    string_bounds = (string_bounds[0],0, string_bounds[2], CELL_WIDTH)
+    test_field_im = test_field_im.crop(string_bounds)
+    #test_field_im.show()
+    return test_field_im
+
+def printFont(font_im, font_map, im_font, kern=False, monospace=-1, baseline_adj=0):
+    '''Prints the given font text and compaction map into an image'''
+    #src_img = Image.open(img_path)
+
+    draw = ImageDraw.Draw(font_im)
+
+    kerningFile = open(KERNING_PATH, 'r+b')
+
+    for entry in font_map:
+        row = font_map[entry][1]
+        column = font_map[entry][0]
+        x_coord = column * CELL_WIDTH
+        y_coord = row * CELL_WIDTH
+
+
+        entry_im = getBoundedStringImage(entry,im_font,baseline_adj)
+        if kern == True:
+            kerningIndex = column + row*N_COLUMNS
+            if monospace == -1:
+                updateKerning(kerningFile,kerningIndex, entry_im.width)
+            else:
+                updateKerning(kerningFile,kerningIndex, monospace)
+        font_im.paste(entry_im, (x_coord, y_coord))
+
+    kerningFile.close()
+    #font_im.show()
+    return font_im
+
+
+def printAllFonts():
+    font_size = (512,1024)
+    font_color = (255, 255, 255, 255)
+    font_im = Image.new("RGBA", font_size, (0, 0, 0, 0))
+
+    for entry in FONTS:
+        entry = FONTS[entry]
+        imFont = ImageFont.truetype(entry["typeface"], entry["font_size"], layout_engine=ImageFont.LAYOUT_RAQM)
+        map = getFontMap(entry["font_map"], entry["row_offset"])
+        printFont(font_im, map, imFont, kern=entry["kern"],
+                             monospace=entry["monospace"], 
+                             baseline_adj=entry["baseline_adjust"] )
+        
+        #font_im.paste(font_im, (0,0))
+    #font_im.show()
+
+    po = polib.pofile("boku-no-natsuyasumi-2\\m_a01000\\MAP\\en\\M_B25000.po")
+    map = textCompaction.mapCompactions(po,2)
+
+    cFont = FONTS["base"]
+    imFont = ImageFont.truetype(cFont["typeface"], cFont["font_size"], layout_engine=ImageFont.LAYOUT_RAQM)
+    printFont(font_im, map, imFont, kern=True, monospace=-1, baseline_adj=0)
+    font_im.show()
+    font_im.save(FONT_IMAGE_PATH)
+    return
+
+#printAllFonts()
 
 desc = """Chinese Peacock
 These large butterflies

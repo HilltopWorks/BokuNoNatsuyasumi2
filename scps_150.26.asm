@@ -1,10 +1,17 @@
 .ps2
 .erroronwarning on
 
+.open "ISO_EDITS\boku2.crc",0
+; ################		   Load vwf table				####################
+.definelabel crc_hash_offset, 0x16374
+.org crc_hash_offset
+.import "font_kerning.bin"
+
+.close
 
 .open "ISO_EDITS\scps_150.26", 0xFF000
 
-.definelabel vwf_table, 0x002a1968 ;0xd0 bytes of free space
+.definelabel vwf_table, 0x0712b24 ;#0x002a1968 ;0xd0 bytes of free space
 .definelabel func_vwf, 0x028eb34
 .definelabel text_loop_space, 0x00290538 ;free debug text space
 
@@ -158,9 +165,7 @@ mfw equ 0xb ;Menu font width
 
 
 
-; ################		   Load vwf table				####################
-.org vwf_table
-.import "font_kerning.bin"
+
 
 ; ################         Main Dialogue text hack             ####################
 .definelabel 	draw_dialogue, 0x001fdcb0
