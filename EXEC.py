@@ -26,7 +26,7 @@ ISO_OUTPUT_PATH = "BUILD/boku2_patched.iso"
 
 inject_dict = MSG.readFont("font-inject.txt", 0, MSG.INSERTION)
 
-def injectMAPs():
+def injectMAPs(compaction_map):
     for root, subdirectories, files in os.walk(os.path.join(ORIGINAL_RIP_PATH, MAP_DIR)):
         for file in files:
             po_name = file.replace(".bin",".po")
@@ -39,28 +39,28 @@ def injectMAPs():
                 print("Skipping MAP ",file)
                 continue
             print("Injecting MAP script:", file)
-            MSG.injectPO(bin_path,po_path, MSG.MAP_MODE, inject_dict)
+            MSG.injectPO(bin_path,po_path, MSG.MAP_MODE, inject_dict, compaction_map)
     return
 
-def injectIMGs():
+def injectIMGs(compaction_map):
     for img_msg in MSG.IMG_MSG_FILES:
         po_path = os.path.join(IMG_PO_PATH, img_msg + ".po")
         bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
         print("Injecting IMG script:", img_msg)
-        MSG.injectPO(bin_path,po_path, MSG.MSG_MODE, inject_dict)
+        MSG.injectPO(bin_path,po_path, MSG.MSG_MODE, inject_dict, compaction_map)
 
     
     for img_msg in MSG.RAW_MSG_FILES:
         po_path = os.path.join(RAW_PO_PATH, img_msg + ".po")
         bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
         print("Injecting IMG script:", img_msg)
-        MSG.injectPO(bin_path,po_path, MSG.RAW_MODE, inject_dict)
+        MSG.injectPO(bin_path,po_path, MSG.RAW_MODE, inject_dict, compaction_map)
     
     for img_msg in MSG.OFFSET_ONLY_MSG_FILES:
         po_path = os.path.join(OFFSET_ONLY_PO_PATH, img_msg + ".po")
         bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
         print("Injecting IMG script:", img_msg)
-        MSG.injectPO(bin_path,po_path, MSG.OFFSET_ONLY_MODE, inject_dict)
+        MSG.injectPO(bin_path,po_path, MSG.OFFSET_ONLY_MODE, inject_dict, compaction_map)
     return
 
 def build_ISO(input, output):
@@ -87,24 +87,24 @@ def pullScript():
 
 def build(mode):
     if mode > 0:
+        #Pull text from weblate
+        pullScript()
+
         #Print automated graphics
         print("____BUILD: Printing graphics")
         reprint.printAllCalendars()
         reprint.printAllBottleCaps()
-        reprint.printAllFonts()
+        compaction_map = reprint.printAllFonts()
 
         #Pack graphics
         print("____BUILD: Injecting graphics")
         TIM2.injectAll()
 
-        #Pull text from weblate
-        #pullScript()
-
         #Pack text
         print("____BUILD: Injecting MAP scripts")
-        injectMAPs()
+        injectMAPs(compaction_map)
         print("____BUILD: Injecting IMG scripts")
-        injectIMGs()
+        injectIMGs(compaction_map)
 
         #Generate bin files
         print("____BUILD: Packing MAP files")
@@ -112,6 +112,7 @@ def build(mode):
         print("____BUILD: Packing IMG")
         UNPACK.packIMG("IMG_RIP_EDITS", "ISO_EDITS")
 
+    #Apply ASM
     print("____BUILD: Applying ASM patches")
     os.remove("ISO_EDITS\\scps_150.26")
     shutil.copy("ISO_RIP\\scps_150.26", "ISO_EDITS\\scps_150.26")
@@ -128,6 +129,6 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = ASM_ONLY
+mode = FULL
 
 build(mode)

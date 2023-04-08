@@ -73,19 +73,99 @@ bg_y_start equ 0xA40
 
 ; ################		   Native Horizontal text fixes
 
-mfw equ 0xb ;Menu font width
+mfw equ 0xa ;Menu font width
 
 ; Hori text texel 23->22 fix
-.org 0x018077c
+.org 0x018077c					;Actual Menus texel width
 	addiu v1, a2, 0x16
-.org 0x0180794
+.org 0x0180794					;Actual Menus texel height
 	addiu v0, a0, 0x16
 ; Char H/W 23->22 fix
-.org 0x01807d0 
+.org 0x01807d0 					;Actual Menus glyph width
 	addiu  v1,s2, 0x16
-.org 0x01807e4
+.org 0x01807e4					;Actual Menus glyph height
 	addiu  v1,s3, 0x16
 
+;Insect baselines
+
+insect_baseline equ 0x1B
+vert_menu_y_dist equ 0xF
+
+.org 0x001f6434	;digit 1
+	li a1, insect_baseline
+
+.org 0x01f6450		;m/
+	li a2, insect_baseline - 1
+
+.org 0x01f6484		;digit 2
+	li a1, insect_baseline
+
+.org 0x01f649c		;d
+	li a2, insect_baseline - 1
+
+.org 0x01f64b0		;caught on
+	li a2, insect_baseline - 1
+
+;.org 0x01f60c4 	;Insect name in box
+;	li a2, insect_baseline
+
+;Insect name count adjust
+.org 0x01FADFC
+	li 	v1, mfw
+
+;Insect Caught text
+.org 0x01f64ac
+	addiu a1,zero,0x1BA
+;Insect month digit
+.org 0x01F6430
+	li a0, 0x224
+;Insect date digit
+.org 0x01F6480
+	li a0,0x256
+
+;Insect month
+.org 0x01f644c
+	li a1,0x233
+
+;Insect date
+.org 0x01f6498
+	li a1,0x264
+
+; Hikari Yes/no text coords
+.org 0x2615e0	;No
+	.word 0x100
+
+; Hikari Yes/No verti->hori
+.org 0x180a04
+	addu a0, a3
+
+; Hikari Yes/No kerning
+.org 0x1809c0
+	li a3, mfw
+
+; Hikari text box height
+.org 0x27bbe4
+	.word 0x60
+
+; Hikari cursor point direction
+.org 0x001f4828
+	li a0, 0x2		;2 is down, 0 is right
+
+; Hikari No cursor X
+.org 0x27bc18
+
+; Hikari No cursor Y
+.org 0x27bc1C
+
+; Hikari Yes cursor X
+.org 0x27bc20
+
+; Hikari No cursor Y
+.org 0x27bc24
+
+
+
+;;;;;;;;;;;;;;;Speculation follows
 ; Hori text kerning updates
 
 .org 0x0155e94 
@@ -100,13 +180,16 @@ mfw equ 0xb ;Menu font width
 .org 0x0156098
 	addiu s2,s2,-mfw
 
-.org 0x0015a4bc
+.org 0x0015a4bc				;Vertical text newline distance
 	li v1,mfw + 3
 
-.org 0x015a4c4
-	li v0,mfw
-	li v1,mfw
-	li v0,mfw + 3
+.org 0x015a4c4				
+	li v0,vert_menu_y_dist	;Vertical text character Y distance
+	li v1,mfw				;Horizontal Insect Text X distance
+	li v0,mfw + 3			;Horizontal Insect Text Y distance ???
+
+.org 0x01809c0				;Vertical text 2 Y dist
+	li a3, vert_menu_y_dist
 
 ;;.org 0x019d290  ;VERTICAL TEXT
 ;	addiu s2,s2,mfw
@@ -190,8 +273,8 @@ mfw equ 0xb ;Menu font width
 .definelabel	font_color_l, 0x15c8
 
 
-shadow_x equ 0x28
-shadow_y equ 0x14
+shadow_x equ 0x20
+shadow_y equ 0x10
 text_padding equ 2
 base_x equ 0x330
 base_y equ 0xAA ;AD
@@ -312,10 +395,10 @@ x_right:
 	
 	la v1, vwf_table		;v1 = &vwf_table
 	addu v1, v1, v0			;v1 = &vwf_table[char]
-	lb	v1, 0x0(v1)			;v1 = *&vwf_table[char] = vwf_table[char]
+	lbu	v1, 0x0(v1)			;v1 = *&vwf_table[char] = vwf_table[char]
 	
 	sll v1, v1, 0x4			;1 pixel = 0x10 value
-	jr a0
+	jr a0					;return
 	nop
 
 

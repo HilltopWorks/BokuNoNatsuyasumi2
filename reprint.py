@@ -8,7 +8,7 @@ from pathlib import Path
 import math
 import re
 import cv2
-from MSG import readFont, INSERTION
+from MSG import readFont, INSERTION, fixPO
 import polib
 from scipy import ndimage
 import textCompaction
@@ -40,13 +40,14 @@ FONT_IMAGE_PATH = "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png"
 
 FONTS = {
         "base": {
-                "typeface":"FONT\\FOT-Seurat Pro M.otf",
-                "font_size":20,
+                "typeface":"FONT\\IwataMaruGothicW55-D.ttf",
+                "font_size":19,
                 "font_map":"font-inject-print.txt",
                 "row_offset":0,
                 "kern":True,
                 "monospace":-1,
-                "baseline_adjust":0
+                "baseline_adjust":0,
+                "emphasis":1.0
                 },
         "menu": {
                 "typeface":"FONT\\Gen Jyuu Gothic Monospace Bold.ttf",
@@ -55,16 +56,19 @@ FONTS = {
                 "row_offset":5,
                 "kern":False,
                 "monospace":10,
-                "baseline_adjust":0
+                "baseline_adjust":0,
+                "emphasis":1.0
                 },
         "simon":{
                 "typeface":"FONT\\OldStandardTT-Regular.ttf",
-                "font_size":21,
+                "font_size":22,
                 "font_map":"font-inject-simon-print.txt",
                 "row_offset":10,
                 "kern":True,
                 "monospace":-1,
-                "baseline_adjust":0
+                "baseline_adjust":0,
+                "emphasis":1.6
+
                 }
 
         }
@@ -263,7 +267,7 @@ def updateKerning(file, index, val):
 
     return
 
-def getBoundedStringImage(string,im_font,baseline_adj):
+def getBoundedStringImage(string,im_font,baseline_adj, emphasis):
     test_field_width = 512
     test_field_size = (test_field_width,CELL_WIDTH)
     font_color = (255, 255, 255, 255)
@@ -280,6 +284,14 @@ def getBoundedStringImage(string,im_font,baseline_adj):
 
         draw.text( (4,17 +baseline_adj ),char, font_color, im_font, "ls", 0, 'left')
 
+        if emphasis != 1.0:
+            char_data = char_test_im.getdata()
+
+            alpha_blended_char = []
+            for item in char_data:
+                alpha_blended_char.append((item[0], item[1], item[2], round(min(255, item[3]*emphasis))))
+            char_test_im.putdata(alpha_blended_char)
+
         bounds = char_test_im.getbbox()
         if bounds == None:
             continue
@@ -290,18 +302,23 @@ def getBoundedStringImage(string,im_font,baseline_adj):
         test_field_im.paste(char_im, (cursor,0))
         cursor += char_im.width + SPACING
     
+    cursor -= SPACING
     string_bounds = test_field_im.getbbox()
     if string_bounds == None:
         #handle no bounding box (only spaces)
         space_count = string.count(" ")
-        string_bounds = (0,0, space_count*(SPACE_WIDTH), CELL_WIDTH)
-
-    string_bounds = (string_bounds[0],0, string_bounds[2], CELL_WIDTH)
+        string_bounds = (0,0,cursor, CELL_WIDTH)
+    else:
+        num_leading_spaces = len(os.path.commonprefix(["        ", string]))
+        l_bound = string_bounds[0] - num_leading_spaces*(SPACE_WIDTH+SPACING)
+        cursor -= num_leading_spaces*(SPACE_WIDTH+SPACING)
+        assert l_bound >=0
+        string_bounds = (l_bound,0, string_bounds[0] + cursor, CELL_WIDTH)
     test_field_im = test_field_im.crop(string_bounds)
     #test_field_im.show()
     return test_field_im
 
-def printFont(font_im, font_map, im_font, kern=False, monospace=-1, baseline_adj=0):
+def printFont(font_im, font_map, im_font, kern=False, monospace=-1, baseline_adj=0, emphasis=1.0):
     '''Prints the given font text and compaction map into an image'''
     #src_img = Image.open(img_path)
 
@@ -316,7 +333,7 @@ def printFont(font_im, font_map, im_font, kern=False, monospace=-1, baseline_adj
         y_coord = row * CELL_WIDTH
 
 
-        entry_im = getBoundedStringImage(entry,im_font,baseline_adj)
+        entry_im = getBoundedStringImage(entry,im_font,baseline_adj, emphasis)
         if kern == True:
             kerningIndex = column + row*N_COLUMNS
             if monospace == -1:
@@ -341,20 +358,21 @@ def printAllFonts():
         map = getFontMap(entry["font_map"], entry["row_offset"])
         printFont(font_im, map, imFont, kern=entry["kern"],
                              monospace=entry["monospace"], 
-                             baseline_adj=entry["baseline_adjust"] )
+                             baseline_adj=entry["baseline_adjust"],
+                             emphasis=entry["emphasis"])
         
         #font_im.paste(font_im, (0,0))
     #font_im.show()
-
+    fixPO("boku-no-natsuyasumi-2\\m_a01000\\MAP\\en\\M_B25000.po")
     po = polib.pofile("boku-no-natsuyasumi-2\\m_a01000\\MAP\\en\\M_B25000.po")
     map = textCompaction.mapCompactions(po,2)
 
     cFont = FONTS["base"]
     imFont = ImageFont.truetype(cFont["typeface"], cFont["font_size"], layout_engine=ImageFont.LAYOUT_RAQM)
     printFont(font_im, map, imFont, kern=True, monospace=-1, baseline_adj=0)
-    font_im.show()
+    #font_im.show()
     font_im.save(FONT_IMAGE_PATH)
-    return
+    return map
 
 #printAllFonts()
 

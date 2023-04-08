@@ -227,7 +227,8 @@ def TIM2_to_PNG(tim2_file_path, offset):
         assert False, "OH NO, CLUT FORMAT NOT 32 bit or DIRECT COLOR!!! File: " + tim2_file_path + " OFFSET:" + str(offset)
 
 
-    CLUT_start = TIM2_file.tell()
+    #CLUT_start = TIM2_file.tell()
+    CLUT_start = pxl_size + header_size + buffer + 0x10 + offset
     if CLUT_format == 3:
         ims = []
         for x in range(nPalettes):
@@ -927,8 +928,8 @@ def prepareInsertionFiles():
 #unpackTEX2("C:\dev\maid\BD_EDITS\MAP_0x7639000_0x7639040.TEX")
 #unpackAllTex()
 #repack()
-#PNG_to_TIM2("a_cal1.tm2", 0x0, "IMG_GFX_RIP\\system\\submenu\\img\\a_cal1.tm2_0x0_0.png", "IMG_GFX_EDITS\\system\\submenu\\img\\a_cal1.tm2_0x0_0.png", 0, base_color=CALENDAR_BG)
-#Tims = TIM2_to_PNG("a_cal1.tm2", 0x0)
+#PNG_to_TIM2("b_msuji.tm2", 0x0, "IMG_GFX_RIP\\system\\b_msuji.tm2_0x0_0.png", "IMG_GFX_EDITS\\system\\b_msuji.tm2_0x0_0.png", 0)
+#Tims = TIM2_to_PNG("IMG_RIP\\system\\b_msuji.tm2", 0x0)
 #Tims[0].show()
 
 #PNG_to_buvTIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path, buv_path, buv_offset)

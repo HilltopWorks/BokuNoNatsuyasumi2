@@ -68,6 +68,10 @@ MENU_FONT_FILES = [ "fishing.msg","system.msg", "namemsg.msg", "quiz.msg", "memo
                     "nick_name_menu.msg","item.msg","item_info.msg","item_name.msg","okan_info.msg","phot_info.msg",
                     "config.msg","technique.msg"]
 
+MENU_TEXT_EXCEPTIONS = ["いいえ\nはい\n{STOP}", "「\n買いもの\n買う\nやめる\nふつうの牛乳\n40円\nコ一ヒ一牛乳\n40円\nジェットサイダ一\n40円\n」",
+                        "「\n買いもの\n買う\nやめる\nチュ一チュ一アイス\n10円\nオレンジガム\n10円\nベ一スボ一ルバ一\n10円\n串イカ\n10円\n串カステラ\n10円\nカツ\n10円\nボ一ルガム\n10円\nクリ一ム\n10円\n梅ジャム・せんべい\n20円\nベビ一スタ一ラ一メン\n20円\n北極バ一\n30円\nタマゴアイス\n30円\nしらゆめ\n50円\nメロンアイス\n50円\nバニラアイス\n50円\n戦艦大和のプラモデル\n350円\n」",
+                        "「\n買いもの\n買う\nやめる\nふつうの牛乳\n40円\nコ一ヒ一牛乳\n40円\nジェットサイダ一\n40円\n」"]
+
 #Dictionary modes
 INSERTION = 0
 EXTRACTION = 1
@@ -197,7 +201,7 @@ def convertRawToText(dict, raw):
         string += char
     return string
 
-def convertTextToRaw(dict, text):
+def convertTextToRaw(dict, text, map=-1):
     '''string -> binary'''
     buffer = b""
 
@@ -219,9 +223,29 @@ def convertTextToRaw(dict, text):
             chars_read = endpoint + 2
         else:
             try:
-                val = dict[text[0]]
-                buffer += val.to_bytes(2, byteorder="little")
-                chars_read = 1
+
+                if map != -1:
+                    longest_match = ''
+                    
+                    for entry in map:
+                        common = os.path.commonprefix([entry,text])
+                        if common == entry and len(longest_match) < len(common):
+                            longest_match = common
+
+                    if longest_match != "":
+                        column = map[longest_match][0]
+                        row = map[longest_match][1]
+                        val = column + row*23
+                        buffer += val.to_bytes(2, byteorder="little")
+                        chars_read = len(longest_match)
+                    else:
+                        val = dict[text[0]]
+                        buffer += val.to_bytes(2, byteorder="little")
+                        chars_read = 1
+                else:
+                    val = dict[text[0]]
+                    buffer += val.to_bytes(2, byteorder="little")
+                    chars_read = 1
             except KeyError:
                 error_code = b'\x2E\x00'
                 print("INSERTION ERROR!!! CHAR: -" + text[0] + "- in " + text)
@@ -570,7 +594,7 @@ def splitMsg(path, mode):
 simon_dict = readFont("font-inject-simon.txt", 0, INSERTION)
 menu_dict = readFont("font-inject-menus.txt", 0, INSERTION)
 
-def injectPO(binary_path, po_path, mode, dict):
+def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
     '''Convert a PO file into a game binary'''
     fixPO(po_path)
     source = open(binary_path, "rb")
@@ -597,10 +621,12 @@ def injectPO(binary_path, po_path, mode, dict):
             if entry.msgstr == "":
                 continue
             
-            if entry.msgstr.startswith("Simon:"):
+            if entry.msgid in MENU_TEXT_EXCEPTIONS:
+                raw_line = convertTextToRaw(menu_dict, entry.msgstr)
+            elif entry.msgstr.startswith("Simon:"):
                 raw_line = convertTextToRaw(simon_dict, entry.msgstr)
             else:
-                raw_line = convertTextToRaw(dict, entry.msgstr)
+                raw_line = convertTextToRaw(dict, entry.msgstr,compaction_map)
             
             if len(raw_line) % 4 == 2:
                 #PADDING
@@ -622,10 +648,10 @@ def injectPO(binary_path, po_path, mode, dict):
                 continue
             
             file_name = binary_path.split("\\")[-1]
-            if file_name in MENU_FONT_FILES:
+            if file_name in MENU_FONT_FILES or entry.msgid in MENU_TEXT_EXCEPTIONS:
                 raw_line = convertTextToRaw(menu_dict, entry.msgstr)
             else:
-                raw_line = convertTextToRaw(dict, entry.msgstr)
+                raw_line = convertTextToRaw(dict, entry.msgstr,compaction_map)
             if len(raw_line) % 4 == 2:
                 #PADDING
                 #raw_line += b"\xCD\xCD"
@@ -644,7 +670,10 @@ def injectPO(binary_path, po_path, mode, dict):
             if entry.msgstr == "":
                 continue
             
-            raw_line = convertTextToRaw(dict, entry.msgstr)
+            if  entry.msgid in MENU_TEXT_EXCEPTIONS:
+                raw_line = convertTextToRaw(menu_dict, entry.msgstr)
+            else:
+                raw_line = convertTextToRaw(dict, entry.msgstr,compaction_map)
             if len(raw_line) % 4 == 2:
                 #PADDING
                 #raw_line += b"\xCD\xCD"
@@ -679,7 +708,7 @@ def testMAPs():
 
 
 def testRaw(hex_string):
-    dict= readFont("font.txt",0, EXTRACTION)
+    dict= readFont("font_inject_raw_test.txt",0, EXTRACTION)
     dict[0x8000] = "{END}\n"
     dict[0x8001] = "\n"
     print(convertRawToText(dict, bytes.fromhex(hex_string)))
@@ -687,55 +716,15 @@ def testRaw(hex_string):
     return
 
 
+#my_dict = readFont("font-inject.txt", 0, INSERTION)
 
+#print(convertTextToRaw(my_dict, "No", map=-1).hex())
+"""
+testRaw("
+bf 00 8a 00
 
-
-'''testRaw("""
-48 01 E8 03 8D 02 9C 00 07 02 32 01 C1 00 DF 04
-7E 00 AF 00 88 00 B8 00 77 00 00 80 B7 01 52 04
-98 00 8A 00 7C 00 08 00 00 80 00 00 7B 00 07 02
-32 01 A0 00 08 00 00 80 00 00 D1 00 0B 01 DB 00
-99 00 07 02 32 01 01 80 84 00 BD 00 98 00 75 00
-75 00 7C 00 9B 00 08 00 00 80 00 00 B3 00 9A 00
-BC 00 00 80 A3 00 BA 00 7D 00 9B 00 00 80 00 00
-CD 00 E1 00 CD 00 EC 00 00 80 00 00 35 00 36 00
-37 00 38 00 39 00 3A 00 3B 00 3C 00 3D 00 01 80
-3E 00 3F 00 40 00 41 00 42 00 43 00 44 00 45 00
-46 00 00 80 73 00 75 00 77 00 79 00 7B 00 00 00
-7C 00 7E 00 80 00 82 00 84 00 01 80 86 00 88 00
-8A 00 8C 00 8E 00 00 00 90 00 92 00 95 00 97 00
-99 00 01 80 9B 00 9C 00 9D 00 9E 00 9F 00 00 00
-A0 00 A3 00 A6 00 A9 00 AC 00 01 80 AF 00 B0 00
-B1 00 B2 00 B3 00 00 00 B5 00 00 00 B7 00 00 00
-B9 00 01 80 BA 00 BB 00 BC 00 BD 00 BE 00 00 00
-C0 00 00 00 C1 00 00 00 C2 00 01 80 72 00 74 00
-76 00 78 00 7A 00 00 00 B4 00 B6 00 B8 00 94 00
-00 00 01 80 7D 00 7F 00 81 00 83 00 85 00 00 00
-87 00 89 00 8B 00 8D 00 8F 00 01 80 91 00 93 00
-96 00 98 00 9A 00 00 00 A1 00 A4 00 A7 00 AA 00
-AD 00 01 80 A2 00 A5 00 A8 00 AB 00 AE 00 00 00
-08 00 09 00 3E 06 3F 06 40 06 00 80 C4 00 C6 00
-C8 00 CA 00 CC 00 00 00 CD 00 CF 00 D1 00 D3 00
-D5 00 01 80 D7 00 D9 00 DB 00 DD 00 DF 00 00 00
-E1 00 E3 00 E6 00 E8 00 EA 00 01 80 EC 00 ED 00
-EE 00 EF 00 F0 00 00 00 F1 00 F4 00 F7 00 FA 00
-FD 00 01 80 00 01 01 01 02 01 03 01 04 01 00 00
-06 01 00 00 08 01 00 00 0A 01 01 80 0B 01 0C 01
-0D 01 0E 01 0F 01 00 00 11 01 00 00 12 01 00 00
-13 01 01 80 C3 00 C5 00 C7 00 C9 00 CB 00 00 00
-05 01 07 01 09 01 E5 00 00 00 01 80 CE 00 D0 00
-D2 00 D4 00 D6 00 00 00 D8 00 DA 00 DC 00 DE 00
-E0 00 01 80 E2 00 E4 00 E7 00 E9 00 EB 00 00 00
-F2 00 F5 00 F8 00 FB 00 FE 00 01 80 F3 00 F6 00
-F9 00 FC 00 FF 00 00 00 1D 00 1E 00 0F 00 2A 00
-05 00 00 80 A0 00 75 00 00 00 75 00 75 00 79 00
-00 80 00 00
-
-
-
-
-""")'''
-
+")
+"""
 #extractMSGs()
 #dict = readFont("font.txt",0, INSERTION)
 #print(convertTextToRaw(dict, "verything" ).hex())
