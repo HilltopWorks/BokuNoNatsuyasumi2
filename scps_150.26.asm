@@ -88,23 +88,122 @@ mfw equ 0xa ;Menu font width
 
 ;Insect baselines
 
-insect_baseline equ 0x1B
+insect_baseline equ 0x18
 vert_menu_y_dist equ 0xF
 
-.org 0x001f6434	;digit 1
+.org 0x001f6434	;digit 1	Y pos
 	li a1, insect_baseline
 
-.org 0x01f6450		;m/
-	li a2, insect_baseline - 1
+.org 0x01f6450		;m/	Y pos
+	li a2, insect_baseline - 2
 
-.org 0x01f6484		;digit 2
+.org 0x01f6484		;digit 2	Y pos
 	li a1, insect_baseline
 
-.org 0x01f649c		;d
-	li a2, insect_baseline - 1
+.org 0x01f649c		;d	Y pos
+	li a2, insect_baseline
 
-.org 0x01f64b0		;caught on
-	li a2, insect_baseline - 1
+.org 0x01f64b0		;caught on	Y pos
+	li a2, insect_baseline
+
+.org 0x01F61A4		;King/Big Y pos
+	li a1, 0x12
+
+.org 0x01F6180		;King/Big Y pos
+	li a1, 0x12
+
+.org 0x01F6180		;Rare Star Y pos
+	li a1, 0x12
+
+;Shops
+
+.org 0x155f80		;Shop price kerning
+	addiu s3,s2, -mfw - 2
+
+;Insects
+
+;Keep/Release options vert->hori
+
+.org 0x1f6688
+	li a3,0
+
+.org 0x1f669c
+	li a3,0
+
+;Release X pos
+.org 0x001f6690
+	li a1, 0x1a6
+
+;Keep/Release text box bg
+.org 0x0027af08
+	.word 0x198		;x
+	.word 0x110		;y
+	.word 0xb0		;width
+	.word 0x22		;height
+
+;Keep/Release cursor pos
+.org 0x27af48
+	.word 0x1b2		;Release x
+	.word 0xEC		;Release Y
+	.word 0x210		;Keep x
+	.word 0xEC		;Keep Y
+	
+;Insect Kit
+
+.org 0x001E9EF8		;"Caught on" X
+	li a1, 0x13b
+
+.org 0x001e9e40		;Month digit X
+	li a0, 0x1a0
+
+.org 0x001e9e68		;/ X
+	li a1, 0x1ac
+
+.org 0x001e9e90		;Day digit tens X
+	li v0, 0x1c3
+
+.org 0x001e03b4		;Day digit ones X
+	li v0, 0x1d0	
+
+.org 0x001e9f94		;Rare star Y
+	li a1, 0x170
+
+.org 0x001E9F60		;BIG Y
+	li a1, 0x190
+
+.org 0x001e9f28		;KING Y
+	li a1, 0x190
+
+.org 0x001EBF94		;Inject tutorial vert->hori
+	li t1, 0x0
+
+.org 0x27a210		;Inject tutorial coords
+	.word 0x40		;X
+	.word 0x194		;Y
+
+.org 0x27a198		;Inject tutorial BG width
+	.word 0xf8
+
+.org 0x27a208		;Inject tutorial 2 coords
+	.word 0x40		;X
+	.word 0x194		;Y
+
+.org 0x27a188		;Inject tutorial 2 BG width
+	.word 0xf8
+
+;Insect blue notes screen
+
+.org 0x001F8AEC		;Fix letter alpha mess
+	li a3, 0x7f
+
+.org 0x001F8Ad8		;Fix letter alpha mess
+	li a3, 0x7f
+
+.org 0x001F8C5C		;Nudge bug gfx up
+	addiu a1,s0,0x3C
+
+.org 0x001F8C90		;Nudge bug gfx up
+	addiu a1,s0,0x3C
 
 ;.org 0x01f60c4 	;Insect name in box
 ;	li a2, insect_baseline
@@ -115,7 +214,7 @@ vert_menu_y_dist equ 0xF
 
 ;Insect Caught text
 .org 0x01f64ac
-	addiu a1,zero,0x1BA
+	addiu a1,zero,0x1C0
 ;Insect month digit
 .org 0x01F6430
 	li a0, 0x224
@@ -131,9 +230,12 @@ vert_menu_y_dist equ 0xF
 .org 0x01f6498
 	li a1,0x264
 
-; Hikari Yes/no text coords
+; Hikari Yes/no text X coords
 .org 0x2615e0	;No
-	.word 0x100
+	.word 0x114
+
+.org 0x2615e8	;Yes
+	.word 0x152
 
 ; Hikari Yes/No verti->hori
 .org 0x180a04
@@ -153,16 +255,19 @@ vert_menu_y_dist equ 0xF
 
 ; Hikari No cursor X
 .org 0x27bc18
+	.word 0x108
 
 ; Hikari No cursor Y
 .org 0x27bc1C
+	.word 0x60
 
 ; Hikari Yes cursor X
 .org 0x27bc20
+	.word 0x14C
 
 ; Hikari No cursor Y
 .org 0x27bc24
-
+	.word 0x60
 
 
 ;;;;;;;;;;;;;;;Speculation follows
@@ -186,10 +291,7 @@ vert_menu_y_dist equ 0xF
 .org 0x015a4c4				
 	li v0,vert_menu_y_dist	;Vertical text character Y distance
 	li v1,mfw				;Horizontal Insect Text X distance
-	li v0,mfw + 3			;Horizontal Insect Text Y distance ???
-
-.org 0x01809c0				;Vertical text 2 Y dist
-	li a3, vert_menu_y_dist
+	li v0,0x14				;Horizontal Insect Text Y distance
 
 ;;.org 0x019d290  ;VERTICAL TEXT
 ;	addiu s2,s2,mfw
