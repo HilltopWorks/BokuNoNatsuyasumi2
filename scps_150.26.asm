@@ -11,12 +11,7 @@
 
 .open "ISO_EDITS\scps_150.26", 0xFF000
 
-.definelabel vwf_table, 0x0712b24 ;#0x002a1968 ;0xd0 bytes of free space
-.definelabel func_vwf, 0x028eb34
-.definelabel text_loop_space, 0x00290538 ;free debug text space
 
-.definelabel 	get_fb_y, 0x0012D3C8
-.definelabel 	get_fb_x, 0x0012D390
 ; ################         Removing the CRC Check            ####################
 .org 0x1bff98
 	nop
@@ -106,11 +101,14 @@ vert_menu_y_dist equ 0xF
 .org 0x01f64b0		;caught on	Y pos
 	li a2, insect_baseline
 
-.org 0x01F61A4		;King/Big Y pos
-	li a1, 0x12
-
-.org 0x01F6180		;King/Big Y pos
-	li a1, 0x12
+.org 0x01F617c		
+	li a2, -1		;King/Big tertiary
+	li a0, 0x142	;King X pos
+	li a1, 0x12		;King Y pos
+	
+.org 0x01F61A4		
+	li a0, 0x136	;Big X pos
+	li a1, 0x14		;Big Y pos
 
 .org 0x01F6180		;Rare Star Y pos
 	li a1, 0x12
@@ -162,8 +160,8 @@ vert_menu_y_dist equ 0xF
 .org 0x001e9e90		;Day digit tens X
 	li v0, 0x1c3
 
-.org 0x001e03b4		;Day digit ones X
-	li v0, 0x1d0	
+.org 0x001e9eb4		;Day digit ones X
+	li a0, 0x1d0	
 
 .org 0x001e9f94		;Rare star Y
 	li a1, 0x170
@@ -173,6 +171,41 @@ vert_menu_y_dist equ 0xF
 
 .org 0x001e9f28		;KING Y
 	li a1, 0x190
+
+;Insect cage full
+
+.org 0x0027af28		;BG
+	.word 0x60		;x
+	.word 0x40		;y
+	.word 0x1bc		;W
+	.word 0xa0		;H
+
+.org 0x001f67b0		;vert to hori
+	li a3, 0
+.org 0x001f67c4
+	li a3, 0
+.org 0x001f67d8
+	li a3, 0
+
+.org 0x001f67a4		;Cage is full header text
+	li a1, 0xec		;Y
+	li a2, 0x58		;X
+
+.org 0x001f67cc		;Pocket it
+	li a1, 0x7c		;X
+	li a2, 0xb0		;Y
+
+.org 0x001F67B8		;Let it go
+	li a1, 0x1A0	;X
+	li a2, 0xb0		;Y
+
+.org 0x0027af58		;cursor
+	.word 0xb0		;Pocket it X
+	.word 0x80		;Pocket it Y
+	.word 0x1b8		;Let it go X
+	.word 0x80		;Let it go Y
+	
+;Insect tutorial
 
 .org 0x001EBF94		;Inject tutorial vert->hori
 	li t1, 0x0
@@ -191,6 +224,34 @@ vert_menu_y_dist equ 0xF
 .org 0x27a188		;Inject tutorial 2 BG width
 	.word 0xf8
 
+;Insect delete confirmation
+.org 0x027a1c0		
+	.word 0x1e8		;BG coords x
+	.word 0x1a0		;Y
+	.word 0xe0		;W
+	.word 0xB0		;H
+
+.org 0x27a258		;cursor
+	.word 0x20c		;No X
+	.word 0x1e4		;No Y
+	.word 0x26a		;Yes X
+	.word 0x1e4		;Yes Y
+
+.org 0x001EC0A0		;Yes verti->hori 
+	li a3, 0x0
+
+.org 0x001ec0c8		;No verti->hori
+	li a3, 0x0
+
+.org 0x001EC084		;Yes/No Y
+	li s2, 0x212
+
+.org 0x001ec08c		;Yes X
+	li a1, 0x274
+
+.org 0x0027a228		;Discard bug? X
+	.word 0x200
+
 ;Insect blue notes screen
 
 .org 0x001F8AEC		;Fix letter alpha mess
@@ -205,8 +266,37 @@ vert_menu_y_dist equ 0xF
 .org 0x001F8C90		;Nudge bug gfx up
 	addiu a1,s0,0x3C
 
-;.org 0x01f60c4 	;Insect name in box
-;	li a2, insect_baseline
+;Insect box screen
+
+.org 0x001fc2e4		;Rarity star Y
+	li a1, 0x12
+
+.org 0x1fc330		;/ X
+	li a1, 0x22E
+
+.org 0x1fc314		;month digit X
+	li a0, 0x224
+
+.org 0x01fc36c		;day digit 2 X
+	li a0, 0x249
+
+.org 0x001fc394		;day digit 1 X
+	li a0, 0x256
+
+.org 0x001fc3cc		;caught on X
+	li a1, 0x1c0
+
+.org 0x001fc4e0		;Big Y
+	li a1, 0x14
+
+.org 0x001fc4bc		;King Y
+	li a1, 0x14
+
+.org 0x001E9D18		;mm text mess fix
+	addiu a3, s2, -1
+
+;Insect Cage
+
 
 ;Insect name count adjust
 .org 0x01FADFC
@@ -215,12 +305,17 @@ vert_menu_y_dist equ 0xF
 ;Insect Caught text
 .org 0x01f64ac
 	addiu a1,zero,0x1C0
+
 ;Insect month digit
 .org 0x01F6430
 	li a0, 0x224
 ;Insect date digit
 .org 0x01F6480
 	li a0,0x256
+
+;Insect date digit 2
+.org 0x01f6464
+	li a0, 0x249
 
 ;Insect month
 .org 0x01f644c
@@ -269,8 +364,184 @@ vert_menu_y_dist equ 0xF
 .org 0x27bc24
 	.word 0x60
 
+;Continue Screen
 
+.org 0x26ddd4		;colon X
+	.halfword 0x10e
+
+;Diary/Bug kit before night
+.org 0x0027bbe8		;bg x y w h
+	.word 0x40
+	.word 0x64
+	.word 0xa0
+	.word 0x202
+
+.org 0x00261620		;Picture diary coords
+	.word 0x72		;x
+	.word 0x7a		;y
+	.word 0x14c		;Insect kit X
+	.word 0x7a		;Y
+
+.org 0x0027bc58		;Picture diary cursor
+	.word 0x98		;X
+	.word 0x48		;Y
+					;Insect kit cursor
+	.word 0x9c		;x
+	.word 0x48		;Y
+
+; Dinner quiz
+
+.org 0x0027bc08		;bg x y w h 
+	.word 0x20
+	.word 0x38
+	.word 0x240
+	.word 0x48
+
+.org 0x002616a0		;quiz options
+	.word 0x30		;Left X
+	.word 0x46		;Left Y
+	.word 0xe0		;Mid X
+	.word 0x5c		;Mid Y
+	.word 0x180		;Right X
+	.word 0x46		;Right Y
+
+.org 0x0027bcd0		;Cursor
+	.word 0x2D		;Left X
+	.word 0x14		;Left Y
+	.word 0xe0		;Mid X
+	.word 0x28		;Mid Y
+	.word 0x180		;Right X
+	.word 0x14		;Right Y
+
+; Discard bug
+
+.org 0x001ec044		
+	li a3, 0x0		;Yes verti to hori
+.org 0x001ec064
+	li a3, 0x0		;No verti to hori
+
+.org 0x001EC038		;Yes X
+	li a1, 0x160
+
+.org 0x0027a220		;Label coords
+	.word 0xe8		;X
+	.word 0x44		;Y
+
+.org 0x0027a1b0		;BG X Y W H
+	.word 0xd0
+	.word 0x30
+	.word 0xe0
+	.word 0x90
+
+.org 0x0027a248		;Cursor
+	.word 0xf4		;No X
+	.word 0x64		;No Y
+	.word 0x156		;Yes X
+	.word 0x64		;Yes Y
+
+;Done fishing
+
+.org 0x29ab80
+	.word 0x100		;Header text X
+	.word 0x44		;Header Y
+
+.org 0x1ada60		;Yes
+	li a1, 0x160	;X
+	li a2, 0x96		;Y
+
+.org 0x001ada70		;verti to hori
+	li t0, 0		;option 1
+.org 0x001ada88
+	li t0, 0		;option 2
+.org 0x1ada54
+	li t2, 0		;header
+
+.org 0x001B35D4		;cursor no x
+	addiu a0, 0xf4
+.org 0x001B35B8		;cursor yes x
+	li v1, 0x62
+
+.org 0x29aaf0		;bg x y w h
+	.word 0xd0
+	.word 0x28
+	.word 0xe0
+	.word 0x98
+
+;Fishing commence
+
+.org 0x001ADAA4		;Verti to hori
+	li t0, 0x0
+.org 0x001adabc
+	li t0, 0x0
+.org 0x001ADA54
+	li t2, 0x0
+
+.org 0x001ada94		;Yes
+	li a1, 0x176	;X
+	li a2, 0xc8		;Y
+
+.org 0x001adaac		;No
+	li a1, 0xf4		;X
+	li a2, 0xc8		;Y
+
+.org 0x0029ab88		;Header
+	.word 0xa0		;X
+	.word 0x30		;Y
+
+.org 0x0029ab00		;BG X Y W H
+	.word 0x84
+	.word 0x18
+	.word 0x188
+	.word 0xe0
+
+.org 0x001B217C		;Cursor
+	li v1, 0x88		;X dist
+	li a1, 0x98		;X base
+.org 0x001B2198
+	addiu a0, 0xe4	;Y
+
+; Underwater Text
+
+.org 0x0019d290
+	addiu s3, mfw	;Vert to hori
+
+.org 0x0019d210		;Whiten text
+	addiu a0, 0x255	
+	addiu a1, 0x255
+	addiu a2, 0x255
+
+
+.org 0x0019D774
+	li a0, 0x40		;Line 1 X
+	li a1, 0x160	;Line 1 Y
+.org 0x0019d848
+	li a0, 0x40		;Line 1 X
+.skip 4
+	li a1, 0x160	;Line 1 Y
+	
+
+.org 0x0019d7fc
+	li a0, 0x40			;Line 2 X
+	li a1, 0x160 + 0x10	;Line 2 Y
+.org 0x0019d7c8
+	li a0, 0x40			;Line 2 X
+	li a1, 0x160 + 0x10	;Line 2 Y
+.org 0x0019d8a0
+	li a0, 0x40			;Line 2 X
+	li a1, 0x160 + 0x10	;Line 2 Y
+.org 0x0019d8d4
+	li a0, 0x40			;Line 2 X
+	li a1, 0x160 + 0x10	;Line 2 Y
+
+.org 0x0019d7e0
+	li a0, 0x40			;Line 3 X
+	li a1, 0x160 + 0x20	;Line 3 Y 
+.org 0x0019d8b8
+	li a0, 0x40			;Line 3 X
+	li a1, 0x160 + 0x20	;Line 3 Y 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;Speculation follows
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Hori text kerning updates
 
 .org 0x0155e94 
@@ -344,7 +615,7 @@ vert_menu_y_dist equ 0xF
 	li     t1,mfw
 
 .org 0x001b47cc  
-	li     v0,mfw
+	li     v0,0xb
 
 
 
@@ -354,6 +625,12 @@ vert_menu_y_dist equ 0xF
 
 ; ################         Main Dialogue text hack             ####################
 .definelabel 	draw_dialogue, 0x001fdcb0
+.definelabel vwf_table, 0x0712b24 ;#0x002a1968 ;0xd0 bytes of free space
+.definelabel func_vwf, 0x028eb34
+.definelabel text_loop_space, 0x00290538 ;free debug text space
+
+.definelabel 	get_fb_y, 0x0012D3C8
+.definelabel 	get_fb_x, 0x0012D390
 ;.definelabel 	draw_char_7, 0x00180670
 ;.definelabel	draw_char, 0x00180680 ; int x, int y, uint char, B(7?)
 ;.definelabel	stash_char, 0x001fde94

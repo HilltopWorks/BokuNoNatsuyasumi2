@@ -88,7 +88,7 @@ def pullScript():
 def build(mode):
     if mode > 0:
         #Pull text from weblate
-        pullScript()
+        #pullScript()
 
         #Print automated graphics
         print("____BUILD: Printing graphics")
