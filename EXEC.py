@@ -53,13 +53,13 @@ def injectIMGs(compaction_map):
     for img_msg in MSG.RAW_MSG_FILES:
         po_path = os.path.join(RAW_PO_PATH, img_msg + ".po")
         bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
-        print("Injecting IMG script:", img_msg)
+        print("Injecting RAW IMG script:", img_msg)
         MSG.injectPO(bin_path,po_path, MSG.RAW_MODE, inject_dict, compaction_map)
     
     for img_msg in MSG.OFFSET_ONLY_MSG_FILES:
         po_path = os.path.join(OFFSET_ONLY_PO_PATH, img_msg + ".po")
         bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
-        print("Injecting IMG script:", img_msg)
+        print("Injecting OFFSET ONLY IMG script:", img_msg)
         MSG.injectPO(bin_path,po_path, MSG.OFFSET_ONLY_MODE, inject_dict, compaction_map)
     return
 
@@ -85,6 +85,24 @@ def pullScript():
 
     return
 
+ADDITIONS = {               #Addition file,                             parent file,        offset
+            "diary":        ["ADDS\\diary-1.bin",               "IMG_RIP_EDITS\\diary.bin", 0x80 ],
+            "saveload-0":   ["ADDS\\saveload-0.bin", "IMG_RIP_EDITS\\system\\saveload.bin", 0x100],
+            "saveload-1":   ["ADDS\\saveload-1.bin", "IMG_RIP_EDITS\\system\\saveload.bin", 0x180]
+            }
+
+def insertAdditions(addition):
+    parent = open(addition[1], 'r+b')
+    parent.seek(addition[2])
+    parent.write(open(addition[0], 'rb').read())
+
+    return
+
+def insertAllAdditions():
+    for addition in ADDITIONS:
+        insertAdditions(ADDITIONS[addition])
+    return
+
 def build(mode):
     if mode > 0:
         #Pull text from weblate
@@ -106,11 +124,17 @@ def build(mode):
         print("____BUILD: Injecting IMG scripts")
         injectIMGs(compaction_map)
 
+        #Insert addition files
+        print("____BUILD: Applying addition patches")
+        insertAllAdditions()
+
         #Generate bin files
         print("____BUILD: Packing MAP files")
         UNPACK.packMaps("MAP_RIP_EDITS","ISO_EDITS\\map")
         print("____BUILD: Packing IMG")
         UNPACK.packIMG("IMG_RIP_EDITS", "ISO_EDITS")
+
+    
 
     #Apply ASM
     print("____BUILD: Applying ASM patches")

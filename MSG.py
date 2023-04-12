@@ -31,9 +31,9 @@ OFFSET_ONLY_MSG_FILES = [
                         ]
 
 RAW_MSG_FILES = [
-                "~diary\\0.bin",
-                "system\\~saveload\\0.bin",
-                "system\\~saveload\\1.bin"
+                #"~diary\\0.bin",
+                #"system\\~saveload\\0.bin",
+                #"system\\~saveload\\1.bin"
 
                 ]
 
@@ -202,7 +202,7 @@ def convertRawToText(dict, raw):
         string += char
     return string
 
-def convertTextToRaw(dict, text, map=-1):
+def convertTextToRaw(dict, text, map=-1, raw_insert=-1):
     '''string -> binary'''
     buffer = b""
 
@@ -212,6 +212,9 @@ def convertTextToRaw(dict, text, map=-1):
 
         if text.startswith("{STOP}"):
             return buffer + b'\x00\x80'
+        elif text.startswith("{END}") and raw_insert != -1:
+            buffer += b'\x00\x80'
+            chars_read = 5
         #elif text.startswith("{END}"):
         #    return buffer + b'\x00\x80'
         elif text.startswith("\n"):
@@ -344,15 +347,18 @@ def convertToPO(path, mode):
     table_number = 0
     for table in tables:
         msg_number = 0
-        
+        if mode == RAW_MODE:
+            table = table[0].split(0x8000.to_bytes(2, byteorder="little"))
         for msg in table:
+            
             if len(msg) == 0:
                 #Skip null entries
                 msg_number += 1
                 continue
             text = convertRawToText(dict, msg)
-            
-            
+            if mode == RAW_MODE:
+                text += "{END}"
+
             if not text.endswith("{END}") and "KEY_ERROR" in text:
                 #Skip malformed strings
                 #print("---" + text + "---")
@@ -709,11 +715,12 @@ def testMAPs():
 
 
 def testRaw(hex_string):
-    dict= readFont("font_inject_raw_test.txt",0, EXTRACTION)
+    dict= readFont("font.txt",0, EXTRACTION)
     dict[0x8000] = "{END}\n"
     dict[0x8001] = "\n"
-    print(convertRawToText(dict, bytes.fromhex(hex_string)))
-
+    text = convertRawToText(dict, bytes.fromhex(hex_string))
+    print(text.count("END"))
+    print(hex_string.count("00 80"))
     return
 
 
@@ -722,14 +729,140 @@ def testRaw(hex_string):
 #print(convertTextToRaw(my_dict, "No", map=-1).hex())
 
 testRaw("""
+03 01 04 01 0C 01 35 06 CD 00 35 06 EB 00 71 06
+72 06 73 06 C1 00 76 02 AA 00 97 00 75 00 AF 00
+8A 00 34 06 01 80 03 01 04 01 0C 01 35 06 CD 00
+35 06 EB 00 71 06 72 06 73 06 C1 00 FB 03 7C 00
+8B 00 9C 00 01 80 7B 00 F2 01 92 00 C8 01 86 00
+75 00 34 06 00 80 F7 00 CB 00 35 06 00 01 E5 00
+EA 00 88 00 97 00 75 00 AF 00 8A 00 34 06 01 80
+03 01 04 01 0C 01 35 06 CD 00 35 06 EB 00 71 06
+72 06 73 06 C1 00 FB 03 7C 00 8B 00 9C 00 01 80
+7B 00 F2 01 92 00 C8 01 86 00 75 00 34 06 00 80
+E9 00 35 06 E1 00 C1 00 3B 03 C2 00 98 00 75 00
+AF 00 8A 00 34 06 01 80 03 01 04 01 0C 01 35 06
+CD 00 35 06 EB 00 71 06 72 06 73 06 C1 00 FB 03
+7C 00 8B 00 9C 00 01 80 7B 00 F2 01 92 00 C8 01
+86 00 75 00 34 06 00 80 E9 00 35 06 E1 00 C1 00
+DF 04 7E 00 A7 03 C2 00 98 00 75 00 AF 00 8A 00
+34 06 01 80 03 01 04 01 0C 01 35 06 CD 00 35 06
+EB 00 71 06 72 06 73 06 C1 00 FB 03 7C 00 8B 00
+9C 00 01 80 7B 00 F2 01 92 00 C8 01 86 00 75 00
+34 06 00 80 F7 00 C3 00 C6 00 0D 01 C1 00 F8 05
+C2 00 98 00 80 00 91 00 86 00 75 00 34 06 00 80
+9A 00 9F 00 F7 00 C3 00 C6 00 0D 01 9C 00 DD 00
+35 06 F8 00 88 00 AF 00 8A 00 7C 00 08 00 00 80
+F7 00 CB 00 35 06 00 01 E5 00 EA 00 7D 00 F1 01
+27 06 88 00 AF 00 88 00 90 00 34 06 00 80 DF 04
+7E 00 84 00 B0 00 7D 00 F1 01 27 06 88 00 AF 00
+88 00 90 00 34 06 00 80 0F 01 35 06 EB 00 7D 00
+F1 01 27 06 88 00 AF 00 88 00 90 00 34 06 00 80
+03 01 04 01 0C 01 35 06 CD 00 35 06 EB 00 71 06
+72 06 73 06 7D 00 73 00 BB 00 AF 00 8C 00 C2 00
+34 06 01 80 84 00 9F 00 AF 00 AF 00 D4 00 35 06
+02 01 C1 00 50 02 D0 01 88 00 97 00 B3 00 72 01
+75 00 98 00 8A 00 7C 00 08 00 00 80 03 01 04 01
+0C 01 35 06 CD 00 35 06 EB 00 71 06 72 06 73 06
+7D 00 5E 03 BD 00 97 00 75 00 AF 00 8A 00 34 06
+01 80 84 00 9F 00 AF 00 AF 00 D4 00 35 06 02 01
+C1 00 50 02 D0 01 88 00 97 00 B3 00 72 01 75 00
+98 00 8A 00 7C 00 08 00 00 80 03 01 04 01 0C 01
+35 06 CD 00 35 06 EB 00 71 06 72 06 73 06 9C 00
+D4 00 35 06 02 01 9F 00 E8 03 E5 05 9C 00 01 80
+1F 03 79 02 9B 00 C9 01 7E 00 6C 02 C7 04 7D 00
+73 00 BB 00 AF 00 8C 00 C2 00 34 06 01 80 84 00
+9F 00 AF 00 AF 00 D4 00 35 06 02 01 C1 00 50 02
+D0 01 88 00 97 00 B3 00 72 01 75 00 98 00 8A 00
+7C 00 08 00 00 80 84 00 9F 00 F7 00 C3 00 C6 00
+0D 01 98 00 B9 00 BE 00 88 00 75 00 98 00 8A 00
+7C 00 08 00 00 80 6D 01 48 01 AF 00 98 00 9F 00
+7C 01 7A 01 54 01 C1 00 03 01 04 01 0C 01 35 06
+CD 00 35 06 EB 00 71 06 72 06 73 06 9C 00 01 80
+E8 03 E5 05 88 00 AF 00 8A 00 7C 00 08 00 00 80
+03 01 04 01 0C 01 35 06 CD 00 35 06 EB 00 71 06
+72 06 73 06 7D 00 F7 00 CB 00 35 06 00 01 E5 00
+EA 00 86 00 BD 00 97 00 01 80 75 00 AF 00 8C 00
+C2 00 34 06 F7 00 CB 00 35 06 00 01 E5 00 EA 00
+88 00 AF 00 8A 00 7C 00 08 00 00 80 5C 02 DF 04
+7E 00 88 00 97 00 B9 00 BE 00 88 00 75 00 98 00
+8A 00 7C 00 08 00 00 80 03 01 04 01 0C 01 35 06
+CD 00 35 06 EB 00 71 06 72 06 73 06 9C 00 D4 00
+35 06 02 01 9F 00 E8 03 E5 05 9C 00 01 80 1F 03
+79 02 9B 00 C9 01 7E 00 6C 02 C7 04 7D 00 73 00
+BB 00 AF 00 8C 00 C2 00 34 06 01 80 84 00 9F 00
+D4 00 35 06 02 01 9F 00 E9 00 35 06 E1 00 C1 00
+DD 00 35 06 F8 00 8A 00 BC 00 9C 00 A0 00 01 80
+3D 00 36 00 48 00 3F 00 B0 01 5C 02 9F 00 C9 01
+7E 00 6C 02 C7 04 7D 00 1F 03 79 02 98 00 8A 00
+00 80 F7 00 CB 00 35 06 00 01 E5 00 EA 00 9C 00
+2E 01 90 02 88 00 AF 00 88 00 90 00 34 06 00 80
+E9 00 35 06 E1 00 9F 00 DF 04 7E 00 84 00 B0 00
+9C 00 2E 01 90 02 88 00 AF 00 88 00 90 00 34 06
+00 80 03 01 04 01 0C 01 35 06 CD 00 35 06 EB 00
+71 06 72 06 73 06 7D 00 6F 03 86 00 BD 00 97 00
+75 00 AF 00 8C 00 C2 00 34 06 00 80 03 01 04 01
+0C 01 35 06 CD 00 35 06 EB 00 71 06 72 06 73 06
+7D 00 5E 03 BD 00 97 00 75 00 AF 00 8A 00 34 06
+00 80 84 00 9F 00 D4 00 35 06 02 01 9F 00 F7 00
+C3 00 C6 00 0D 01 7D 00 73 00 BB 00 AF 00 8C 00
+C2 00 34 06 00 80 E9 00 35 06 E1 00 9F 00 3B 03
+B0 00 84 00 B0 00 9C 00 2E 01 90 02 88 00 AF 00
+88 00 90 00 34 06 00 80 03 01 04 01 0C 01 35 06
+CD 00 35 06 EB 00 71 06 72 06 73 06 7D 00 FB 03
+7C 00 BD 00 AF 00 88 00 90 00 34 06 00 80 D4 00
+35 06 02 01 C1 00 F1 01 27 06 88 00 90 00 F7 00
+C3 00 C6 00 0D 01 7D 00 73 00 BB 00 AF 00 8C 00
+C2 00 34 06 00 80 E9 00 35 06 E1 00 7D 00 5E 03
+BD 00 97 00 75 00 AF 00 8A 00 34 06 00 80 A0 00
+75 00 00 80 75 00 75 00 79 00 00 80 84 00 9F 00
+AF 00 AF 00 D4 00 35 06 02 01 C1 00 7F 01 82 00
+AF 00 8A 00 7C 00 08 00 00 80
+
 
 
 
 """)
 
+
+#convertToPO("1.bin", RAW_MODE)
 #extractMSGs()
-#dict = readFont("font.txt",0, INSERTION)
-#print(convertTextToRaw(dict, "verything" ).hex())
+dict = readFont("font-inject-menus.txt",0, INSERTION)
+print(convertTextToRaw(dict, 
+"""Reading memory card...{END}
+Formatting memory card...{END}
+Loading save...{END}
+Saving...{END}
+Select a file{END}
+Which file will you save to?{END}
+Complete{END}
+Save complete{END}
+File loaded{END}
+No memory card detected.
+Proceed anyways?{END}
+The memory card is corrupted.
+Proceed anyways?{END}
+Not enough space to create
+save. Proceed anyways?{END}
+Proceed with this file?{END}
+Do you want to save your
+progress so far?{END}
+Unformatted memory card detected.
+Format now?{END}
+Overwrite this file?{END}
+Save failed. 92KB of free
+space is required to save.{END}
+Formatting error!{END}
+Save error!{END}
+No memory card detected!{END}
+Memory card error{END}
+No save files detected{END}
+Load failed{END}
+Memory card ejected{END}
+No completed save file detected{END}
+Data corrupted{END}
+Yes{END}
+No{END}
+Continue game?{END}""", raw_insert=1 ).hex())
 #injectPO("IMG_RIP_EDITS\\system\\namemsg\\namemsg.msg", "boku-no-natsuyasumi-2\\fishing-msg\\IMG\\en\\system\\namemsg\\namemsg.msg.po", MSG_MODE, dict)
 #injectPO("1.bin", "M_A01000.po", MAP_MODE, dict)
 #text = convertToPO("1.bin", MAP_MODE)

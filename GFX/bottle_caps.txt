@@ -1,0 +1,25 @@
+Archelon
+Allosaurus
+Ankylosaurus
+Ammonite
+Iguanodon
+Ichthyosaur
+Elasmosaurus
+Oviraptor
+Kentrosaurus
+Archaeopteryx
+Shantungosaurus
+Stegosaurus
+Spinosaurus
+Tyrannosaurus
+Deinosuchus
+Diplodocus
+Triceratops
+Nodosaurus
+Hypsilophodon
+Pteranodon
+Brachiosaurus
+Protoceratops
+Minmi
+Relict Dragonfly
+Megalosaurus
