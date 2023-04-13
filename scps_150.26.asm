@@ -11,6 +11,12 @@
 
 .open "ISO_EDITS\scps_150.26", 0xFF000
 
+; ################         Enable debug mode            ####################
+.org 0x020a970
+	lui 	a0,0x28
+.org 0x20a978
+	addiu	a0, a0, -0x11b0
+
 
 ; ################         Removing the CRC Check            ####################
 .org 0x1bff98
@@ -60,11 +66,6 @@ bg_y_start equ 0xA40
 .org 0x001803a0
 	li   v0, 0x0
 
-; ################         Enable debug mode            ####################
-;.org 0x020a970
-;	lui 	a0,0x28
-;.org 0x20a978
-;	addiu	a0, a0, -0x11b0
 
 ; ################		   Native Horizontal text fixes
 
@@ -369,33 +370,15 @@ vert_menu_y_dist equ 0xF
 .org 0x26ddd4		;colon X
 	.halfword 0x10e
 
-;Diary/Bug kit before night
-.org 0x0027bbe8		;bg x y w h
-	.word 0x40
-	.word 0x64
-	.word 0xa0
-	.word 0x202
 
-.org 0x00261620		;Picture diary coords
-	.word 0x72		;x
-	.word 0x7a		;y
-	.word 0x14c		;Insect kit X
-	.word 0x7a		;Y
-
-.org 0x0027bc58		;Picture diary cursor
-	.word 0x98		;X
-	.word 0x48		;Y
-					;Insect kit cursor
-	.word 0x9c		;x
-	.word 0x48		;Y
 
 ; Dinner quiz
 
 .org 0x0027bc08		;bg x y w h 
 	.word 0x20
-	.word 0x38
+	.word 0x20
 	.word 0x240
-	.word 0x48
+	.word 0x78
 
 .org 0x002616a0		;quiz options
 	.word 0x30		;Left X
@@ -539,6 +522,100 @@ vert_menu_y_dist equ 0xF
 .org 0x0019d8b8
 	li a0, 0x40			;Line 3 X
 	li a1, 0x160 + 0x20	;Line 3 Y 
+
+;Continue/Data load screen
+
+.org 0x001A7B14
+	li s1, 0x15c		;No X
+
+.org 0x001A7A3C
+	li s1, 0x100		;Yes X
+
+;Diary/Bug kit
+
+.org 0x00261620		;Picture diary coords
+	.word 0x66		;x
+	.word 0x7a		;y
+	.word 0x14c		;Insect kit X
+	.word 0x7a		;Y
+
+.org 0x0027bc58		;Picture diary cursor
+	.word 0x90		;X
+	.word 0x48		;Y
+					;Insect kit cursor
+	.word 0x19c		;x
+	.word 0x48		;Y
+
+.org 0x0027bbe8			;BG
+	.word 0x40			;X
+	.word 0x64			;Y
+	.word 0x1fe			;W
+	.word 0x42			;H
+
+;Diary save with label
+
+.org 0x0027bd00			;Cursor
+	.word 0xbc			;No X
+	.word 0x7a			;No Y
+	.word 0x1c4			;Yes X
+	.word 0x7a			;Yes Y
+
+.org 0x002616e0			;Labels
+	.word 0xf4			;No X
+	.word 0x74			;No Y
+	.word 0x178			;Yes X
+	.word 0x74			;Yes Y
+	.word 0x9e			;Header X
+	.word 0x2c			;Header Y
+
+
+;Sumo Boku side
+
+.org 0x001C6DD0			;Caught on
+	li a1, 0x32d		;X
+
+.org 0x001C6D30			;Month digit
+	li a0, 0x390		;X
+
+.org 0x001C6D54			;Month "/"
+	li a1, 0x3a0		;X
+
+.org 0x001C6D84			;Date tens
+	li v0, 0x3aa		;X
+
+.org 0x001C6DAC			;Date ones
+	li a0, 0x3ba		;X
+
+.org 0x001C6FB8			;Lv.
+	li a0, 0x296		;Red X
+.org 0x001c6fcc			
+	addiu a1, 0xde		;Red Y
+.org 0x001c7034
+	li a0, 0x296		;White X
+.org 0x001c7048
+	addiu a1, 0xde		;White Y
+
+.org 0x001c6fdc			;level digit
+	li v0, 0x2b8		;Red X
+.org 0x001c7058
+	lu v0, 0x2b8		;White X
+
+;Sumo opponent side
+
+.org 0x001c7670			;Skill
+	addiu a1, 0x42E		;X
+
+.org 0x001c7740			;LV
+	li a1, 0xde			;White Y
+.org 0x001c76c0
+	li a1, 0xde			;Red Y
+
+.org 0x001C777C			;Level digit
+	addiu a1, 0x48a		;White X
+.org 0x001c76fc
+	addiu a1, a1, 0x48a
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;Speculation follows
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -616,11 +693,6 @@ vert_menu_y_dist equ 0xF
 
 .org 0x001b47cc  
 	li     v0,0xb
-
-
-
-
-
 
 
 ; ################         Main Dialogue text hack             ####################

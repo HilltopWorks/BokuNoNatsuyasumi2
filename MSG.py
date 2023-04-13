@@ -212,9 +212,12 @@ def convertTextToRaw(dict, text, map=-1, raw_insert=-1):
 
         if text.startswith("{STOP}"):
             return buffer + b'\x00\x80'
+        elif text.startswith("{END}\n") and raw_insert != -1:
+            buffer += b'\x00\x80'
+            chars_read = 6
         elif text.startswith("{END}") and raw_insert != -1:
             buffer += b'\x00\x80'
-            chars_read = 5
+            chars_read = 5   
         #elif text.startswith("{END}"):
         #    return buffer + b'\x00\x80'
         elif text.startswith("\n"):
@@ -715,12 +718,13 @@ def testMAPs():
 
 
 def testRaw(hex_string):
-    dict= readFont("font.txt",0, EXTRACTION)
+    dict= readFont("font-inject-menus.txt",0, EXTRACTION)
     dict[0x8000] = "{END}\n"
     dict[0x8001] = "\n"
     text = convertRawToText(dict, bytes.fromhex(hex_string))
-    print(text.count("END"))
-    print(hex_string.count("00 80"))
+    print(text)
+    #print(text.count("END"))
+    #print(hex_string.count("00 80"))
     return
 
 
@@ -728,111 +732,26 @@ def testRaw(hex_string):
 
 #print(convertTextToRaw(my_dict, "No", map=-1).hex())
 
-testRaw("""
-03 01 04 01 0C 01 35 06 CD 00 35 06 EB 00 71 06
-72 06 73 06 C1 00 76 02 AA 00 97 00 75 00 AF 00
-8A 00 34 06 01 80 03 01 04 01 0C 01 35 06 CD 00
-35 06 EB 00 71 06 72 06 73 06 C1 00 FB 03 7C 00
-8B 00 9C 00 01 80 7B 00 F2 01 92 00 C8 01 86 00
-75 00 34 06 00 80 F7 00 CB 00 35 06 00 01 E5 00
-EA 00 88 00 97 00 75 00 AF 00 8A 00 34 06 01 80
-03 01 04 01 0C 01 35 06 CD 00 35 06 EB 00 71 06
-72 06 73 06 C1 00 FB 03 7C 00 8B 00 9C 00 01 80
-7B 00 F2 01 92 00 C8 01 86 00 75 00 34 06 00 80
-E9 00 35 06 E1 00 C1 00 3B 03 C2 00 98 00 75 00
-AF 00 8A 00 34 06 01 80 03 01 04 01 0C 01 35 06
-CD 00 35 06 EB 00 71 06 72 06 73 06 C1 00 FB 03
-7C 00 8B 00 9C 00 01 80 7B 00 F2 01 92 00 C8 01
-86 00 75 00 34 06 00 80 E9 00 35 06 E1 00 C1 00
-DF 04 7E 00 A7 03 C2 00 98 00 75 00 AF 00 8A 00
-34 06 01 80 03 01 04 01 0C 01 35 06 CD 00 35 06
-EB 00 71 06 72 06 73 06 C1 00 FB 03 7C 00 8B 00
-9C 00 01 80 7B 00 F2 01 92 00 C8 01 86 00 75 00
-34 06 00 80 F7 00 C3 00 C6 00 0D 01 C1 00 F8 05
-C2 00 98 00 80 00 91 00 86 00 75 00 34 06 00 80
-9A 00 9F 00 F7 00 C3 00 C6 00 0D 01 9C 00 DD 00
-35 06 F8 00 88 00 AF 00 8A 00 7C 00 08 00 00 80
-F7 00 CB 00 35 06 00 01 E5 00 EA 00 7D 00 F1 01
-27 06 88 00 AF 00 88 00 90 00 34 06 00 80 DF 04
-7E 00 84 00 B0 00 7D 00 F1 01 27 06 88 00 AF 00
-88 00 90 00 34 06 00 80 0F 01 35 06 EB 00 7D 00
-F1 01 27 06 88 00 AF 00 88 00 90 00 34 06 00 80
-03 01 04 01 0C 01 35 06 CD 00 35 06 EB 00 71 06
-72 06 73 06 7D 00 73 00 BB 00 AF 00 8C 00 C2 00
-34 06 01 80 84 00 9F 00 AF 00 AF 00 D4 00 35 06
-02 01 C1 00 50 02 D0 01 88 00 97 00 B3 00 72 01
-75 00 98 00 8A 00 7C 00 08 00 00 80 03 01 04 01
-0C 01 35 06 CD 00 35 06 EB 00 71 06 72 06 73 06
-7D 00 5E 03 BD 00 97 00 75 00 AF 00 8A 00 34 06
-01 80 84 00 9F 00 AF 00 AF 00 D4 00 35 06 02 01
-C1 00 50 02 D0 01 88 00 97 00 B3 00 72 01 75 00
-98 00 8A 00 7C 00 08 00 00 80 03 01 04 01 0C 01
-35 06 CD 00 35 06 EB 00 71 06 72 06 73 06 9C 00
-D4 00 35 06 02 01 9F 00 E8 03 E5 05 9C 00 01 80
-1F 03 79 02 9B 00 C9 01 7E 00 6C 02 C7 04 7D 00
-73 00 BB 00 AF 00 8C 00 C2 00 34 06 01 80 84 00
-9F 00 AF 00 AF 00 D4 00 35 06 02 01 C1 00 50 02
-D0 01 88 00 97 00 B3 00 72 01 75 00 98 00 8A 00
-7C 00 08 00 00 80 84 00 9F 00 F7 00 C3 00 C6 00
-0D 01 98 00 B9 00 BE 00 88 00 75 00 98 00 8A 00
-7C 00 08 00 00 80 6D 01 48 01 AF 00 98 00 9F 00
-7C 01 7A 01 54 01 C1 00 03 01 04 01 0C 01 35 06
-CD 00 35 06 EB 00 71 06 72 06 73 06 9C 00 01 80
-E8 03 E5 05 88 00 AF 00 8A 00 7C 00 08 00 00 80
-03 01 04 01 0C 01 35 06 CD 00 35 06 EB 00 71 06
-72 06 73 06 7D 00 F7 00 CB 00 35 06 00 01 E5 00
-EA 00 86 00 BD 00 97 00 01 80 75 00 AF 00 8C 00
-C2 00 34 06 F7 00 CB 00 35 06 00 01 E5 00 EA 00
-88 00 AF 00 8A 00 7C 00 08 00 00 80 5C 02 DF 04
-7E 00 88 00 97 00 B9 00 BE 00 88 00 75 00 98 00
-8A 00 7C 00 08 00 00 80 03 01 04 01 0C 01 35 06
-CD 00 35 06 EB 00 71 06 72 06 73 06 9C 00 D4 00
-35 06 02 01 9F 00 E8 03 E5 05 9C 00 01 80 1F 03
-79 02 9B 00 C9 01 7E 00 6C 02 C7 04 7D 00 73 00
-BB 00 AF 00 8C 00 C2 00 34 06 01 80 84 00 9F 00
-D4 00 35 06 02 01 9F 00 E9 00 35 06 E1 00 C1 00
-DD 00 35 06 F8 00 8A 00 BC 00 9C 00 A0 00 01 80
-3D 00 36 00 48 00 3F 00 B0 01 5C 02 9F 00 C9 01
-7E 00 6C 02 C7 04 7D 00 1F 03 79 02 98 00 8A 00
-00 80 F7 00 CB 00 35 06 00 01 E5 00 EA 00 9C 00
-2E 01 90 02 88 00 AF 00 88 00 90 00 34 06 00 80
-E9 00 35 06 E1 00 9F 00 DF 04 7E 00 84 00 B0 00
-9C 00 2E 01 90 02 88 00 AF 00 88 00 90 00 34 06
-00 80 03 01 04 01 0C 01 35 06 CD 00 35 06 EB 00
-71 06 72 06 73 06 7D 00 6F 03 86 00 BD 00 97 00
-75 00 AF 00 8C 00 C2 00 34 06 00 80 03 01 04 01
-0C 01 35 06 CD 00 35 06 EB 00 71 06 72 06 73 06
-7D 00 5E 03 BD 00 97 00 75 00 AF 00 8A 00 34 06
-00 80 84 00 9F 00 D4 00 35 06 02 01 9F 00 F7 00
-C3 00 C6 00 0D 01 7D 00 73 00 BB 00 AF 00 8C 00
-C2 00 34 06 00 80 E9 00 35 06 E1 00 9F 00 3B 03
-B0 00 84 00 B0 00 9C 00 2E 01 90 02 88 00 AF 00
-88 00 90 00 34 06 00 80 03 01 04 01 0C 01 35 06
-CD 00 35 06 EB 00 71 06 72 06 73 06 7D 00 FB 03
-7C 00 BD 00 AF 00 88 00 90 00 34 06 00 80 D4 00
-35 06 02 01 C1 00 F1 01 27 06 88 00 90 00 F7 00
-C3 00 C6 00 0D 01 7D 00 73 00 BB 00 AF 00 8C 00
-C2 00 34 06 00 80 E9 00 35 06 E1 00 7D 00 5E 03
-BD 00 97 00 75 00 AF 00 8A 00 34 06 00 80 A0 00
-75 00 00 80 75 00 75 00 79 00 00 80 84 00 9F 00
-AF 00 AF 00 D4 00 35 06 02 01 C1 00 7F 01 82 00
-AF 00 8A 00 7C 00 08 00 00 80
-
-
-
+testRaw("""73 00 74 00 75 00 76 00 77 00 78 00 79 00 7A 00
+7B 00 7C 00 39 06 8A 00 00 00 8D 00 01 80 95 00
+C1 00 C0 00 C6 00 BB 00 C0 00 C7 00 B7 00 01 80
+A5 00 B3 00 C8 00 B7 00 01 80 A0 00 B7 00 C9 00
+00 00 99 00 B3 00 BF 00 B7 00 01 80 A4 00 B7 00
+BF 00 BB 00 C0 00 BB 00 C5 00 B5 00 B7 00 01 80
+97 00 C4 00 C4 00 C1 00 C4 00 CD 00 97 00 A0 00
+96 00 CF 00 01 80 00 00 00 00 00 00 00 00 00 00
 
 """)
 
 
 #convertToPO("1.bin", RAW_MODE)
 #extractMSGs()
-dict = readFont("font-inject-menus.txt",0, INSERTION)
-print(convertTextToRaw(dict, 
-"""Reading memory card...{END}
+
+saveload_1 = """Reading memory card...{END}
 Formatting memory card...{END}
 Loading save...{END}
 Saving...{END}
-Select a file{END}
+Select a save file{END}
 Which file will you save to?{END}
 Complete{END}
 Save complete{END}
@@ -862,7 +781,15 @@ No completed save file detected{END}
 Data corrupted{END}
 Yes{END}
 No{END}
-Continue game?{END}""", raw_insert=1 ).hex())
+Do you want to continue playing?{END}"""
+
+
+def genSaveText(txt):
+    dict = readFont("font-inject-menus.txt",0, INSERTION)
+    print(convertTextToRaw(dict, txt  , raw_insert=1 ).hex())
+
+genSaveText("Game")
+genSaveText("File")
 #injectPO("IMG_RIP_EDITS\\system\\namemsg\\namemsg.msg", "boku-no-natsuyasumi-2\\fishing-msg\\IMG\\en\\system\\namemsg\\namemsg.msg.po", MSG_MODE, dict)
 #injectPO("1.bin", "M_A01000.po", MAP_MODE, dict)
 #text = convertToPO("1.bin", MAP_MODE)
