@@ -73,6 +73,9 @@ MENU_TEXT_EXCEPTIONS = ["いいえ\nはい\n{STOP}", "「\n買いもの\n買う\
                         "「\n買いもの\n買う\nやめる\nふつうの牛乳\n40円\nコ一ヒ一牛乳\n40円\nジェットサイダ一\n40円\n」",
                         "絵日記\n昆虫採集セット\n{STOP}"]
 
+BUGGED_LINES = {"グレ一ト\n {STOP}"     :"Great\n{STOP}",
+                "黒い\n {STOP}"         :"Black\n {STOP}"}
+
 #Dictionary modes
 INSERTION = 0
 EXTRACTION = 1
@@ -649,6 +652,9 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
     elif mode == MSG_MODE:
         msg = splitMsg(binary_path, mode)
         for entry in po:
+            if entry.msgid in BUGGED_LINES:
+                entry.msgstr = BUGGED_LINES[entry.msgid]
+
             table_line = entry.comment
             split_table = table_line.split("-")
             table_number = int(split_table[0].split(":")[1])
@@ -732,14 +738,7 @@ def testRaw(hex_string):
 
 #print(convertTextToRaw(my_dict, "No", map=-1).hex())
 
-testRaw("""73 00 74 00 75 00 76 00 77 00 78 00 79 00 7A 00
-7B 00 7C 00 39 06 8A 00 00 00 8D 00 01 80 95 00
-C1 00 C0 00 C6 00 BB 00 C0 00 C7 00 B7 00 01 80
-A5 00 B3 00 C8 00 B7 00 01 80 A0 00 B7 00 C9 00
-00 00 99 00 B3 00 BF 00 B7 00 01 80 A4 00 B7 00
-BF 00 BB 00 C0 00 BB 00 C5 00 B5 00 B7 00 01 80
-97 00 C4 00 C4 00 C1 00 C4 00 CD 00 97 00 A0 00
-96 00 CF 00 01 80 00 00 00 00 00 00 00 00 00 00
+testRaw("""
 
 """)
 
@@ -788,8 +787,8 @@ def genSaveText(txt):
     dict = readFont("font-inject-menus.txt",0, INSERTION)
     print(convertTextToRaw(dict, txt  , raw_insert=1 ).hex())
 
-genSaveText("Game")
-genSaveText("File")
+#genSaveText("Game")
+#genSaveText("File")
 #injectPO("IMG_RIP_EDITS\\system\\namemsg\\namemsg.msg", "boku-no-natsuyasumi-2\\fishing-msg\\IMG\\en\\system\\namemsg\\namemsg.msg.po", MSG_MODE, dict)
 #injectPO("1.bin", "M_A01000.po", MAP_MODE, dict)
 #text = convertToPO("1.bin", MAP_MODE)

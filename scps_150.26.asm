@@ -303,6 +303,14 @@ vert_menu_y_dist equ 0xF
 .org 0x01FADFC
 	li 	v1, mfw
 
+;Insect name digit distance
+.org 0x001FB06C
+	addiu a0, s0, 0x8
+
+;Insect custom name spacing
+.org 0x001FAEE0
+	li s0, mfw
+
 ;Insect Caught text
 .org 0x01f64ac
 	addiu a1,zero,0x1C0
@@ -598,7 +606,7 @@ vert_menu_y_dist equ 0xF
 .org 0x001c6fdc			;level digit
 	li v0, 0x2b8		;Red X
 .org 0x001c7058
-	lu v0, 0x2b8		;White X
+	li v0, 0x2b8		;White X
 
 ;Sumo opponent side
 
@@ -615,7 +623,38 @@ vert_menu_y_dist equ 0xF
 .org 0x001c76fc
 	addiu a1, a1, 0x48a
 
+;Bug naming
 
+.org 0x001CE1FC			;bug count digit
+	li a0, 0xa			;spacing
+.org 0x001CE244
+	addiu a0, s1, 0xb6	;Ones X
+.org 0x001ce224
+	addiu a0, s1, 0xa9	;Tens X
+
+.org 0x001CE12C			;Engine assembling
+	addiu a1, 0x6c		;X (right aligned)
+.org 0x001CE0FC		
+	li v1, mfw			;spacing
+
+.org 0x001CE180			;Caboose
+	li a1, 0xb0			;X (left aligned)
+
+.org 0x001FB108			;Caboose direction
+	li t1, 0x0			;disable verti mode for space
+
+.org 0x001FAEF8			;Caboose dist
+	addiu s1, mfw
+
+.org 0x001CE54C			;LV
+	li a1, 0x3c			;Y White
+.org 0x001ce4b8
+	li a1, 0x3C			;Y Red
+
+.org 0x001CE564			;Level digit
+	li a1, 0xc8			;X White
+.org 0x001ce4d0
+	li a1, 0xc8			;X Red
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;Speculation follows
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
