@@ -35,13 +35,32 @@ IMG_PATH   = os.path.join(ISO_RIP_DIR, "boku2.img")
 IMG_RIP_DIR = 'IMG_RIP'
 IMG_EDITS_DIR = "IMG_RIP_EDITS"
 
-IMG_MAP_FILES_TYPE_0 = ["diary.bin","system\\saveload.bin"]
+IMG_MAP_FILES_TYPE_0 = ["diary.bin","system\\saveload.bin",
+                        "fish\\img\\~fish_on_mem\\~11\\2.bin",
+                        "fish\\img\\~fish_on_mem\\~12\\2.bin",
+                        "fish\\img\\~fish_on_mem\\~13\\2.bin",
+                        "fish\\img\\~fish_on_mem\\~15\\2.bin",
+                        "fish\\img\\~fish_on_mem\\~16\\2.bin"]
 
 IMG_MAP_FILES = [
                 "map",
-                "data\\map\\evt\\on_mem_event.bin"
+                "data\\map\\evt\\on_mem_event.bin", 
+                "fish\\img\\fish_on_mem.bin",
+                "fish\\img\\~fish_on_mem\\11.bin",
+                
+                "fish\\img\\~fish_on_mem\\12.bin",
+                
+                "fish\\img\\~fish_on_mem\\13.bin",
+                
+                "fish\\img\\~fish_on_mem\\15.bin",
+                
+                "fish\\img\\~fish_on_mem\\16.bin"
+                
                 ]
 
+
+EIGHT_BYTE_HEADER = 0
+TWELVE_BYTE_HEADER = 1
 
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
@@ -140,6 +159,42 @@ def unpackMaps():
 
     return
 
+
+def packMap(dir, output_path, ref_path, type=EIGHT_BYTE_HEADER):
+    original_file = open(ref_path, "rb")
+    n_entries = resource.readInt(original_file)
+    table_size = resource.readInt(original_file)
+
+    header_buffer = n_entries.to_bytes(4, "little")
+    data_buffer = b''
+    file_cursor = table_size
+
+    for x in range(n_entries):
+                component_path = os.path.join(dir,  str(x) + ".bin")
+                if not os.path.exists(component_path):
+                    #Null entry
+                    header_buffer += b'\x00\x00\x00\x00' + b'\x00\x00\x00\x00'
+
+                    if type == TWELVE_BYTE_HEADER:
+                        header_buffer += b'\x00\x00\x00\x00'
+
+                    continue
+
+                component_file = open(component_path, 'rb')
+                component_data = component_file.read()
+
+                component_size = len(component_data)
+
+                while len(component_data) % 0x10 != 0:
+                    component_data += b'\x00'
+
+                header_buffer += file_cursor.to_bytes(4, "little")
+                header_buffer += component_size.to_bytes(4,"little")
+
+                data_buffer += component_data
+                file_cursor += component_size + (0x10 - (component_size % 0x10) ) % 0x10
+
+                
 def packMaps(maps_dir, outdir):
     map_list = []
     

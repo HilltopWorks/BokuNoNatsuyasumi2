@@ -48,6 +48,7 @@ IMG_GFX_FOLDER = "IMG_GFX_RIP"
 IMG_GFX_EDITS = "IMG_GFX_EDITS"
 
 MAP_FOLDER = "MAP_RIP"
+MAP_EDITS = "MAP_RIP_EDITS"
 MAP_GFX_FOLDER = "MAP_GFX_RIP"
 MAP_GFX_EDITS = "MAP_GFX_EDITS" 
 
@@ -319,9 +320,6 @@ def ripTIMpack(file_path, type):
         offset = resource.readInt(pack_file)
         size = resource.readInt(pack_file)
 
-
-        
-
         if type == MAP_TYPE:
             
             dir_name = os.path.split(os.path.dirname(file_path))[1]
@@ -333,7 +331,7 @@ def ripTIMpack(file_path, type):
                 if len(ims) > 1:
                     print("___NOTE!!: MAP IMAGE HAS MORE THAN 1 CLUT!!!")
         else:
-            #TODO handle IMG
+            #TODO handle IMG actually not todo
             pass
 
     return
@@ -537,11 +535,6 @@ def unpackFont(filepath):
 
     im = Image.fromarray(font_array, "RGB")
     im.show()
-
-    return
-
-def blendColors(base, top, alpha):
-
 
     return
 
@@ -817,6 +810,22 @@ def injectTIM2(target_TM2_path, TM2_offset, reference_PNG_path, edited_PNG_path)
 
 def injectAll():
     #Copy clean files
+
+    print("Copying clean MAP files before image injection...")
+    for subdir, dirs, files in os.walk(MAP_GFX_FOLDER):
+        for file in files:
+            # checking if it is a file
+            ref_PNG_path = os.path.join(subdir, file)
+            edit_PNG_path = ref_PNG_path.replace(MAP_GFX_FOLDER, MAP_GFX_EDITS)
+
+            if filecmp.cmp(ref_PNG_path, edit_PNG_path):
+                #skip unedited files
+                continue
+            target_TM2_path = edit_PNG_path.replace(MAP_GFX_EDITS, MAP_EDITS)
+            target_TM2_path = target_TM2_path.rsplit("_", 1)[0] + ".bin"
+            ref_TM2_path = target_TM2_path.replace(MAP_EDITS, MAP_FOLDER)
+            shutil.copyfile(ref_TM2_path, target_TM2_path)
+    print("Copying clean IMG files before image injection...")
     for subdir, dirs, files in os.walk(IMG_GFX_FOLDER):
         for file in files:
             # checking if it is a file
@@ -830,7 +839,33 @@ def injectAll():
             target_TM2_path = target_TM2_path.split("_0x")[0]
             ref_TM2_path = target_TM2_path.replace(IMG_EDITS, IMG_FOLDER)
             shutil.copyfile(ref_TM2_path, target_TM2_path)
+    print("Injecting MAP GFX...")
+    for subdir, dirs, files in os.walk(MAP_GFX_FOLDER):
+        for file in files:
+            # checking if it is a file
+            ref_PNG_path = os.path.join(subdir, file)
+            edit_PNG_path = ref_PNG_path.replace(MAP_GFX_FOLDER, MAP_GFX_EDITS)
 
+            if filecmp.cmp(ref_PNG_path, edit_PNG_path):
+                #skip unedited files
+                continue
+            
+            print("Injecting graphic:", edit_PNG_path)
+
+            file_number = int(file.split("_")[1].split(".")[0])
+
+            target_TM2_path = edit_PNG_path.replace(MAP_GFX_EDITS, MAP_EDITS)
+            target_TM2_path = target_TM2_path.rsplit("_", 1)[0] + ".bin"
+            ref_TM2_path = target_TM2_path.replace(MAP_EDITS, MAP_FOLDER)
+
+            target_file = open(target_TM2_path, "rb")
+            target_file.seek(file_number*8 + 4)
+            
+            TM2_offset = int.from_bytes(target_file.read(4), "little")
+            
+            injectTIM2(target_TM2_path, TM2_offset, ref_PNG_path, edit_PNG_path)
+
+    print("Injecting IMG GFX...")
     for subdir, dirs, files in os.walk(IMG_GFX_FOLDER):
         for file in files:
             # checking if it is a file
@@ -911,7 +946,8 @@ def prepareInsertionFiles():
 
 #injectTIM2("item_img.tm2", 0, "item_img.tm2_0x0.png", "item_img.tm2_0x0 - Edit.png")
 
-#PNG_to_TIM2("IMG_RIP_EDITS\\system\\bk_font.tms", 0x80, "IMG_GFX_RIP\\system\\bk_font.tms_0x80_0.png", "IMG_GFX_EDITS\\system\\bk_font.tms_0x80_0.png", 0)
+#PNG_to_TIM2("IMG_RIP_EDITS\\fish\\img\\fish_on_mem.bin", 0xa0, "IMG_GFX_RIP\\fish\\img\\fish_on_mem.bin_0xa0.png",
+#            "IMG_GFX_EDITS\\fish\\img\\fish_on_mem.bin_0xa0.png", 1, base_color=(20,20,255))
 #readBUV("IMG_RIP\system\submenu\img\\root.buv", 0)
 
 #unpackIMGTIM2(os.path.join(IMG_FOLDER,"fish\\img\\fish_on_mem.bin" ))

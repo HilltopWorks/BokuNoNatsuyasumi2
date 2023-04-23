@@ -74,7 +74,13 @@ MENU_TEXT_EXCEPTIONS = ["いいえ\nはい\n{STOP}", "「\n買いもの\n買う\
                         "絵日記\n昆虫採集セット\n{STOP}"]
 
 BUGGED_LINES = {"グレ一ト\n {STOP}"     :"Great\n{STOP}",
-                "黒い\n {STOP}"         :"Black\n {STOP}"}
+                "黒い\n {STOP}"         :"Black\n {STOP}",
+                "ハリケ一ン\n{STOP}"    :"Hurricane\n{STOP}"}
+
+ALT_NEWLINE_FILES = ["turi_info.msg", "phot_info.msg", "okan_info.msg", "item_info.msg", "insect_menu.msg",
+                     "fishing.msg", "fish_info.msg"]
+
+#Have to copy over: item_info, fish_info
 
 #Dictionary modes
 INSERTION = 0
@@ -182,20 +188,23 @@ def readFont(path, startval, mode):
     return dict
 
 
-def convertRawToText(dict, raw):
+def convertRawToText(dict, raw, alt_mode = False):
     '''binary -> string'''
     string = ""
     bytes_read = 0
+    
     while True:
         if bytes_read >= len(raw):
             break
         val = int.from_bytes(raw[bytes_read:bytes_read + 2], byteorder="little")
         bytes_read += 2
 
-        if val == 0x8002:
+        if val == 0x8002 and not alt_mode:
             param = int.from_bytes(raw[bytes_read:bytes_read + 2], byteorder="little")
             bytes_read += 2
             char = "{WAIT=" + hex(param) + "}\\n"
+        elif val == 0x8002 and alt_mode:
+            char = "{BREAK}\\n"
         else:    
             try:
                 char = dict[val]
@@ -205,7 +214,7 @@ def convertRawToText(dict, raw):
         string += char
     return string
 
-def convertTextToRaw(dict, text, map=-1, raw_insert=-1):
+def convertTextToRaw(dict, text, map=-1, raw_insert=-1, alt_mode = False):
     '''string -> binary'''
     buffer = b""
 
@@ -213,8 +222,18 @@ def convertTextToRaw(dict, text, map=-1, raw_insert=-1):
         if len(text) == 0:
             break
 
-        if text.startswith("{STOP}"):
+        if text.startswith("{STOP}") and not alt_mode:
             return buffer + b'\x00\x80'
+        elif text.startswith("\n{STOP}") and alt_mode:
+            return buffer + b'\x01\x80'
+        elif text.startswith("{STOP}") and alt_mode:
+            return buffer + b'\x01\x80'
+        elif text.startswith("{BREAK}\n"):
+            buffer += b'\x02\x80'
+            chars_read = 8
+        elif text.startswith("{BREAK}"):
+            buffer += b'\x02\x80'
+            chars_read = 7
         elif text.startswith("{END}\n") and raw_insert != -1:
             buffer += b'\x00\x80'
             chars_read = 6
@@ -223,7 +242,10 @@ def convertTextToRaw(dict, text, map=-1, raw_insert=-1):
             chars_read = 5   
         #elif text.startswith("{END}"):
         #    return buffer + b'\x00\x80'
-        elif text.startswith("\n"):
+        elif text.startswith("\n") and not alt_mode:
+            buffer += b'\x01\x80'
+            chars_read = 1
+        elif text.startswith("\n") and alt_mode:
             buffer += b'\x01\x80'
             chars_read = 1
         elif text.startswith("{WAIT="):
@@ -350,6 +372,8 @@ def convertToPO(path, mode):
 
     line_total = 0
 
+    filename = path.split("\\")[-1]
+
     table_number = 0
     for table in tables:
         msg_number = 0
@@ -361,7 +385,11 @@ def convertToPO(path, mode):
                 #Skip null entries
                 msg_number += 1
                 continue
-            text = convertRawToText(dict, msg)
+
+            if filename in ALT_NEWLINE_FILES:
+                text = convertRawToText(dict, msg, alt_mode=True)
+            else:
+                text = convertRawToText(dict, msg)
             if mode == RAW_MODE:
                 text += "{END}"
 
@@ -612,7 +640,7 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
     fixPO(po_path)
     source = open(binary_path, "rb")
     po = polib.pofile(po_path)
-
+    file_name = binary_path.split("\\")[-1]
     all_lines = {}
 
     for entry in po:
@@ -662,9 +690,10 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
 
             if entry.msgstr == "":
                 continue
-            
-            file_name = binary_path.split("\\")[-1]
-            if file_name in MENU_FONT_FILES or entry.msgid in MENU_TEXT_EXCEPTIONS:
+              
+            if file_name in ALT_NEWLINE_FILES:
+                raw_line = convertTextToRaw(menu_dict, entry.msgstr, alt_mode=True)
+            elif file_name in MENU_FONT_FILES or entry.msgid in MENU_TEXT_EXCEPTIONS:
                 raw_line = convertTextToRaw(menu_dict, entry.msgstr)
             else:
                 raw_line = convertTextToRaw(dict, entry.msgstr,compaction_map)
@@ -724,10 +753,10 @@ def testMAPs():
 
 
 def testRaw(hex_string):
-    dict= readFont("font-inject-menus.txt",0, EXTRACTION)
+    dict= readFont("font.txt",0, EXTRACTION)
     dict[0x8000] = "{END}\n"
     dict[0x8001] = "\n"
-    text = convertRawToText(dict, bytes.fromhex(hex_string))
+    text = convertRawToText(dict, bytes.fromhex(hex_string), alt_mode=True)
     print(text)
     #print(text.count("END"))
     #print(hex_string.count("00 80"))
@@ -738,11 +767,9 @@ def testRaw(hex_string):
 
 #print(convertTextToRaw(my_dict, "No", map=-1).hex())
 
-testRaw("""
-
-""")
 
 
+#extractMSGs()
 #convertToPO("1.bin", RAW_MODE)
 #extractMSGs()
 

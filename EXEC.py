@@ -81,7 +81,22 @@ def pullScript():
     os.system("git reset --hard HEAD")
     os.system("git merge origin/main")
     os.chdir("..\\..")
+    return
+
+def copy_POs():
+
+    destinations = ["boku-no-natsuyasumi-2\\fishing-msg\\IMG\\en\\system\\submenu\\fish\\fish_info.msg.po",
+                    "boku-no-natsuyasumi-2\\fishing-msg\\IMG\\en\\system\\submenu\\item\\item_info.msg.po"
+                    ]
+
+    sources =       ["boku-no-natsuyasumi-2\\fish_info-msg\\en.po",
+                     "boku-no-natsuyasumi-2\\item_info-msg\\en.po"
+                    ]
     
+    for x in range(len(destinations)):
+        if os.path.exists(sources[x]):
+            print("Copying:",sources[x], destinations[x])
+            shutil.copyfile(sources[x], destinations[x])
 
     return
 
@@ -98,15 +113,32 @@ def insertAdditions(addition):
 
     return
 
+def fixFishOnMem():
+    payload_data = open(os.path.join(IMG_EDITS_DIR, "fish\\fishing.msg"), 'rb').read()
+    
+    while len(payload_data)%0x10 != 0:
+        payload_data += b"\x00"
+    
+    target_file = open(os.path.join(IMG_EDITS_DIR, "fish\\img\\fish_on_mem.bin"), 'r+b')
+    target_file.seek(0x438d0)
+    target_file.write(payload_data)
+    target_file.seek(0x90)
+    target_file.write(len(payload_data).to_bytes(4, "little"))
+    return
+
 def insertAllAdditions():
     for addition in ADDITIONS:
         insertAdditions(ADDITIONS[addition])
+
+    print("Applying fish_on_mem.bin manual patch...")
+    fixFishOnMem()
     return
 
 def build(mode):
     if mode > 0:
         #Pull text from weblate
-        pullScript()
+        ###pullScript()
+        copy_POs()
 
         #Print automated graphics
         print("____BUILD: Printing graphics")
@@ -133,7 +165,6 @@ def build(mode):
         UNPACK.packMaps("MAP_RIP_EDITS","ISO_EDITS\\map")
         print("____BUILD: Packing IMG")
         UNPACK.packIMG("IMG_RIP_EDITS", "ISO_EDITS")
-
     
 
     #Apply ASM
@@ -153,7 +184,6 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = FULL
-
+mode = ASM_ONLY
 build(mode)
 

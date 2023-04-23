@@ -88,13 +88,35 @@ insect_baseline equ 0x18
 vert_menu_y_dist equ 0xF
 
 .org 0x001f6434	;digit 1	Y pos
-	li a1, insect_baseline
+	li a1, insect_baseline + 2
 
-.org 0x01f6450		;m/	Y pos
-	li a2, insect_baseline - 2
+.org 0x001F6434		;month Y
+	li a1, 0x1A
+
+.org 0x001F6138
+	li a1, 0x1A		;size ones Y
+
+.org 0x001f6120
+	li a1, 0x1A		;size tens Y
+
+.org 0x001f60f0
+	li a1, 0x1A		;size hundreds Y
+
+.org 0x001F644C
+	li a1, 0x228	;/ X pos
+	li a2, 0x17		;/ Y pos
+
+.org 0x001F6464
+	li a0, 0x23d	;date tens X
+
+.org 0x001F6480
+	li a0, 0x24a	;date ones X
+
+.org 0x001F646C
+	li a1, 0x1A		;digit 1	Y pos
 
 .org 0x01f6484		;digit 2	Y pos
-	li a1, insect_baseline
+	li a1, insect_baseline + 2
 
 .org 0x01f649c		;d	Y pos
 	li a2, insect_baseline
@@ -155,14 +177,32 @@ vert_menu_y_dist equ 0xF
 .org 0x001e9e40		;Month digit X
 	li a0, 0x1a0
 
+.org 0x001E9E58
+	addiu a1, 0x2	;Month digit Y	;;;;;;SHADOW RISK
+
+.org 0x001E9EAC
+	addiu a1, 0x2	;Date tens Y	;;;;;;SHADOW RISK
+
+.org 0x001e9ed0
+	addiu a1, 0x2	;Date ones Y	;;;;;;SHADOW RISK
+
+.org 0x001E9E04
+	addiu a1, 0x2	;size ones Y	;;;;;;SHADOW RISK
+
+.org 0x001e9de0
+	addiu a1, 0x2	;size tens Y	;;;;;;SHADOW RISK
+
+.org 0x001e9da4
+	addiu a1, 0x2	;size hundreds Y;;;;;;SHADOW RISK
+
 .org 0x001e9e68		;/ X
-	li a1, 0x1ac
+	li a1, 0x1a4
 
 .org 0x001e9e90		;Day digit tens X
-	li v0, 0x1c3
+	li v0, 0x1bb
 
 .org 0x001e9eb4		;Day digit ones X
-	li a0, 0x1d0	
+	li a0, 0x1c8	
 
 .org 0x001e9f94		;Rare star Y
 	li a1, 0x170
@@ -267,6 +307,35 @@ vert_menu_y_dist equ 0xF
 .org 0x001F8C90		;Nudge bug gfx up
 	addiu a1,s0,0x3C
 
+.org 0x001f8ed0
+	addiu a1, s1, 0x2	;Date tens Y
+
+.org 0x001f8f00
+	addiu a1, s1, 0x2	;Date ones Y
+
+.org 0x001f8e80
+	addiu a1, s1, 0x2	;Month digit Y
+
+.org 0x001F8EA0
+	li a0, 0x21A		;date tens X
+
+.org 0x001F8EF8
+	li a0, 0x227		;date ones X
+
+.org 0x001F8D20
+	addiu a1, s1, 0x2	;size hundreds Y
+
+.org 0x001f8d94
+	addiu a1, s1, 0x2	;size tens Y
+.org 0x001f8d38
+	addiu a1, s1, 0x2	;size tens Y
+
+.org 0x001f8d50
+	addiu a1, s1, 0x2	;size ones Y
+.org 0x001f8dac
+	addiu a1, s1, 0x2	;size ones Y
+.org 0x001f8dfc
+	addiu a1, s1, 0x2	;size ones Y
 ;Insect box screen
 
 .org 0x001fc2e4		;Rarity star Y
@@ -296,6 +365,7 @@ vert_menu_y_dist equ 0xF
 .org 0x001E9D18		;mm text mess fix
 	addiu a3, s2, -1
 
+
 ;Insect Cage
 
 
@@ -306,6 +376,12 @@ vert_menu_y_dist equ 0xF
 ;Insect name digit distance
 .org 0x001FB06C
 	addiu a0, s0, 0x8
+
+;Insect name digit Y
+.org 0x001FB070
+	addiu a1, s6, 0x2
+.org 0x001fb040
+	addiu a1, s6, 0x2
 
 ;Insect custom name spacing
 .org 0x001FAEE0
@@ -378,6 +454,8 @@ vert_menu_y_dist equ 0xF
 .org 0x26ddd4		;colon X
 	.halfword 0x10e
 
+.org 0x001A81E0
+	li a0, 0x2		;date digit space position
 
 
 ; Dinner quiz
@@ -501,6 +579,7 @@ vert_menu_y_dist equ 0xF
 	addiu a1, 0x255
 	addiu a2, 0x255
 
+underwater_spacing equ 0x18
 
 .org 0x0019D774
 	li a0, 0x40		;Line 1 X
@@ -513,23 +592,23 @@ vert_menu_y_dist equ 0xF
 
 .org 0x0019d7fc
 	li a0, 0x40			;Line 2 X
-	li a1, 0x160 + 0x10	;Line 2 Y
+	li a1, 0x160 + underwater_spacing	;Line 2 Y
 .org 0x0019d7c8
 	li a0, 0x40			;Line 2 X
-	li a1, 0x160 + 0x10	;Line 2 Y
+	li a1, 0x160 + underwater_spacing	;Line 2 Y
 .org 0x0019d8a0
 	li a0, 0x40			;Line 2 X
-	li a1, 0x160 + 0x10	;Line 2 Y
+	li a1, 0x160 + underwater_spacing	;Line 2 Y
 .org 0x0019d8d4
 	li a0, 0x40			;Line 2 X
-	li a1, 0x160 + 0x10	;Line 2 Y
+	li a1, 0x160 + underwater_spacing	;Line 2 Y
 
 .org 0x0019d7e0
 	li a0, 0x40			;Line 3 X
-	li a1, 0x160 + 0x20	;Line 3 Y 
+	li a1, 0x160 + underwater_spacing*2	;Line 3 Y 
 .org 0x0019d8b8
 	li a0, 0x40			;Line 3 X
-	li a1, 0x160 + 0x20	;Line 3 Y 
+	li a1, 0x160 + underwater_spacing*2	;Line 3 Y 
 
 ;Continue/Data load screen
 
@@ -608,6 +687,12 @@ vert_menu_y_dist equ 0xF
 .org 0x001c7058
 	li v0, 0x2b8		;White X
 
+.org 0x001c6c88			;Big
+	addiu a1, 0x171		;Y
+
+.org 0x001c6c58			;King
+	addiu a1, 0x171		;Y
+
 ;Sumo opponent side
 
 .org 0x001c7670			;Skill
@@ -622,6 +707,12 @@ vert_menu_y_dist equ 0xF
 	addiu a1, 0x48a		;White X
 .org 0x001c76fc
 	addiu a1, a1, 0x48a
+
+.org 0x001C7420			;Big
+	li a1, 0x15			;Y
+
+.org 0x001c73f8			;King
+	li a1, 0x15			;Y
 
 ;Bug naming
 
@@ -655,6 +746,337 @@ vert_menu_y_dist equ 0xF
 	li a1, 0xc8			;X White
 .org 0x001ce4d0
 	li a1, 0xc8			;X Red
+
+;Cancel bug tutorial text
+.org 0x27a1f0
+	.word 0x4b			;X
+	.word 0x194			;Y
+
+.org 0x27a150			;BG
+	.word 0x3c			;X
+	.word 0x188			;Y
+	.word 0xf8			;W
+	.word 0x138			;H
+
+;Bug Trade Screen
+
+;;Opposing
+
+.org 0x001CC3D4
+	li a1, 0x170		;Opposing skill X
+
+;;;White
+.org 0x001CC46C
+	li a0, 0x1a8		;"Lvl" X
+	li a1, 0x5c			;"Lvl" Y
+
+.org 0x001CC4B0
+	li a1, 0x1c8		;level digit X
+
+;;;Red
+.org 0x001cc41c
+	li a0, 0x1a8		;"Lvl" X
+	li a1, 0x5D			;"Lvl" Y
+
+.org 0x001cc438
+	li a1, 0x1c8		;level digit X
+
+.org 0x001CC564
+	li a1, 0xac			;Value ones Y
+
+.org 0x001cc580
+	li a1, 0xac			;Value tenths Y
+
+;;Boku
+
+.org 0x001cc8a8
+	li a1, 0x170		;Skill X
+
+;;;White
+.org 0x001CC954
+	li a0, 0x1a8		;"Lvl" X
+	li a1, 0x131		;"Lvl" Y
+
+.org 0x001cc984
+	li a1, 0x1c8		;level digit X
+
+;;;Red
+.org 0x001cc8f0
+	li a1, 0x1a8		;"Lvl" X
+	li a1, 0x131		;"Lvl" Y
+
+.org 0x001cc90c
+	li a1, 0x1c8		;level digit X
+
+.org 0x001CC744
+	li a1, 0x181		;Value tenths Y
+
+.org 0x001cc72c
+	li a1, 0x181		;Value ones Y
+
+;Bug report
+
+.org 0x001cbec8
+	li a1, 0x170		;Skill X
+
+.org 0x001CBF74
+	li a0, 0x1a8		;White Lvl X
+	li a1, 0xac			;White Lvl Y
+
+.org 0x001cbf10
+	li a0, 0x1a8		;Red Lvl X
+	li a1, 0xac			;Red Lvl Y
+
+.org 0x001CBFA4
+	li a1, 0x1c8		;level digit x white
+.org 0x001cbf40
+	li a1, 0x1c8		;level digit x red
+
+.org 0x001CBC44
+	li a1, 0x100		;Value tenths Y
+
+.org 0x001cbc2c
+	li a1, 0x100		;Value ones Y
+
+;King selector
+.org 0x001c8b94
+	li a1, 0xaa			;King X
+
+;Bug Memo
+
+;;Hundo
+.org 0x001E3F84
+	li a0, 0x10			;Change wari to 0 during hundo
+
+.org 0x001e3f5c
+	li a1, 0x38			;winrate hundreds digit
+
+.org 0x001e3f70
+	li a1, 0x44			;winrate tens digit
+
+.org 0x001e3f88
+	li a1, 0x50			;winrate ones digit
+
+;;0-99%
+.org 0x001E3F20
+	nop					;Disable wari on less than hundo
+
+.org 0x001E3F28
+	li a1, 0x50			;winrate ones digit X
+
+.org 0x001E3EE4	
+	li a1, 0x44			;winrate tens digit X
+
+;;Dashes
+
+;.org 0x001e3e0c			;disable all 4 dashes
+;	nop
+;.org 0x001e3e20
+;	nop
+;.org 0x001e3e34
+;	nop
+;.org 0x001e3f48
+;	nop
+
+.org 0x001e3e00				;Change dashes into slashes
+	li a0, 0x1
+.org 0x001e3e14
+	li a0, 0x1
+.org 0x001E3E28
+	li a0, 0x1
+.org 0x001e3e44
+	li a0, 0x1
+
+;Memo
+.org 0x001E4100
+	nop					;Disable skill boku
+.org 0x001e42c0
+	nop					;Disable skill opposing
+.org 0x001E410C
+	addiu a1, s3, -4	;LV. Y Boku
+.org 0x001e42cc
+	addiu a1, s3, -4	;LV. Y Opposing
+
+;TECHNIQUE COORDS
+.org 0x2787a0
+	.word 0x13c			;WIN CIRCLE and TECHNIQUE X
+	.word 0x240			;LOSE GFX X
+	.word 0x13c			;WIN CIRCLE and TECHNIQUE X
+	.word 0x240			;LOSE GFX X
+	.word 0x13c			;WIN CIRCLE and TECHNIQUE X
+	.word 0x240			;LOSE GFX X
+	.word 0x13c			;WIN CIRCLE and TECHNIQUE X
+	.word 0x240			;LOSE GFX X
+	.word 0x13c			;WIN CIRCLE and TECHNIQUE X
+	.word 0x240			;LOSE GFX X
+	.word 0x13c			;WIN CIRCLE and TECHNIQUE X
+	.word 0x240			;LOSE GFX X
+	.word 0x13c			;WIN CIRCLE and TECHNIQUE X
+	.word 0x240			;LOSE GFX X
+	.word 0x13c			;WIN CIRCLE and TECHNIQUE X
+	.word 0x240			;LOSE GFX X
+
+;item decription
+
+.org 0x001e7b04
+	li a2, 0x15A		;description X
+	li a3, 0xEC			;description Y
+
+;release bug from cage
+.org 0x27af18			;bg x y h w
+	.word 0xd0
+	.word 0x40
+	.word 0xe0
+	.word 0xb0
+
+.org 0x27af68			;cursor
+	.word 0x160			;Yes X
+	.word 0x94			;Yes Y
+	.word 0xe6			;No X
+	.word 0x94			;No Y
+
+.org 0x001F7ACC
+	li a3, 0x0			;Yes hori
+.org 0x001F7AC4
+	li a2, 0xc0			;Y
+.org 0x001F7AC0
+	li a1, 0x16a		;X
+
+.org 0x001F7AE0
+	li a3, 0x0			;No hori
+.org 0x001F7AD8
+	li a2, 0xc0			;Y
+.org 0x001F7AD4
+	li a1, 0xf3			;X
+
+.org 0x001F7AB8
+	li a3, 0x0			;label hori
+
+.org 0x001F7AAC
+	li a1, 0xec			;label x
+	li a2, 0x56			;label y
+
+; Catches
+
+.org 0x001F1404
+	li a2, 0x1D			;Catches label X
+
+.org 0x001F1B08
+	li a2, 0x3a			;Fish name X
+
+.org 0x0027a678
+	.word 0x8			;Cursor X pos 1
+.org 0x0027a680
+	.word 0x8			;Cursor X pos 2
+.org 0x0027a688
+	.word 0x8			;Cursor X pos 3
+.org 0x0027a690
+	.word 0x8			;Cursor X pos 4
+.org 0x0027a698
+	.word 0x8			;Cursor X pos 5
+.org 0x0027a6a0
+	.word 0x8			;Cursor X pos 6
+
+.org 0x001F1D60
+	li a2, 0x44			;Fish description X
+
+.org 0x001F1BC8			;Max Size hundreds Y
+	li a1, 0xeb
+
+.org 0x001f1bf8
+	li a1, 0xeb			;Max Size tens Y
+
+.org 0x001f1c10
+	li a1, 0xeb			;Max Size ones Y
+
+.org 0x001F1CA4
+	li a1, 0x106		;Total ones Y
+
+.org 0x001f1c84
+	li a1, 0x106		;Total tens Y
+
+.org 0x001F1CA0
+	li a0, 0x18b		;Total ones X
+
+.org 0x001f1c8c
+	li a0, 0x17e		;Total tens X
+
+.org 0x001F1C34
+	li a1, 0xea			;date tens Y
+
+.org 0x001F1C54
+	li a1, 0xea			;date ones Y
+
+.org 0x001F1C3C
+	li a0, 0x1f8		;Date tens X
+
+.org 0x001F1C50
+	li a0, 0x205		;Date ones X
+
+.org 0x001F1D14
+	li a0, 0x20F		;Avg ones X
+	li a1, 0x106		;Avg ones Y
+
+.org 0x001f1cfc
+	li a0, 0x202		;Avg tens X
+	li a1, 0x106		;Avg tens Y
+
+.org 0x001f1cc8
+	li a0, 0x202 - 0xD	;Avg hundreds X
+	lbu t0, 0x8(s0)		;Filler
+	li a1, 0x106		;Avg hundreds Y
+
+;Belongings
+.org 0x001E8FE0
+	li a1, 0x24			;Header label X
+
+;Fix alpha blending bugs
+.org 0x001B0FDC
+	li a3, 0x7f			;digits print tens
+.org 0x001B10C0
+	li a3, 0x7f			;digits print hundreds
+.org 0x001B0F7C
+	li a3, 0x7f			;digits print ones
+
+;Fish catch
+.org 0x001B1440
+	li a0, 0x1c2		;size x
+
+.org 0x001B1468
+	li a1, 0x1ce		;size mm x
+	li a2, 0x175		;size mm y
+
+.org 0x001b1490
+	li a1, 0x1d0		;size mm shadow x
+	li a2, 0x177		;size mm shadow y
+
+.org 0x001B1568
+	li a3, 0x7f			;Max size mm alpha
+.org 0x001B1460
+	li a3, 0x7F			;Size mm alpha
+.org 0x001b1610
+	li a3, 0x7f
+
+.org 0x001B15E8
+	li a3, 0x1a4		;Max colon X
+.org 0x001B15C4
+	li a3, 0x185		;Max X
+
+.org 0x001B1540
+	li a3, 0x110		;Avg colon X
+.org 0x001B151C
+	li a3, 0xec			;Avg X
+
+.org 0x001B14E8
+	li a3, 0xb2			;X count x
+
+;Bottle caps
+.org 0x001E798C
+	li a2, 0x160		;Description X
+
+;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;Speculation follows
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
