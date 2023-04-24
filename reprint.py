@@ -16,17 +16,24 @@ import textCompaction
 #Calendar
 day_strings = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 day_colors = [(144,53,40,255), (53,53,53,255), (151,77,46,255), (33,41,122,255), (85,57,47,255) ,(40,74,61,255), (41,105,140,255)]
-diary_base_path = "FONT/diary_base.png"
-diary_folder = "IMG_GFX_EDITS\\system\\submenu\\img"
+calendar_folder = "IMG_GFX_EDITS\\system\\submenu\\img"
 
 #Bottle Caps
 cap_folder = "IMG_GFX_EDITS\\system\\submenu\\img"
 label_path = "GFX\\bottle_caps.txt"
 
 
+#Bug Info
+bug_folder = "IMG_GFX_EDITS\\system\\submenu\\img"
+bug_label_path = "GFX\\bug_info.txt"
+
+#Diary
+diary_folder = "IMG_GFX_EDITS\\00diary\\nik"
+diary_text_path = "GFX\\diaries.txt"
+diary_base_folder = "GFX\\diary"
+diary_base_path = "FONT/diary_base.png"
+
 #Font
-
-
 SPACING = 2
 SPACE_WIDTH = 6
 
@@ -161,9 +168,49 @@ def printBugInfo(img_path, string):
     sourceImage = sourceImage.resize((sourceImage.width//resample_scale_factor, sourceImage.height//resample_scale_factor), resample=Image.LANCZOS)
     #sourceImage = sourceImage.filter(ImageFilter.SHARPEN)
     sourceImage = sourceImage.rotate(-2.5,Image.BICUBIC,expand=False, center=(0,0))
-    sourceImage.show()
-    sourceImage.save("imgTestBUG.PNG")
+    #sourceImage.show()
+    sourceImage.save(img_path)
 
+    return
+
+def printAllBugInfo():
+
+    text_file = open(bug_label_path, "r", encoding="utf8")
+
+    while True:
+        headerLine = text_file.readline()
+        if not headerLine:
+            #EOF
+            break
+        if not headerLine.startswith("&"):
+            #Filler line
+            continue
+        
+        image_number = headerLine[1:].rstrip("\n").zfill(3)
+        
+        image_file_path = os.path.join(bug_folder, "book" + image_number + ".dat_0xc460_0.png")
+        
+        string_buffer = ""
+
+        while True:
+            cursor = text_file.tell()
+            next_line = text_file.readline()
+            if not next_line:
+                #EOF
+                break
+            if not next_line.startswith("&"):
+                #Text line
+                string_buffer += next_line
+                continue
+            else:
+                #Next entry reached
+                text_file.seek(cursor)
+                break
+        
+        print("Printing Bug Info", image_number)
+        printBugInfo(image_file_path, string_buffer) 
+    
+    text_file.close()
     return
 
 def printCalendar(img_path, string, color):
@@ -216,22 +263,25 @@ def printCalendar(img_path, string, color):
 def printAllCalendars():
 
     for x in range(31):
-        calendar_path = os.path.join(diary_folder, "a_cal" + str(x+1) + ".tm2_0x0_0.png")
+        calendar_path = os.path.join(calendar_folder, "a_cal" + str(x+1) + ".tm2_0x0_0.png")
         print("Printing Calendar Day: " + str(x+1))
         printCalendar(calendar_path, day_strings[x%7], day_colors[x%7])
 
     return
 
-def printDiary(img_path,stringL, stringR):
-    sourceImage = Image.open(img_path)
-    baseImage = Image.open(diary_base_path)
+def printDiary(img_path,stringL, stringR, alt_base_path=-1):
 
-    sourceImage = sourceImage.crop((0,0,512,195))
+    if alt_base_path == -1:
+        sourceImage = Image.open(img_path)
+        baseImage = Image.open(diary_base_path)
 
-    baseImage.paste(sourceImage)
+        sourceImage = sourceImage.crop((0,0,512,195))
 
-    
-
+        baseImage.paste(sourceImage)
+    else:
+        linesImage = Image.open("GFX\\diary_base_lines.png")
+        baseImage = Image.open(alt_base_path)
+        baseImage.paste(linesImage, (0,0), linesImage)
     draw = ImageDraw.Draw(baseImage)
 
     font = "FONT\\VarelaRound-Regular.ttf"
@@ -245,6 +295,56 @@ def printDiary(img_path,stringL, stringR):
 
     baseImage.show()
     baseImage.save(img_path)
+    return
+
+def printAllDiary():
+    text_file = open(diary_text_path, "r", encoding="utf8")
+
+    while True:
+        headerLine = text_file.readline()
+        if not headerLine:
+            #EOF
+            break
+        if not headerLine.startswith("&"):
+            #Filler line
+            continue
+        
+        image_number = headerLine[1:].rstrip("\n").zfill(3)
+        image_name = "nik" + image_number + ".tm2_0x0_0.png"
+        image_file_path = os.path.join(diary_folder, image_name)
+        
+        string_buffer = ["",""]
+        LEFT = 0
+        RIGHT = 1
+        current_buffer = LEFT
+        while True:
+            cursor = text_file.tell()
+            next_line = text_file.readline()
+            if not next_line:
+                #EOF
+                break
+            if next_line.startswith("///"):
+                current_buffer = RIGHT
+                continue
+
+            if not next_line.startswith("&"):
+                #Text line
+                string_buffer[current_buffer] += next_line
+                continue
+            else:
+                #Next entry reached
+                text_file.seek(cursor)
+                break
+        
+        print("Printing Diary", image_number)
+
+        base_image_path = os.path.join("GFX","diary", image_name)
+        if os.path.exists(base_image_path):
+            printDiary(image_file_path, string_buffer[0], string_buffer[1], alt_base_path=base_image_path) 
+        else:
+            printDiary(image_file_path, string_buffer[0], string_buffer[1]) 
+    
+    text_file.close()
     return
 
 def getFontMap(font_path, start_row):
@@ -394,6 +494,7 @@ desc2 = """Listening close from
 my bed, I can hear
 the sound of the
 waves."""
+
 
 #printAllCalendars()
 #printAllBottleCaps()

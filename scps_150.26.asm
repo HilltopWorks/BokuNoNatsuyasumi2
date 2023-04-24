@@ -316,11 +316,14 @@ vert_menu_y_dist equ 0xF
 .org 0x001f8e80
 	addiu a1, s1, 0x2	;Month digit Y
 
+.org 0x001F8E7C
+	li a0, 0x1fe		;Month digit X
+
 .org 0x001F8EA0
-	li a0, 0x21A		;date tens X
+	li a0, 0x214		;date tens X
 
 .org 0x001F8EF8
-	li a0, 0x227		;date ones X
+	li a0, 0x221		;date ones X
 
 .org 0x001F8D20
 	addiu a1, s1, 0x2	;size hundreds Y
@@ -336,6 +339,19 @@ vert_menu_y_dist equ 0xF
 	addiu a1, s1, 0x2	;size ones Y
 .org 0x001f8dfc
 	addiu a1, s1, 0x2	;size ones Y
+
+.org 0x001F8C34
+	addiu a1, s1, 0x2	;number ones Y
+.org 0x001f8bd8
+	addiu a1, s1, 0x2	;number hundreds Y
+.org 0x001f8bfc
+	addiu a1, s1, 0x2	;number tens Y
+.org 0x001f8c14
+	addiu a1, s1, 0x2	;number ones Y 2
+
+.org 0x001f8f20
+	li a1, 0x20a		;slash X
+
 ;Insect box screen
 
 .org 0x001fc2e4		;Rarity star Y
@@ -921,6 +937,20 @@ underwater_spacing equ 0x18
 .org 0x001e7b04
 	li a2, 0x15A		;description X
 	li a3, 0xEC			;description Y
+
+.org 0x001E7C20
+	li a2, 0x15A		;description2 X
+	li a3, 0xEC			;description2 Y
+
+.org 0x001E798C			;Bottle caps
+	li a2, 0x15a		;X
+.skip 0xC
+	li a3, 0xec			;Y
+
+.org 0x001e7a60			;Photos
+	li a2, 0x15a		;X
+.skip 0xC
+	li a3, 0xec			;Y
 
 ;release bug from cage
 .org 0x27af18			;bg x y h w
