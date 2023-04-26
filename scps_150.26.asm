@@ -358,16 +358,16 @@ vert_menu_y_dist equ 0xF
 	li a1, 0x12
 
 .org 0x1fc330		;/ X
-	li a1, 0x22E
+	li a1, 0x22A
 
 .org 0x1fc314		;month digit X
 	li a0, 0x224
 
 .org 0x01fc36c		;day digit 2 X
-	li a0, 0x249
+	li a0, 0x244
 
 .org 0x001fc394		;day digit 1 X
-	li a0, 0x256
+	li a0, 0x251
 
 .org 0x001fc3cc		;caught on X
 	li a1, 0x1c0
@@ -381,6 +381,22 @@ vert_menu_y_dist equ 0xF
 .org 0x001E9D18		;mm text mess fix
 	addiu a3, s2, -1
 
+.org 0x001fc39c		;Date Y
+	li a1, 0x1A	
+.org 0x001fc370
+	li a1, 0x1A
+
+.org 0x001FC318		;Month Y
+	li a1, 0x1A
+
+.org 0x001FC46C		;Size digits Y
+	li a1, 0x1A
+.org 0x001fc430
+	li a1, 0x1A
+.org 0x001fc448
+	li a1, 0x1A
+.org 0x001fc484
+	li a1, 0x1A
 
 ;Insect Cage
 
@@ -658,10 +674,14 @@ underwater_spacing equ 0x18
 ;Diary save with label
 
 .org 0x0027bd00			;Cursor
-	.word 0xbc			;No X
-	.word 0x7a			;No Y
-	.word 0x1c4			;Yes X
-	.word 0x7a			;Yes Y
+	.word 0xe8			;No X
+	.word 0x44			;No Y
+	.word 0x172			;Yes X
+	.word 0x44			;Yes Y
+;	.word 0xbc			;No X
+;	.word 0x7a			;No Y
+;	.word 0x1c4			;Yes X
+;	.word 0x7a			;Yes Y
 
 .org 0x002616e0			;Labels
 	.word 0xf4			;No X
@@ -1104,6 +1124,31 @@ underwater_spacing equ 0x18
 .org 0x001E798C
 	li a2, 0x160		;Description X
 
+;Bike
+.org 0x0027bbd8			;BG dimensions
+	.word 0x108
+	.word 0x88
+	.word 0x7c
+	.word 0x30
+
+.org 0x0027bc18			;Cursor dims (Lx,Ly,Rx,Ry)
+	.word 0x112
+	.word 0x60
+	.word 0x150
+	.word 0x60
+
+.org 0x002615e0			;Label dims BUT SHARED
+
+.org 0x00258550			;Text "Menu\nWalk\n"
+	.word 0x00b7009f	;Me
+	.word 0x00c700c0	;nu
+	.word 0x00a98001	;\nW
+	.word 0x00be00b3	;al
+	.word 0x800100bd	;k\n
+
+.org 0x00144D34
+	li a1, 0x16			;Text limit bump
+;9f00b700c000c7000180a900b300be00bd000180
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;

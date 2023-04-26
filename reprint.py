@@ -284,16 +284,16 @@ def printDiary(img_path,stringL, stringR, alt_base_path=-1):
         baseImage.paste(linesImage, (0,0), linesImage)
     draw = ImageDraw.Draw(baseImage)
 
-    font = "FONT\\VarelaRound-Regular.ttf"
+    font = "FONT\\KGMidnightMemories.ttf"
     #font = "FONT\\FOT-Seurat Pro DB.otf"
-    fontSize = 21
+    fontSize = 26
     fontColor = (0, 0, 0, 255)
     imFont = ImageFont.truetype(font, fontSize)
 
-    draw.text( (8,196), stringL, fontColor, imFont, "la", 7, 'left')
-    draw.text( (262,196), stringR, fontColor, imFont, "la", 7, 'left')
+    draw.text( (8,193), stringL, fontColor, imFont, "la", 2, 'left')
+    draw.text( (253,193), stringR, fontColor, imFont, "la", 2, 'left')
 
-    baseImage.show()
+    #baseImage.show()
     baseImage.save(img_path)
     return
 
@@ -496,7 +496,7 @@ the sound of the
 waves."""
 
 
-#printAllCalendars()
+#printAllDiary()
 #printAllBottleCaps()
 #printDiary("nik001.tm2_0x0_0.png", desc1, desc2)
 #printBugInfo("imgTestBUG.PNG", desc)

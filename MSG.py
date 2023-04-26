@@ -763,6 +763,8 @@ def testRaw(hex_string):
     return
 
 
+#testRaw("d7 00 f8 00 fc 02 99 01 01 80 a0 02 bb 00 bc 00 01 80")
+
 #my_dict = readFont("font-inject.txt", 0, INSERTION)
 
 #print(convertTextToRaw(my_dict, "No", map=-1).hex())
@@ -812,7 +814,9 @@ Do you want to continue playing?{END}"""
 
 def genSaveText(txt):
     dict = readFont("font-inject-menus.txt",0, INSERTION)
-    print(convertTextToRaw(dict, txt  , raw_insert=1 ).hex())
+    print(convertTextToRaw(dict, txt).hex())
+
+#genSaveText("Menu\nWalk")
 
 #genSaveText("Game")
 #genSaveText("File")
@@ -826,7 +830,7 @@ def genSaveText(txt):
 #print(len(n))
 #print(n.hex())
 #injectPO("binary_path", "boku-no-natsuyasumi-2/m_a01000/MAP/en/M_A01000.po")
-#convertTextToRaw(readFont("font.txt",0, INSERTION), "『天井近くまで高く{WAIT=0x1190}\\n積みあげられた\\n お布団の山がある\\n なんだかくずれてきそうだ』{STOP}")
+#print(convertTextToRaw(readFont("font.txt",0, INSERTION), "降りる").hex())
 #dict = readFont("font.txt",0)
 #testMAPs()
 #extractMAPs()
