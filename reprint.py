@@ -153,7 +153,7 @@ def printBugInfo(img_path, string):
     draw = ImageDraw.Draw(sourceImage)
 
     font = "FONT\\FOT-Seurat Pro DB.otf"
-    fontSize = 18
+    fontSize = 17
     fontColor = (0, 0, 0, 255)
     imFont = ImageFont.truetype(font, fontSize)
 
@@ -495,7 +495,7 @@ my bed, I can hear
 the sound of the
 waves."""
 
-
+printAllBugInfo()
 #printAllDiary()
 #printAllBottleCaps()
 #printDiary("nik001.tm2_0x0_0.png", desc1, desc2)

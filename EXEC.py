@@ -137,7 +137,7 @@ def insertAllAdditions():
 def build(mode):
     if mode > 0:
         #Pull text from weblate
-        ###pullScript()
+        pullScript()
         copy_POs()
 
         #Print automated graphics
@@ -186,6 +186,6 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = ASM_ONLY
+mode = FULL
 build(mode)
 

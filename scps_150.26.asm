@@ -398,6 +398,22 @@ vert_menu_y_dist equ 0xF
 .org 0x001fc484
 	li a1, 0x1A
 
+
+.org 0x001ea0c8
+	li a2, 0x2f4	;W's Y
+.org 0x001EA0C0
+	li a1, 0x1a0	;W's X
+.org 0x001ea1d8
+	li a2, 0x2f4	;L's Y
+.org 0x001EA1D0
+	li a1, 0x1E5	;L's X
+
+.org 0x001FC684
+	li a1, 0x120	;W's X
+	li a2, 0x196	;W's Y
+.org 0x001FC7B4
+	li a1, 0x16b	;L's X
+	li a2, 0x196	;L's Y
 ;Insect Cage
 
 
@@ -693,12 +709,43 @@ underwater_spacing equ 0x18
 
 
 ;Sumo Boku side
+.org 0x001c6cd4
+	addiu a1, a1, 0x176	;Size tens Y
+.org 0x001c6cf8
+	addiu a1, a1, 0x176 ;Size ones Y
+
+.org 0x001C6E84
+	li a1, 0x27b		;W's X
+.org 0x001c6e18
+	addiu a1, 0x102		;Wins hundreds Y
+.org 0x001c6e50
+	addiu a1, 0x102		;Wins tens Y
+.org 0x001c6e74
+	addiu a1, 0x102		;Wins ones Y
+
+.org 0x001C6F40
+	li a1, 0x2c6		;L's X
+
+.org 0x001c6ed0
+	addiu a1, 0x102		;Losses Hundreds Y
+.org 0x001c6f08
+	addiu a1, 0x102		;Losses Tens Y
+.org 0x001c6f2c
+	addiu a1, 0x102		;Losses ones Y
 
 .org 0x001C6DD0			;Caught on
 	li a1, 0x32d		;X
 
 .org 0x001C6D30			;Month digit
 	li a0, 0x390		;X
+
+.org 0x001c6d44
+	addiu a1, a1, 0x174	;Month digit Y
+
+.org 0x001c6d9c
+	addiu a1, a1, 0x174	;Day tens digit Y
+.org 0x001c6dc0
+	addiu a1, a1, 0x174	;Day ones digit Y
 
 .org 0x001C6D54			;Month "/"
 	li a1, 0x3a0		;X
@@ -730,6 +777,31 @@ underwater_spacing equ 0x18
 	addiu a1, 0x171		;Y
 
 ;Sumo opponent side
+.org 0x001C7450			
+	li a1, 0x38			;Size hundreds Y
+.org 0x001c7488
+	li a1, 0x38			;Size tens Y
+.org 0x001c74ac
+	li a1, 0x38			;Size ones Y
+
+.org 0x001c7598
+	addiu a1, a1, 0x433	;W's X
+.org 0x001c750c
+	li a1, 0x102		;W's Hundreds Y
+.org 0x001c7544
+	li a1, 0x102		;W's Tens Y
+.org 0x001c7568
+	li a1, 0x102		;W's Ones Y
+
+.org 0x001c7650
+	addiu a1, a1, 0x47e	;L's X
+.org 0x001c75c4
+	li a1, 0x102		;L's Hundreds Y
+.org 0x001c7620
+	li a1, 0x102		;L's Tens Y
+.org 0x001c75fc
+	li a1, 0x102		;L's Ones Y
+
 
 .org 0x001c7670			;Skill
 	addiu a1, 0x42E		;X
@@ -797,6 +869,23 @@ underwater_spacing equ 0x18
 ;Bug Trade Screen
 
 ;;Opposing
+.org 0x001CC3C0
+	li a1, 0x232		;L's X
+.org 0x001cc364
+	li a1, 0x62			;Losses hundreds Y
+.org 0x001cc394
+	li a1, 0x62			;Losses tens Y
+.org 0x001cc3ac
+	li a1, 0x62			;Losses ones Y
+
+.org 0x001cc338
+	li a1, 0x1ed		;W's X
+.org 0x001cc324
+	li a1, 0x62			;Wins ones Y
+.org 0x001cc30c
+	li a1, 0x62			;Wins tens Y
+.org 0x001cc2dc
+	li a1, 0x62			;Wins Hundreds Y
 
 .org 0x001CC3D4
 	li a1, 0x170		;Opposing skill X
@@ -807,7 +896,7 @@ underwater_spacing equ 0x18
 	li a1, 0x5c			;"Lvl" Y
 
 .org 0x001CC4B0
-	li a1, 0x1c8		;level digit X
+	li a1, 0x1c6		;level digit X
 
 ;;;Red
 .org 0x001cc41c
@@ -815,7 +904,7 @@ underwater_spacing equ 0x18
 	li a1, 0x5D			;"Lvl" Y
 
 .org 0x001cc438
-	li a1, 0x1c8		;level digit X
+	li a1, 0x1c6		;level digit X
 
 .org 0x001CC564
 	li a1, 0xac			;Value ones Y
@@ -824,6 +913,23 @@ underwater_spacing equ 0x18
 	li a1, 0xac			;Value tenths Y
 
 ;;Boku
+.org 0x001CC894			;L's X
+	li a1, 0x232
+.org 0x001CC87C
+	li a1, 0x137		;L's tens Y
+.org 0x001cc864
+	li a1, 0x137		;L's tens Y
+.org 0x001cc834
+	li a1, 0x137		;L's ones Y
+
+.org 0x001cc804
+	li a1, 0x1ed		;W's X
+.org 0x001CC7F0
+	li a1, 0x137		;W's Hundreds Y
+.org 0x001cc7d8
+	li a1, 0x137		;W's Tens Y
+.org 0x001cc7a8
+	li a1, 0x137		;W's ones Y
 
 .org 0x001cc8a8
 	li a1, 0x170		;Skill X
@@ -834,15 +940,15 @@ underwater_spacing equ 0x18
 	li a1, 0x131		;"Lvl" Y
 
 .org 0x001cc984
-	li a1, 0x1c8		;level digit X
+	li a1, 0x1c6		;level digit X
 
 ;;;Red
 .org 0x001cc8f0
 	li a1, 0x1a8		;"Lvl" X
 	li a1, 0x131		;"Lvl" Y
 
-.org 0x001cc90c
-	li a1, 0x1c8		;level digit X
+.org 001cbea8
+	li a1, 0x1c6		;level digit X
 
 .org 0x001CC744
 	li a1, 0x181		;Value tenths Y
@@ -851,16 +957,33 @@ underwater_spacing equ 0x18
 	li a1, 0x181		;Value ones Y
 
 ;Bug report
+.org 0x001cbe2c
+	li a1, 0x1ed		;W's X
+.org 0x001cbe18
+	li a1, 0xb2			;W's Hundreds Y
+.org 0x001cbe00
+	li a1, 0xb2			;W's Tens Y
+.org 0x001cbdd0
+	li a1, 0xb2			;W's ones Y
+
+.org 0x001cbeb4
+	li a1, 0x232		;L's X
+.org 0x001cbea0
+	li a1, 0xb2			;L's hundreds Y
+.org 0x001cbe88
+	li a1, 0xb2			;L's tens Y
+.org 0x001cbe58
+	li a1, 0xb2			;L's ones Y
 
 .org 0x001cbec8
 	li a1, 0x170		;Skill X
 
 .org 0x001CBF74
-	li a0, 0x1a8		;White Lvl X
+	li a0, 0x1a6		;White Lvl X
 	li a1, 0xac			;White Lvl Y
 
 .org 0x001cbf10
-	li a0, 0x1a8		;Red Lvl X
+	li a0, 0x1a6		;Red Lvl X
 	li a1, 0xac			;Red Lvl Y
 
 .org 0x001CBFA4
