@@ -137,7 +137,7 @@ def insertAllAdditions():
 def build(mode):
     if mode > 0:
         #Pull text from weblate
-        pullScript()
+        #pullScript()
         copy_POs()
 
         #Print automated graphics
@@ -162,6 +162,10 @@ def build(mode):
         print("____BUILD: Applying addition patches")
         insertAllAdditions()
 
+        #Apply MAP ASM
+        print("____BUILD: Applying MAP ASM patches")
+        subprocess.call(['armips.exe', 'map.asm'])
+
         #Generate bin files
         print("____BUILD: Packing MAP files")
         UNPACK.packMaps("MAP_RIP_EDITS","ISO_EDITS\\map")
@@ -169,7 +173,7 @@ def build(mode):
         UNPACK.packIMG("IMG_RIP_EDITS", "ISO_EDITS")
     
 
-    #Apply ASM
+    #Apply EXE ASM
     print("____BUILD: Applying ASM patches")
     os.remove("ISO_EDITS\\scps_150.26")
     shutil.copy("ISO_RIP\\scps_150.26", "ISO_EDITS\\scps_150.26")

@@ -136,6 +136,19 @@ vert_menu_y_dist equ 0xF
 .org 0x01F6180		;Rare Star Y pos
 	li a1, 0x12
 
+.org 0x001f62ec
+	li a1, 0x19a	;Wins ones Y
+.org 0x001f62d4
+	li a1, 0x19a	;Wins tens Y
+.org 0x001f62a4
+	li a1, 0x19a	;Wins hundreds Y
+.org 0x001f63d8
+	li a1, 0x19a	;Losses ones Y
+.org 0x001f63c0
+	li a1, 0x19a	;Losses tens Y
+.org 0x001f6390
+	li a1, 0x19a	;Losses hundreds Y
+
 ;Shops
 
 .org 0x155f80		;Shop price kerning
@@ -740,12 +753,12 @@ underwater_spacing equ 0x18
 	li a0, 0x390		;X
 
 .org 0x001c6d44
-	addiu a1, a1, 0x174	;Month digit Y
+	addiu a1, a1, 0x176	;Month digit Y
 
 .org 0x001c6d9c
-	addiu a1, a1, 0x174	;Day tens digit Y
+	addiu a1, a1, 0x176	;Day tens digit Y
 .org 0x001c6dc0
-	addiu a1, a1, 0x174	;Day ones digit Y
+	addiu a1, a1, 0x176	;Day ones digit Y
 
 .org 0x001C6D54			;Month "/"
 	li a1, 0x3a0		;X
@@ -823,6 +836,23 @@ underwater_spacing equ 0x18
 	li a1, 0x15			;Y
 
 ;Bug naming
+.org 0x001ce608
+	li a1, 0x83
+.org 0x001ce5ac 		;Wins digits Y
+	li a1, 0x128
+.org 0x001ce5dc
+	li a1, 0x128
+.org 0x001ce5f4
+	li a1, 0x128
+
+.org 0x001CE698			;L's X
+	li a1, 0xc8			
+.org 0x001ce684			;Losses digits Y
+	li a1, 0x128
+.org 0x001ce66c
+	li a1, 0x128
+.org 0x001ce63c
+	li a1, 0x128
 
 .org 0x001CE1FC			;bug count digit
 	li a0, 0xa			;spacing
@@ -830,6 +860,15 @@ underwater_spacing equ 0x18
 	addiu a0, s1, 0xb6	;Ones X
 .org 0x001ce224
 	addiu a0, s1, 0xa9	;Tens X
+.org 0x001CE254
+	li a1, 0x15e		;Tens Y
+.org 0x001ce230
+	li a1, 0x15e		;Ones Y
+
+.org 0x001faf68
+	addiu a1, s6, 0x2	;Sumo custom name count tens Y
+.org 0x001FAF98
+	addiu a1, s6, 0x2 	;Sumo custom name count ones Y
 
 .org 0x001CE12C			;Engine assembling
 	addiu a1, 0x6c		;X (right aligned)
@@ -947,7 +986,7 @@ underwater_spacing equ 0x18
 	li a1, 0x1a8		;"Lvl" X
 	li a1, 0x131		;"Lvl" Y
 
-.org 001cbea8
+.org 0x001cbea8
 	li a1, 0x1c6		;level digit X
 
 .org 0x001CC744
@@ -1047,14 +1086,22 @@ underwater_spacing equ 0x18
 	li a0, 0x1
 
 ;Memo
+.org 0x001E4020
+	addiu a1, s2, 0x84	;King Y Boku
+.org 0x001E4044
+	addiu a1, s2, 0x86	;Big Y Boku
+.org 0x001E41EC
+	addiu a1, s2, 0x68	;King/Big Y Opposing
 .org 0x001E4100
 	nop					;Disable skill boku
 .org 0x001e42c0
 	nop					;Disable skill opposing
+
 .org 0x001E410C
 	addiu a1, s3, -4	;LV. Y Boku
 .org 0x001e42cc
 	addiu a1, s3, -4	;LV. Y Opposing
+
 
 ;TECHNIQUE COORDS
 .org 0x2787a0
@@ -1272,6 +1319,15 @@ underwater_spacing equ 0x18
 .org 0x00144D34
 	li a1, 0x16			;Text limit bump
 ;9f00b700c000c7000180a900b300be00bd000180
+
+;Blessings
+.org 0x00206a20
+	li t1, 0x7c;a0		;bg W
+	li t2, 0x7c;a0		;bg H
+	.skip 4
+	li a2, 0x102;f0			;bg X
+	li a3, 0x5a;48			;bg Y
+
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1529,3 +1585,4 @@ x_right:
 	li curr_x, base_x
 
 .close
+

@@ -495,7 +495,7 @@ my bed, I can hear
 the sound of the
 waves."""
 
-printAllBugInfo()
+#printAllBugInfo()
 #printAllDiary()
 #printAllBottleCaps()
 #printDiary("nik001.tm2_0x0_0.png", desc1, desc2)
