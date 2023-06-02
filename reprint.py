@@ -338,7 +338,7 @@ def printAllDiary():
         
         print("Printing Diary", image_number)
 
-        base_image_path = os.path.join("GFX","diary", image_name)
+        base_image_path = os.path.join("GFX","diary", "clean_diary_pages", image_name.replace(".png","_clean.png"))
         if os.path.exists(base_image_path):
             printDiary(image_file_path, string_buffer[0], string_buffer[1], alt_base_path=base_image_path) 
         else:
@@ -496,7 +496,7 @@ the sound of the
 waves."""
 
 #printAllBugInfo()
-#printAllDiary()
+printAllDiary()
 #printAllBottleCaps()
 #printDiary("nik001.tm2_0x0_0.png", desc1, desc2)
 #printBugInfo("imgTestBUG.PNG", desc)

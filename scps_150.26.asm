@@ -652,23 +652,23 @@ underwater_spacing equ 0x18
 	
 
 .org 0x0019d7fc
-	li a0, 0x40			;Line 2 X
+	li a0, 0x40							;Line 2 X
 	li a1, 0x160 + underwater_spacing	;Line 2 Y
 .org 0x0019d7c8
-	li a0, 0x40			;Line 2 X
+	li a0, 0x40							;Line 2 X
 	li a1, 0x160 + underwater_spacing	;Line 2 Y
 .org 0x0019d8a0
-	li a0, 0x40			;Line 2 X
+	li a0, 0x40							;Line 2 X
 	li a1, 0x160 + underwater_spacing	;Line 2 Y
 .org 0x0019d8d4
-	li a0, 0x40			;Line 2 X
+	li a0, 0x40							;Line 2 X
 	li a1, 0x160 + underwater_spacing	;Line 2 Y
 
 .org 0x0019d7e0
-	li a0, 0x40			;Line 3 X
+	li a0, 0x40							;Line 3 X
 	li a1, 0x160 + underwater_spacing*2	;Line 3 Y 
 .org 0x0019d8b8
-	li a0, 0x40			;Line 3 X
+	li a0, 0x40							;Line 3 X
 	li a1, 0x160 + underwater_spacing*2	;Line 3 Y 
 
 ;Continue/Data load screen
@@ -1327,6 +1327,23 @@ underwater_spacing equ 0x18
 	.skip 4
 	li a2, 0x102;f0			;bg X
 	li a3, 0x5a;48			;bg Y
+
+;Sumo Decision
+.org 0x001c7b90
+	li a1, 0x350	;Decision line 1 X
+	.skip 4
+	li a2, 0x38		;Decision line 1 Y
+
+decision_line_2_x equ 0x380
+decision_line_2_y equ 0x38
+
+.org 0x001c7c44
+	li a1, decision_line_2_x
+	.skip 4
+	li a2, decision_line_2_y
+.org 0x001c7c28
+	li a1, decision_line_2_x
+	li a2, decision_line_2_y
 
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;
