@@ -436,7 +436,7 @@ vert_menu_y_dist equ 0xF
 
 ;Insect name digit distance
 .org 0x001FB06C
-	addiu a0, s0, 0x8
+	addiu a0, s0, 0xa
 
 ;Insect name digit Y
 .org 0x001FB070
@@ -1330,11 +1330,11 @@ underwater_spacing equ 0x18
 
 ;Sumo Decision
 .org 0x001c7b90
-	li a1, 0x350	;Decision line 1 X
+	li a1, 0x2E0	;Decision line 1 X
 	.skip 4
-	li a2, 0x38		;Decision line 1 Y
+	li a2, 0xC		;Decision line 1 Y
 
-decision_line_2_x equ 0x380
+decision_line_2_x equ 0x2E0
 decision_line_2_y equ 0x38
 
 .org 0x001c7c44
@@ -1344,6 +1344,13 @@ decision_line_2_y equ 0x38
 .org 0x001c7c28
 	li a1, decision_line_2_x
 	li a2, decision_line_2_y
+
+;; Sumo BG
+.org 0x277fc0
+	.word 0x200			;x
+	.word 0x1A			;y
+	.word 0x300			;w
+	.word 0x50			;h
 
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;

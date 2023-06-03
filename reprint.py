@@ -367,11 +367,12 @@ def updateKerning(file, index, val):
 
     return
 
-def getBoundedStringImage(string,im_font,baseline_adj, emphasis):
+def getBoundedStringImage(string,im_font,baseline_adj = 0, emphasis = 1.0, max_char_dim = (30,22)):
     test_field_width = 512
     test_field_size = (test_field_width,CELL_WIDTH)
     font_color = (255, 255, 255, 255)
     test_field_im = Image.new("RGBA", test_field_size, (0, 0, 0, 0))
+
     cursor = 0
     for char in string:
         
@@ -379,7 +380,7 @@ def getBoundedStringImage(string,im_font,baseline_adj, emphasis):
             cursor += SPACE_WIDTH + SPACING
             continue
 
-        char_test_im = Image.new("RGBA", (30,22), (0, 0, 0, 0))
+        char_test_im = Image.new("RGBA", max_char_dim, (0, 0, 0, 0))
         draw = ImageDraw.Draw(char_test_im)
 
         draw.text( (4,17 +baseline_adj ),char, font_color, im_font, "ls", 0, 'left')
@@ -474,7 +475,119 @@ def printAllFonts():
     font_im.save(FONT_IMAGE_PATH)
     return map
 
-#printAllFonts()
+
+def previewSumo():
+    im = Image.open("IMG_GFX_EDITS\\system\\wrestling\\img\\technique.tm2_0x0_0.png")
+    buv = open("IMG_RIP_EDITS\\system\\wrestling\\img\\technique.buv", 'rb')
+    
+    n_entries = int.from_bytes(buv.read(4), "little")
+    
+    for x in range(n_entries):
+        buv.seek(4 + 0xC*x)    
+        u = int.from_bytes(buv.read(2), "little")
+        v = int.from_bytes(buv.read(2), "little")   
+        w = int.from_bytes(buv.read(2), "little")
+        h = int.from_bytes(buv.read(2), "little")
+        sub_im = im.crop((u,v,u+w, v+h))
+        sub_im.show()
+    return
+
+def getBoundedTextImage(string, imfont):
+    canvas = Image.new("RGBA", (640,640), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(canvas)
+    
+    draw.text( (20,20),string, (255, 255, 255, 255), imfont, "la", 0, 'center')
+    
+    dims = canvas.getbbox()
+
+    if dims == None:
+        return canvas.crop((0,0,20,20))
+    
+    
+    return canvas.crop(dims)
+
+def generateSumoIm(height, imfont_large, stringLarge, imfont_small, stringSmall):
+    large = getBoundedTextImage(stringLarge, imfont_large)
+    small = getBoundedTextImage(stringSmall, imfont_small)
+    canvas = Image.new("RGBA", (max(large.width, small.width), height), (0,0,0,0))
+    
+    canvas.paste(large, ((canvas.width - large.width)//2,0))
+    canvas.paste(small,((canvas.width - small.width)//2,large.height + 3) )
+    
+    return canvas
+
+def printSumo(TestOutput = False):
+    large_font = "FONT\\Heavitas.ttf"
+    imFont_large = ImageFont.truetype(large_font, 30, layout_engine=ImageFont.LAYOUT_RAQM)
+    small_font = "FONT\\IwataMaruGothicW55-D.ttf"
+    imFont_small = ImageFont.truetype(small_font, 16, layout_engine=ImageFont.LAYOUT_RAQM)
+    
+    
+    
+    po = polib.pofile("GFX\\technique.msg.po")
+    
+    
+    TOTAL_WIDTH = 640
+    TOTAL_HEIGHT = 640
+    N_ROWS = 15
+    SUB_IMAGE_HEIGHT = 640 // N_ROWS
+    space_buffers = [640]*N_ROWS
+    
+    sub_images = []
+    victoryIm = generateSumoIm(SUB_IMAGE_HEIGHT, imFont_large, "", imFont_small, "Victory by")
+    #victoryIm.show()
+    sub_images.append(victoryIm)
+    
+    
+    
+    for entry_number in range(len(po)):
+        line = po[entry_number].msgstr
+        line = line.replace("{STOP}","").rstrip("\n")
+        if "\n" in line:
+            JP_line = line.split("\n")[0]
+            EN_line = line.split("\n", 1)[1]
+            sumoIm = generateSumoIm(SUB_IMAGE_HEIGHT, imFont_large, JP_line, imFont_small, "(" + EN_line + ")")
+            
+        else:
+            sumoIm = generateSumoIm(SUB_IMAGE_HEIGHT, imFont_large, line, imFont_small, "")
+        
+        #sumoIm.show()
+        print(hex(sumoIm.width))
+        if TestOutput:
+            os.makedirs("MISC\\SUMO", exist_ok=True)
+            sumoIm.save("MISC\\SUMO\\" + str(entry_number) + ".PNG")
+        sub_images.append(sumoIm)    
+        
+        
+    buv = open("IMG_RIP_EDITS\\system\\wrestling\\img\\technique.buv", 'r+b')
+    canvas = Image.new("RGBA", (640,640), (0,0,0,0))
+    
+    for image_number in range(len(sub_images)):
+        image = sub_images[image_number]
+        buv.seek(4 + 0xC*image_number)
+        
+        for x in range(len(space_buffers)):
+            if space_buffers[x] > image.width + 1:
+                sub_im_x = 640 - space_buffers[x]
+                sub_im_y = x*SUB_IMAGE_HEIGHT
+                canvas.paste(image, (sub_im_x, sub_im_y))
+                #canvas.show()
+                space_buffers[x] = space_buffers[x] - (image.width + 1)
+                
+                buv.write(sub_im_x.to_bytes(2, "little"))
+                buv.write(sub_im_y.to_bytes(2, "little"))
+                buv.write(image.width.to_bytes(2, "little"))
+                buv.write(image.height.to_bytes(2, "little"))
+                break
+            
+            if x == len(space_buffers) - 1:
+                assert("could not fit a sumo!")
+    
+    #canvas.show()
+    canvas.save("IMG_GFX_EDITS\\system\\wrestling\\img\\technique.tm2_0x0_0.png")
+    
+    return
+
 
 desc = """Chinese Peacock
 These large butterflies
@@ -495,8 +608,11 @@ my bed, I can hear
 the sound of the
 waves."""
 
+
+printSumo(TestOutput=True)
+#previewSumo()
 #printAllBugInfo()
-printAllDiary()
+#printAllDiary()
 #printAllBottleCaps()
 #printDiary("nik001.tm2_0x0_0.png", desc1, desc2)
 #printBugInfo("imgTestBUG.PNG", desc)

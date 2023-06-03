@@ -137,7 +137,7 @@ def insertAllAdditions():
 def build(mode):
     if mode > 0:
         #Pull text from weblate
-        #pullScript()
+        pullScript()
         copy_POs()
 
         #Print automated graphics
@@ -146,6 +146,7 @@ def build(mode):
         reprint.printAllBottleCaps()
         reprint.printAllDiary()
         reprint.printAllBugInfo()
+        reprint.printSumo()
         compaction_map = reprint.printAllFonts()
 
         #Pack graphics
