@@ -191,6 +191,6 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = FULL
+mode = ASM_ONLY
 build(mode)
 

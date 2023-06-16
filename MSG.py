@@ -752,18 +752,26 @@ def testMAPs():
     return
 
 
+
+dict2= readFont("MISC\\font.txt",0, EXTRACTION)
+dict2[0x8000] = "{END}\n"
+dict2[0x8001] = "\n"
 def testRaw(hex_string):
-    dict= readFont("font.txt",0, EXTRACTION)
-    dict[0x8000] = "{END}\n"
-    dict[0x8001] = "\n"
-    text = convertRawToText(dict, bytes.fromhex(hex_string), alt_mode=True)
-    print(text)
+    
+    text = convertRawToText(dict2, bytes.fromhex(hex_string), alt_mode=False)
+    #print(text)
     #print(text.count("END"))
     #print(hex_string.count("00 80"))
-    return
+    return text
 
+def testFind(string):
+    dict= readFont("font.txt",0, INSERTION)
+    hex = convertTextToRaw(dict, string).hex()
+    print(hex)
+    return hex
 
-#testRaw("d7 00 f8 00 fc 02 99 01 01 80 a0 02 bb 00 bc 00 01 80")
+#testFind("はっぴい")
+#testRaw("""""")
 
 #my_dict = readFont("font-inject.txt", 0, INSERTION)
 

@@ -133,8 +133,8 @@ vert_menu_y_dist equ 0xF
 	li a0, 0x136	;Big X pos
 	li a1, 0x14		;Big Y pos
 
-.org 0x01F6180		;Rare Star Y pos
-	li a1, 0x12
+;.org 0x01F6180		;Rare Star Y pos
+;	li a1, 0x12
 
 .org 0x001f62ec
 	li a1, 0x19a	;Wins ones Y
@@ -790,6 +790,9 @@ underwater_spacing equ 0x18
 	addiu a1, 0x171		;Y
 
 ;Sumo opponent side
+.org 0x001C7328			;Cust name
+	li v0, 0xA			;Text kern position
+
 .org 0x001C7450			
 	li a1, 0x38			;Size hundreds Y
 .org 0x001c7488
@@ -864,6 +867,16 @@ underwater_spacing equ 0x18
 	li a1, 0x15e		;Tens Y
 .org 0x001ce230
 	li a1, 0x15e		;Ones Y
+
+.org 0x001ce434			;Size
+	li a1, 0x42			;Tens Y
+.org 0x001ce44c
+	li a1, 0x42			;Ones Y
+
+.org 0x001ce3c8			;King
+	li a1, 0x40			;Y
+.org 0x001ce3ec			;Big
+	li a1, 0x40			;Y
 
 .org 0x001faf68
 	addiu a1, s6, 0x2	;Sumo custom name count tens Y
@@ -1330,12 +1343,12 @@ underwater_spacing equ 0x18
 
 ;Sumo Decision
 .org 0x001c7b90
-	li a1, 0x2E0	;Decision line 1 X
+	li a1, 0x328	;Decision line 1 X
 	.skip 4
-	li a2, 0xC		;Decision line 1 Y
+	li a2, 0x88;0x2C		;Decision line 1 Y
 
-decision_line_2_x equ 0x2E0
-decision_line_2_y equ 0x38
+decision_line_2_x equ 0x328
+decision_line_2_y equ 0xb4;0x58
 
 .org 0x001c7c44
 	li a1, decision_line_2_x
@@ -1348,7 +1361,7 @@ decision_line_2_y equ 0x38
 ;; Sumo BG
 .org 0x277fc0
 	.word 0x200			;x
-	.word 0x1A			;y
+	.word 0x96;0x3A			;y
 	.word 0x300			;w
 	.word 0x50			;h
 

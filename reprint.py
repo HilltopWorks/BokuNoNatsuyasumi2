@@ -477,8 +477,8 @@ def printAllFonts():
 
 
 def previewSumo():
-    im = Image.open("IMG_GFX_EDITS\\system\\wrestling\\img\\technique.tm2_0x0_0.png")
-    buv = open("IMG_RIP_EDITS\\system\\wrestling\\img\\technique.buv", 'rb')
+    im = Image.open("IMG_GFX_RIP\\system\\wrestling\\img\\technique.tm2_0x0_0.png")
+    buv = open("IMG_RIP\\system\\wrestling\\img\\technique.buv", 'rb')
     
     n_entries = int.from_bytes(buv.read(4), "little")
     
@@ -489,7 +489,9 @@ def previewSumo():
         w = int.from_bytes(buv.read(2), "little")
         h = int.from_bytes(buv.read(2), "little")
         sub_im = im.crop((u,v,u+w, v+h))
-        sub_im.show()
+        #sub_im.show()
+        os.makedirs("MISC\\SUMO_JP", exist_ok=True)
+        sub_im.save("MISC\\SUMO_JP\\" + str(x)+".png")
     return
 
 def getBoundedTextImage(string, imfont):
@@ -609,7 +611,7 @@ the sound of the
 waves."""
 
 
-printSumo(TestOutput=True)
+#printSumo(TestOutput=True)
 #previewSumo()
 #printAllBugInfo()
 #printAllDiary()
