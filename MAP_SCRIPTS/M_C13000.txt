@@ -1,0 +1,1752 @@
+
+--- MAP_RIP\M_C13000\1.bin:0xd0:0 ---
+0x2  IPROG : 34000600
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x12 XA    : 01cd70170000ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600000
+--------------------------
+0x1b XWT   : 
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x184:1 ---
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x16 BGANM : 0600
+0x12 XA    : 01cd71170001ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600100
+--------------------------
+0x1b XWT   : 
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x238:2 ---
+0x2  IPROG : 34000700
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x12 XA    : 01cd72170002ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600200
+--------------------------
+0x1b XWT   : 
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x2ec:3 ---
+0x2  IPROG : 34000800
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x12 XA    : 01cd73170003ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600300
+--------------------------
+0x1b XWT   : 
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x3a0:4 ---
+0x2  IPROG : 34000900
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x12 XA    : 01cd74170004ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600400
+--------------------------
+0x1b XWT   : 
+0x13 FLAG  : 1b000100
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x458:5 ---
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x16 BGANM : 0a00
+0x12 XA    : 01cd75170005ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600500
+--------------------------
+0x1b XWT   : 
+0x16 BGANM : 6e00
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x510:6 ---
+0x2  IPROG : 34000b00
+0x2  IPROG : 1b000000
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x12 XA    : 01cd76170006ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600600
+--------------------------
+0x1b XWT   : 
+0x5  JMPE  : 04006a000200
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x5cc:7 ---
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x6  PROG  : 46000100
+0x16 BGANM : 0500
+0x12 XA    : 01cd77170007ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600700
+--------------------------
+0x1b XWT   : 
+0x16 BGANM : 6900
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x724:8 ---
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x6  PROG  : 46000100
+0x16 BGANM : 0400
+0x12 XA    : 01cd78170008ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600800
+--------------------------
+0x1b XWT   : 
+0x16 BGANM : 6800
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x87c:9 ---
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x6  PROG  : 46000100
+0x16 BGANM : 0300
+0x12 XA    : 01cd79170009ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600900
+--------------------------
+0x1b XWT   : 
+0x16 BGANM : 6700
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x9d4:10 ---
+0x15 ANM   : 30003cff1400
+0x17 LOOK  : 4800000008010010
+0x1e WAT   : 1400
+0x1d WIN   : 0000
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『大きなテレビがある』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 0100
+0x1d WIN   : 6500
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0xa50:11 ---
+0x15 ANM   : 07003cff1400
+0x17 LOOK  : b8ff0000a3010010
+0x1e WAT   : 1400
+0xf  SE    : 0004077fcdcd
+0x1d WIN   : 0000
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『鍵がかかっているようだ』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 0100
+0x1d WIN   : 6500
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0xae8:12 ---
+0x17 LOOK  : 3a0a008000000014
+0x7  GO    : 030020ff000062000000
+0x15 ANM   : 020032fe0000
+0x1f MWT   : 0000
+0x15 ANM   : 20003cff1400
+0x17 LOOK  : e4fe0000c9000010
+0x1e WAT   : 1400
+0x1d WIN   : 0000
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『不思議な形の建物を描いた
+ 油絵がある
+ どこの国の風景なんだろ… 』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 0100
+0x1d WIN   : 6500
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0xbbc:13 ---
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : 0c00ff7fff7f0014
+0x6  PROG  : 1b000b00
+0x6  PROG  : 44000000
+0x6  PROG  : 39000000
+0xa  MAP   : 000049343800ffff0000
+0x5  JMPE  : 770149000100
+0x6  PROG  : 07003700
+0x1d WIN   : 0000
+0x10 XAMSG : 02cd9bb7009b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 02121100
+-XAMSG:
+光「ところでさ…{WAIT=0x67}
+ あんたが
+ 大切な夏休みの時間を
+ 無駄なく過ごせるように{WAIT=0x121}
+ 光が発明した占いで
+ 占ってあげようか?」
+--------------------------
+0x1b XWT   : 
+0x10 XAMSG : 02cd9bb7019b00cd
+-REPLACE  = FALSE
+-MSG ID   = 1
+-VOICE ID = 02121101
+-XAMSG:
+ボク「え? どういうこと?」
+--------------------------
+0x1b XWT   : 
+0x10 XAMSG : 02cd9bb7029b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 2
+-VOICE ID = 02121102
+-XAMSG:
+光「昼や夕方だったら
+ 今日、何をすればいいか…{WAIT=0xe3}
+ 夜だったら
+ 明日、何をすればいいか
+ 占ってあげるのよ」
+--------------------------
+0x1b XWT   : 
+0x10 XAMSG : 02cd9bb7039b00cd
+-REPLACE  = FALSE
+-MSG ID   = 3
+-VOICE ID = 02121103
+-XAMSG:
+ボク「でも、占いなんて… 」
+--------------------------
+0x1b XWT   : 
+0x10 XAMSG : 02cd9bb7049b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 4
+-VOICE ID = 02121104
+-XAMSG:
+光「あれ? あんたまさか
+ 私の言う事が信じられないって
+ いうの?」
+--------------------------
+0x1b XWT   : 
+0x10 XAMSG : 02cd9bb7059b00cd
+-REPLACE  = FALSE
+-MSG ID   = 5
+-VOICE ID = 02121105
+-XAMSG:
+ボク「いや、そういう
+ わけじゃなくて…{WAIT=0xa0}
+ ねぇ、じゃあ
+ どうすればいいの?」
+--------------------------
+0x1b XWT   : 
+0x10 XAMSG : 02cd9bb7069b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 6
+-VOICE ID = 02121106
+-XAMSG:
+光「じゃあね、まず光が
+ 一から六までの数字を
+ なんとなく選ぶの{WAIT=0x13f}
+ 今日は五ね」
+--------------------------
+0x1b XWT   : 
+0x1d WIN   : 0100
+0x5  JMPE  : 200070000100
+0x5  JMPE  : 220070000200
+0x5  JMPE  : 240070000300
+0x5  JMPE  : 260070000400
+0x5  JMPE  : 280070000500
+0x5  JMPE  : 2a0070000600
+0x5  JMPE  : 2c0070000700
+0x5  JMPE  : 2e0070000800
+0x15 ANM   : 280c3c021400
+0x3  JMP   : 2c00
+0x15 ANM   : 180c3c001400
+0x3  JMP   : 2600
+0x15 ANM   : 2e0c3c001400
+0x3  JMP   : 2000
+0x15 ANM   : 280c3c141400
+0x3  JMP   : 1a00
+0x15 ANM   : 280c3c3c1400
+0x3  JMP   : 1400
+0x15 ANM   : 180c3c3d1400
+0x3  JMP   : 0e00
+0x15 ANM   : 2e0c3c3d1400
+0x3  JMP   : 0800
+0x15 ANM   : 280c3c501400
+0x3  JMP   : 0200
+0xf  SE    : 00010440cdcd
+0x19 AWT   : 0c00
+0x1e WAT   : 1e00
+0x5  JMPE  : 200070000100
+0x5  JMPE  : 220070000200
+0x5  JMPE  : 240070000300
+0x5  JMPE  : 260070000400
+0x5  JMPE  : 280070000500
+0x5  JMPE  : 2a0070000600
+0x5  JMPE  : 2c0070000700
+0x5  JMPE  : 2e0070000800
+0x15 ANM   : 080c3c021400
+0x3  JMP   : 2c00
+0x15 ANM   : 190c3c001400
+0x3  JMP   : 2600
+0x15 ANM   : 2f0c3c001400
+0x3  JMP   : 2000
+0x15 ANM   : 080c3c141400
+0x3  JMP   : 1a00
+0x15 ANM   : 080c3c3c1400
+0x3  JMP   : 1400
+0x15 ANM   : 190c3c3d1400
+0x3  JMP   : 0e00
+0x15 ANM   : 2f0c3c3d1400
+0x3  JMP   : 0800
+0x15 ANM   : 080c3c501400
+0x3  JMP   : 0200
+0x1d WIN   : 0000
+0x10 XAMSG : 02cd9bb7079b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 7
+-VOICE ID = 02121107
+-XAMSG:
+光「いち、にい、さん
+ し—、ご…」
+--------------------------
+0xf  SE    : 00010450cdcd
+0x1e WAT   : 1400
+0xf  SE    : 00010432cdcd
+0x1b XWT   : 
+0xf  SE    : 00010450cdcd
+0x5  JMPE  : 200070000100
+0x5  JMPE  : 220070000200
+0x5  JMPE  : 240070000300
+0x5  JMPE  : 260070000400
+0x5  JMPE  : 280070000500
+0x5  JMPE  : 2a0070000600
+0x5  JMPE  : 2c0070000700
+0x5  JMPE  : 2e0070000800
+0x15 ANM   : 080cff021400
+0x3  JMP   : 2c00
+0x15 ANM   : 190cff001400
+0x3  JMP   : 2600
+0x15 ANM   : 2f0cff001400
+0x3  JMP   : 2000
+0x15 ANM   : 080cff141400
+0x3  JMP   : 1a00
+0x15 ANM   : 080cff3c1400
+0x3  JMP   : 1400
+0x15 ANM   : 190cff3d1400
+0x3  JMP   : 0e00
+0x15 ANM   : 2f0cff3d1400
+0x3  JMP   : 0800
+0x15 ANM   : 080cff501400
+0x3  JMP   : 0200
+0x10 XAMSG : 02cd9bb7089b00cd
+-REPLACE  = FALSE
+-MSG ID   = 8
+-VOICE ID = 02121108
+-XAMSG:
+ボク「あ、それ知ってる{WAIT=0x70}
+ で、次はその見えてる
+ ところからボクが数字を
+ 選ぶんでしょ」
+--------------------------
+0x1b XWT   : 
+0x10 XAMSG : 02cd9bb7099b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 9
+-VOICE ID = 02121109
+-XAMSG:
+光「なんだ、知ってるんじゃない」
+--------------------------
+0x1b XWT   : 
+0x10 XAMSG : 02cd9bb70a9b00cd
+-REPLACE  = FALSE
+-MSG ID   = 10
+-VOICE ID = 02121110
+-XAMSG:
+ボク「ねぇ、この赤いマルが
+ 付いてるのは、なあに?」
+--------------------------
+0x1b XWT   : 
+0x10 XAMSG : 02cd9bb70b9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 11
+-VOICE ID = 02121111
+-XAMSG:
+光「それは、光の今日のお勧め
+ なの」
+--------------------------
+0x1b XWT   : 
+0x10 XAMSG : 02cd9bb70c9b00cd
+-REPLACE  = FALSE
+-MSG ID   = 12
+-VOICE ID = 02121112
+-XAMSG:
+ボク「なるほど
+ そういうことか… 」
+--------------------------
+0x1b XWT   : 
+0x1d WIN   : 0100
+0x6  PROG  : 1b000000
+0x5  JMPE  : 09006a000200
+0x13 FLAG  : 28010100
+0x3  JMP   : 0500
+0x13 FLAG  : 28010200
+0x13 FLAG  : 49000100
+0x3  JMP   : 1701
+0x6  PROG  : 1b000000
+0x5  JMPE  : 13006a000200
+0x1d WIN   : 0000
+0x10 XAMSG : 02cd9bb70d9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 13
+-VOICE ID = 02121113
+-XAMSG:
+光「ねぇ、今日は
+ どこへ行けば面白いか
+ 占ってあげようか?」
+--------------------------
+0x1b XWT   : 
+0x24 SELECT: 00000e00
+-REPLACE  = FALSE
+-MSG ID   = 14
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 0100
+0x3  JMP   : 0f00
+0x1d WIN   : 0000
+0x10 XAMSG : 02cd9bb70f9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 15
+-VOICE ID = 02121114
+-XAMSG:
+光「ねぇ、明日は
+ どこへ行けば面白いか
+ 占ってあげようか?」
+--------------------------
+0x1b XWT   : 
+0x24 SELECT: 00001000
+-REPLACE  = FALSE
+-MSG ID   = 16
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 0100
+0x5  JMPE  : 3a01ff000100
+0x5  JMPE  : 200070000100
+0x5  JMPE  : 220070000200
+0x5  JMPE  : 240070000300
+0x5  JMPE  : 260070000400
+0x5  JMPE  : 280070000500
+0x5  JMPE  : 2a0070000600
+0x5  JMPE  : 2c0070000700
+0x5  JMPE  : 2e0070000800
+0x15 ANM   : 280c3c021400
+0x3  JMP   : 2c00
+0x15 ANM   : 180c3c001400
+0x3  JMP   : 2600
+0x15 ANM   : 2e0c3c001400
+0x3  JMP   : 2000
+0x15 ANM   : 280c3c141400
+0x3  JMP   : 1a00
+0x15 ANM   : 280c3c3c1400
+0x3  JMP   : 1400
+0x15 ANM   : 180c3c3d1400
+0x3  JMP   : 0e00
+0x15 ANM   : 2e0c3c3d1400
+0x3  JMP   : 0800
+0x15 ANM   : 280c3c501400
+0x3  JMP   : 0200
+0xf  SE    : 00010440cdcd
+0x19 AWT   : 0c00
+0x1e WAT   : 1e00
+0x1d WIN   : 0000
+0x5  JMPE  : 17006f000300
+0x5  JMPE  : 1a006f000400
+0x5  JMPE  : 1d006f000500
+0x5  JMPE  : 20006f000600
+0x10 XAMSG : 02cd9bb7119b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 17
+-VOICE ID = 02121115
+-XAMSG:
+光「じゃあ今日は二ね
+ いち、にい! 」
+--------------------------
+0x3  JMP   : 1c00
+0x10 XAMSG : 02cd9bb7129b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 18
+-VOICE ID = 02121116
+-XAMSG:
+光「じゃあ今日は三ね
+ いち、にい、さん! 」
+--------------------------
+0x3  JMP   : 1500
+0x10 XAMSG : 02cd9bb7139b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 19
+-VOICE ID = 02121117
+-XAMSG:
+光「じゃあ今日は四ね
+ いち、にい、さん、し—! 」
+--------------------------
+0x3  JMP   : 0e00
+0x10 XAMSG : 02cd9bb7149b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 20
+-VOICE ID = 02121118
+-XAMSG:
+光「じゃあ今日は五ね
+ いち、にい、さん、し—、ご!」
+--------------------------
+0x3  JMP   : 0700
+0x10 XAMSG : 02cd9bb7159b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 21
+-VOICE ID = 02121119
+-XAMSG:
+光「じゃあ今日は六ね
+ いち、にい、さん
+ し—、ご、ろく! 」
+--------------------------
+0x1e WAT   : 5a00
+0x5  JMPE  : 200070000100
+0x5  JMPE  : 220070000200
+0x5  JMPE  : 240070000300
+0x5  JMPE  : 260070000400
+0x5  JMPE  : 280070000500
+0x5  JMPE  : 2a0070000600
+0x5  JMPE  : 2c0070000700
+0x5  JMPE  : 2e0070000800
+0x15 ANM   : 080c3c021400
+0x3  JMP   : 2c00
+0x15 ANM   : 190c3c001400
+0x3  JMP   : 2600
+0x15 ANM   : 2f0c3c001400
+0x3  JMP   : 2000
+0x15 ANM   : 080c3c141400
+0x3  JMP   : 1a00
+0x15 ANM   : 080c3c3c1400
+0x3  JMP   : 1400
+0x15 ANM   : 190c3c3d1400
+0x3  JMP   : 0e00
+0x15 ANM   : 2f0c3c3d1400
+0x3  JMP   : 0800
+0x15 ANM   : 080c3c501400
+0x3  JMP   : 0200
+0xf  SE    : 00010450cdcd
+0x1e WAT   : 1400
+0xf  SE    : 00010432cdcd
+0x1b XWT   : 
+0xf  SE    : 00010450cdcd
+0x1d WIN   : 0100
+0xb  CMAP  : 49343200
+0x2b CMPOS : 00000000000000000000ff00
+0xd  CMWT  : 
+0x2  IPROG : 39000000
+0xa  MAP   : 000052303000ffff0000
+0x1d WIN   : 0000
+0x10 XAMSG : 02cd9bb7169b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 22
+-VOICE ID = 02121120
+-XAMSG:
+光「はい! じゃあこの中から
+ 好きな数字を選んで!」
+--------------------------
+0x1b XWT   : 
+0x1d WIN   : 0100
+0x6  PROG  : 3a000000
+0x3  JMP   : 3600
+0x1d WIN   : 6500
+0x1d WIN   : 0100
+0x1d WIN   : 0000
+0x10 XAMSG : 02cd9bb7179b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 23
+-VOICE ID = 02121121
+-XAMSG:
+光「どう、参考になったかな?{WAIT=0xab}
+ さてと…
+ 光のお勧め、もう一回聞く?」
+--------------------------
+0x1b XWT   : 
+0x24 SELECT: 00001800
+-REPLACE  = FALSE
+-MSG ID   = 24
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 0100
+0x5  JMPE  : 0600ff000100
+0x3  JMP   : dcff
+0xb  CMAP  : 52303000
+0x2b CMPOS : 00000000000000000000ff01
+0xd  CMWT  : 
+0x6  PROG  : 44000100
+0x6  PROG  : 40000000
+0x1d WIN   : 0000
+0x10 XAMSG : 02cd9bb7199b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 25
+-VOICE ID = 02121122
+-XAMSG:
+光「じゃあ、また占って
+ 欲しくなったら声をかけてね」
+--------------------------
+0x1b XWT   : 
+0x1d WIN   : 0100
+0x3  JMP   : 2a04
+0xf  SE    : 00010b7fcdcd
+0x1d WIN   : 0000
+0x1d WIN   : 6400
+0x5  JMPE  : f2006e000000
+0x5  JMPE  : fe006e000100
+0x5  JMPE  : 0a016e000200
+0x5  JMPE  : 16016e000300
+0x5  JMPE  : 22016e000400
+0x5  JMPE  : 2e016e000500
+0x5  JMPE  : 34016e000600
+0x5  JMPE  : 40016e000700
+0x5  JMPE  : 4c016e000800
+0x5  JMPE  : 4a016e000900
+0x5  JMPE  : 56016e000a00
+0x5  JMPE  : 62016e000b00
+0x5  JMPE  : 6e016e000c00
+0x5  JMPE  : 7a016e000d00
+0x5  JMPE  : 86016e000e00
+0x5  JMPE  : 92016e000f00
+0x5  JMPE  : 9e016e001000
+0x5  JMPE  : aa016e001100
+0x5  JMPE  : b6016e001200
+0x5  JMPE  : c2016e001300
+0x5  JMPE  : ce016e001400
+0x5  JMPE  : d4016e001500
+0x5  JMPE  : e0016e001600
+0x5  JMPE  : ec016e001700
+0x5  JMPE  : f2016e001800
+0x5  JMPE  : fe016e001900
+0x5  JMPE  : 0a026e001a00
+0x5  JMPE  : 16026e001b00
+0x5  JMPE  : 22026e001c00
+0x5  JMPE  : 2e026e001d00
+0x5  JMPE  : 3a026e001e00
+0x5  JMPE  : 46026e001f00
+0x5  JMPE  : 52026e002000
+0x5  JMPE  : 5e026e002100
+0x5  JMPE  : 6a026e002200
+0x5  JMPE  : 76026e002300
+0x5  JMPE  : 82026e002400
+0x5  JMPE  : 8e026e002500
+0x5  JMPE  : 9a026e002600
+0x5  JMPE  : a6026e002700
+0x5  JMPE  : b2026e002800
+0x5  JMPE  : b8026e002900
+0x5  JMPE  : c4026e002a00
+0x5  JMPE  : ca026e002b00
+0x5  JMPE  : d0026e002c00
+0x5  JMPE  : d6026e002d00
+0x5  JMPE  : dc026e002e00
+0x5  JMPE  : e2026e002f00
+0x5  JMPE  : e8026e003000
+0x5  JMPE  : ee026e003100
+0x5  JMPE  : f4026e003200
+0x5  JMPE  : fa026e003300
+0x5  JMPE  : 00036e003400
+0x5  JMPE  : 06036e003500
+0x5  JMPE  : 0c036e003600
+0x5  JMPE  : 12036e003700
+0x5  JMPE  : 18036e003800
+0x5  JMPE  : 1e036e003900
+0x5  JMPE  : 24036e003a00
+0x5  JMPE  : 2a036e003b00
+0x3  JMP   : d4fe
+0x11 MSG   : 00cd00001a0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 26
+-MSG:
+『夜の民宿、二階』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb71b9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 27
+-VOICE ID = 02121123
+-XAMSG:
+光「今晩、あそこに行くと
+ ちょっぴりいい事があるってさ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : c4fe
+0x11 MSG   : 00cd00001c0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 28
+-MSG:
+『民宿、二階の一号室』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb71d9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 29
+-VOICE ID = 02121124
+-XAMSG:
+光「一号室は
+ サイモンがいる部屋だよ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : b4fe
+0x11 MSG   : 00cd00001e0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 30
+-MSG:
+『民宿、二階の二号室』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb71f9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 31
+-VOICE ID = 02121125
+-XAMSG:
+光「二号室のお姉さん
+ なかなか美人さんじゃないの{WAIT=0xf2}
+ あんた、鼻の下伸ばして
+ 部屋に行くんじゃないわよ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : a4fe
+0x11 MSG   : 00cd0000200000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 32
+-MSG:
+『民宿、二階の三号室』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7219b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 33
+-VOICE ID = 02121126
+-XAMSG:
+光「ちょっと怖い
+ 男のお客さんがいるみたいね{WAIT=0xe3}
+ 何の為に富海に来たんだろ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 94fe
+0x11 MSG   : 00cd0000220000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 34
+-MSG:
+『民宿、二階の洗濯物干し』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7239b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 35
+-VOICE ID = 02121127
+-XAMSG:
+光「おばちゃんが
+ 洗濯物でも干してるのかな?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 84fe
+0x11 MSG   : 00cd0000240000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 36
+-MSG:
+『夜の民宿、二階の洗濯物干し』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 7afe
+0x11 MSG   : 00cd0000250000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 37
+-MSG:
+『お風呂場』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7269b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 38
+-VOICE ID = 02121128
+-XAMSG:
+光「お昼前後にお風呂場だってさ
+ いったい何があるのかな?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 6afe
+0x11 MSG   : 00cd0000270000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 39
+-MSG:
+『お風呂場』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7289b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 40
+-VOICE ID = 02121129
+-XAMSG:
+光「晩御飯の後に
+ お風呂場だってさ{WAIT=0xc3}
+ あんまり長湯して
+ のぼせんじゃないわよ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 5afe
+0x3  JMP   : 58fe
+0x11 MSG   : 00cd0000290000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 41
+-MSG:
+『夕方の海の家』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb72a9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 42
+-VOICE ID = 02121130
+-XAMSG:
+光「芳花さんって
+ ギタ—まで弾けるんだね」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 48fe
+0x11 MSG   : 00cd00002b0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 43
+-MSG:
+『海で魚釣り』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb72c9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 44
+-VOICE ID = 02121131
+-XAMSG:
+光「お魚の釣り方は
+ 茜屋のおじちゃんに
+ 訊いてみてね」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 38fe
+0x11 MSG   : 00cd00002d0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 45
+-MSG:
+『海で魚釣り』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb72e9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 46
+-VOICE ID = 02121133
+-XAMSG:
+光「そういえば
+ 昔民宿に来てたおじさんが{WAIT=0xd8}
+ 夜、港でたくさん魚が
+ 釣れたって言ってたよ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 28fe
+0x11 MSG   : 00cd00002f0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 47
+-MSG:
+『港に張られたテント』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7309b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 48
+-VOICE ID = 02121135
+-XAMSG:
+光「あそこは夜に行っても
+ いいみたいだよ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 18fe
+0x11 MSG   : 00cd0000310000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 49
+-MSG:
+『夕方の船着場』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7329b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 50
+-VOICE ID = 02121137
+-XAMSG:
+光「今日は夕方の船着場が
+ お勧めよ!{WAIT=0xc3}
+ なんだか、すごい事に
+ なってるみたい」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 08fe
+0x11 MSG   : 00cd0000330000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 51
+-MSG:
+『正午の船着場』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7349b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 52
+-VOICE ID = 02121138
+-XAMSG:
+光「今日はお昼の船着場が
+ いいんだってさ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : f8fd
+0x11 MSG   : 00cd0000350000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 53
+-MSG:
+『光といっしょ』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7369b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 54
+-VOICE ID = 02121139
+-XAMSG:
+光「これは、明日、私といっしょに
+ 行動しろってことね」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : e8fd
+0x11 MSG   : 00cd0000370000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 55
+-MSG:
+『夕方の公園』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7389b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 56
+-VOICE ID = 02121141
+-XAMSG:
+光「たまには、夕方の公園にも
+ 行ってみたらどうかしら?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : d8fd
+0x11 MSG   : 00cd0000390000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 57
+-MSG:
+『夜の公園』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb73a9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 58
+-VOICE ID = 02121142
+-XAMSG:
+光「どうやら夜の公園に
+ お姉ちゃんたちが
+ いるみたいだよ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : c8fd
+0x11 MSG   : 00cd00003b0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 59
+-MSG:
+『昼の診療所』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb73c9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 60
+-VOICE ID = 02121143
+-XAMSG:
+光「どうでもいいけど
+ 看護婦の凪咲さんが{WAIT=0xb2}
+ 最近、めっきり
+ きれいになったのよね{WAIT=0x9e}
+ いったいなにが
+ 起こってるのかしら?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : b8fd
+0x11 MSG   : 00cd00003d0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 61
+-MSG:
+『夕方の診療所』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb73e9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 62
+-VOICE ID = 02121144
+-XAMSG:
+光「これって
+ なんで夕方なのかしら?{WAIT=0xea}
+ なんだか気にならない?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : a8fd
+0x11 MSG   : 00cd00003f0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 63
+-MSG:
+『夜、診療所の前』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 9efd
+0x11 MSG   : 00cd0000400000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 64
+-MSG:
+『昼の靖子お姉ちゃんの部屋』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7419b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 65
+-VOICE ID = 02121145
+-XAMSG:
+光「今日は、お姉ちゃんの部屋が
+ すっごくいいみたいだよ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 8efd
+0x11 MSG   : 00cd0000420000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 66
+-MSG:
+『夜の靖子お姉ちゃんの部屋』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7439b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 67
+-VOICE ID = 02121146
+-XAMSG:
+光「お勧めは
+ 夜のお姉ちゃんの部屋
+ だってさ…{WAIT=0xde}
+ あんた、妙なことしちゃ
+ ダメだからね」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 7efd
+0x11 MSG   : 00cd0000440000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 68
+-MSG:
+『光んちの裏庭』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 74fd
+0x11 MSG   : 00cd0000450000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 69
+-MSG:
+『光んちの居間』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7469b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 70
+-VOICE ID = 02121148
+-XAMSG:
+光「何だか知らないけど
+ 夜、うちの居間に来てみると
+ いいみたいだよ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 64fd
+0x11 MSG   : 00cd0000470000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 71
+-MSG:
+『ケン坊の犬小屋』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7489b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 72
+-VOICE ID = 02121150
+-XAMSG:
+光「ちなみにケン坊は
+ うちの犬の名前なんだから」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 54fd
+0x11 MSG   : 00cd0000490000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 73
+-MSG:
+『海の家の下』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb74a9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 74
+-VOICE ID = 02121153
+-XAMSG:
+光「あれ、なんだこれ…
+ 水の中ってことかな?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 44fd
+0x11 MSG   : 00cd00004b0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 75
+-MSG:
+『海の中』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb74c9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 76
+-VOICE ID = 02121154
+-XAMSG:
+光「どうやら、海の中で
+ お魚の子供が
+ たくさん生まれたみたいだよ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 34fd
+0x11 MSG   : 00cd00004d0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 77
+-MSG:
+『海の中』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb74e9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 78
+-VOICE ID = 02121155
+-XAMSG:
+ボク「なんだろ?
+ 宝物でもあるのかなぁ… 」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 24fd
+0x11 MSG   : 00cd00004f0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 79
+-MSG:
+『おみくじ地蔵』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7509b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 80
+-VOICE ID = 02121156
+-XAMSG:
+光「おみくじ地蔵は
+ 占いができるお地蔵様なの{WAIT=0x10c}
+ 民宿の近くにあるんだけど
+ 知ってる?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 14fd
+0x11 MSG   : 00cd0000510000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 81
+-MSG:
+『お墓』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7529b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 82
+-VOICE ID = 02121157
+-XAMSG:
+光「誰かが、お墓で
+ 探しものをしてるみたいだよ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 04fd
+0x11 MSG   : 00cd0000530000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 83
+-MSG:
+『秘密基地』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7549b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 84
+-VOICE ID = 02121158
+-XAMSG:
+光「秘密っていうくらいだから
+ 場所は自分で探してね{WAIT=0x10c}
+ ヒントとしては
+ お墓の近くかな?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : f4fc
+0x11 MSG   : 00cd0000550000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 85
+-MSG:
+『秘密基地』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7569b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 86
+-VOICE ID = 02121159
+-XAMSG:
+光「今日は
+ タケシにいちゃんたち
+ あそこにいるのかなぁ?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : e4fc
+0x11 MSG   : 00cd0000570000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 87
+-MSG:
+『洋にいちゃんの家』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7589b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 88
+-VOICE ID = 02121160
+-XAMSG:
+光「洋にいちゃん
+ 今日は家にいるのかな?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : d4fc
+0x11 MSG   : 00cd0000590000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 89
+-MSG:
+『洋にいちゃんの家』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb75a9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 90
+-VOICE ID = 02121161
+-XAMSG:
+光「今日はなんだか
+ うちのお姉ちゃんが行ってる
+ みたいだよ{WAIT=0xef}
+ なんでなんだろ?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : c4fc
+0x11 MSG   : 00cd00005b0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 91
+-MSG:
+『洋にいちゃんの家』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb75c9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 92
+-VOICE ID = 02121162
+-XAMSG:
+光「そろそろロケットの
+ 打ち上げの準備で大忙しかな?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : b4fc
+0x11 MSG   : 00cd00005d0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 93
+-MSG:
+『田んぼの近く』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb75e9b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 94
+-VOICE ID = 02121163
+-XAMSG:
+光「洋にいちゃんち、行く途中に
+ ちょっと道をそれると
+ 田んぼがあるんだ… 」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : a4fc
+0x11 MSG   : 00cd00005f0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 95
+-MSG:
+『奥沢』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7609b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 96
+-VOICE ID = 02121164
+-XAMSG:
+光「奥沢は、診療所の中を
+ 通りぬけて行くか{WAIT=0xee}
+ お風呂場の裏側を通って
+ 行くんだからね{WAIT=0xa8}
+ 判った?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 94fc
+0x11 MSG   : 00cd0000610000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 97
+-MSG:
+『奥沢の秘密の場所』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7629b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 98
+-VOICE ID = 02121166
+-XAMSG:
+ボク「ねぇ、この秘密の場所って
+ なんなの?」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 84fc
+0x11 MSG   : 00cd0000630000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 99
+-MSG:
+『裏山のほら穴』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7649b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 100
+-VOICE ID = 02121168
+-XAMSG:
+光「秘密基地のちょっと
+ 先のほうにある{WAIT=0xa6}
+ お風呂の裏山の洞穴が
+ 今日のお勧めなんだって{WAIT=0xf9}
+ いったい、何が起きるんだろ!」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 74fc
+0x11 MSG   : 00cd0000650000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 101
+-MSG:
+『奥沢淵』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 6afc
+0x11 MSG   : 00cd0000660000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 102
+-MSG:
+『オオカミじじいの炭焼き小屋』
+--------------------------
+0x28 MSGWT : 9600
+0x10 XAMSG : 02cd9bb7679b0ccd
+-REPLACE  = FALSE
+-MSG ID   = 103
+-VOICE ID = 02121170
+-XAMSG:
+光「炭焼き小屋へ行く道は
+ 橋が落ちてたんだけど{WAIT=0xe5}
+ いつのまにか、新しいのが
+ かかってるんだってさ」
+--------------------------
+0x1b XWT   : 
+0x3  JMP   : 5afc
+0x11 MSG   : 00cd0000680000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 104
+-MSG:
+『夜、タケシとシゲルの部屋』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 50fc
+0x11 MSG   : 00cd0000690000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 105
+-MSG:
+『昼間の公園』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 46fc
+0x11 MSG   : 00cd00006a0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 106
+-MSG:
+『昼間の民宿、二階』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 3cfc
+0x11 MSG   : 00cd00006b0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 107
+-MSG:
+『夜の海岸』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 32fc
+0x11 MSG   : 00cd00006c0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 108
+-MSG:
+『昼間の海岸』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 28fc
+0x11 MSG   : 00cd00006d0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 109
+-MSG:
+『昼間、民宿の公衆電話』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 1efc
+0x11 MSG   : 00cd00006e0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 110
+-MSG:
+『昼間の海の家』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 14fc
+0x11 MSG   : 00cd00006f0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 111
+-MSG:
+『お墓』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 0afc
+0x11 MSG   : 00cd0000700000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 112
+-MSG:
+『夜、民宿の公衆電話』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : 00fc
+0x11 MSG   : 00cd0000710000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 113
+-MSG:
+『夜の公園』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : f6fb
+0x11 MSG   : 00cd0000720000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 114
+-MSG:
+『民宿、二階の三号室』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : ecfb
+0x11 MSG   : 00cd0000730000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 115
+-MSG:
+『猫屋敷』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : e2fb
+0x11 MSG   : 00cd0000740000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 116
+-MSG:
+『防波堤の先っちょ』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : d8fb
+0x11 MSG   : 00cd0000750000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 117
+-MSG:
+『正午の船着場』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : cefb
+0x11 MSG   : 00cd0000760000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 118
+-MSG:
+『昼の靖子お姉ちゃんの部屋』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : c4fb
+0x11 MSG   : 00cd0000770000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 119
+-MSG:
+『秘密基地』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : bafb
+0x11 MSG   : 00cd0000780000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 120
+-MSG:
+『洋にいちゃんの家』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : b0fb
+0x11 MSG   : 00cd0000790000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 121
+-MSG:
+『裏山のほら穴』
+--------------------------
+0x28 MSGWT : ffff
+0x3  JMP   : a6fb
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x3518:14 ---
+0x0  POS   : 000000003c0074f523010c02
+0x13 FLAG  : fc000100
+0x17 LOOK  : 40fe008000000014
+0x7  GO    : 0500d4ff0000af000000
+0x15 ANM   : 02001efe0000
+0x1f MWT   : 0000
+0x15 ANM   : 30003c001400
+0xf  SE    : 00090046cdcd
+0x5  JMPE  : 1e000f000100
+0x5  JMPE  : 40000f000200
+0x1d WIN   : 0000
+0x10 XAMSG : 10cd3a98003a0ccd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 16121000
+-XAMSG:
+光「もうちょっと
+ テレビのチャンネル
+ 増えないかな?」
+--------------------------
+0x15 ANM   : 070c3cfe1400
+0x1e WAT   : 6e00
+0x15 ANM   : 34003cfe1400
+0x1b XWT   : 
+0x1d WIN   : 0100
+0x3  JMP   : 3c00
+0x15 ANM   : 070c3cff1400
+0x1e WAT   : 2800
+0x1d WIN   : 0000
+0x10 XAMSG : 10cd3a98013a00cd
+-REPLACE  = FALSE
+-MSG ID   = 1
+-VOICE ID = 16121001
+-XAMSG:
+ボク「アイス、みんなに内緒で
+ 食べてたの?」
+--------------------------
+0x1b XWT   : 
+0x15 ANM   : 220c3cff1400
+0x1e WAT   : 0a00
+0x10 XAMSG : 10cd3a98023a0ccd
+-REPLACE  = FALSE
+-MSG ID   = 2
+-VOICE ID = 16121002
+-XAMSG:
+光「…うん」
+--------------------------
+0x19 AWT   : 0c00
+0x15 ANM   : 070c3cff1400
+0x1b XWT   : 
+0x1d WIN   : 0100
+0x1e WAT   : 1e00
+0x3  JMP   : 1600
+0x1d WIN   : 0000
+0x10 XAMSG : 10cd3a98033a0ccd
+-REPLACE  = FALSE
+-MSG ID   = 3
+-VOICE ID = 16121003
+-XAMSG:
+光「この家、ドアが開いて
+ 判ったんだけど
+ 意外に広いんだね… 」
+--------------------------
+0x15 ANM   : 210c3cfe1400
+0x1e WAT   : b400
+0x15 ANM   : 1e0c3cfe3c00
+0x1b XWT   : 
+0x1d WIN   : 0100
+0x15 ANM   : 230c3cfe1400
+0x15 ANM   : 01003cfe1400
+0xf  SE    : 00090050cdcd
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x3784:15 ---
+0x0  POS   : 93011700c601a8f410010600
+0x18 END   : 
+
+--- MAP_RIP\M_C13000\1.bin:0x3868:16 ---
+0x2  IPROG : 1b000200
+0x5  JMPE  : 22006a000800
+0x5  JMPE  : 15006a001300
+0x5  JMPE  : 11006a001500
+0x5  JMPE  : 1d000f000100
+0x0  POS   : f2011500dd006e071c010601
+0x3  JMP   : 1200
+0x0  POS   : a70100002201e7f903010603
+0x3  JMP   : 0900
+0x0  POS   : c20100000b01f8f809010b14
+0x18 END   : 

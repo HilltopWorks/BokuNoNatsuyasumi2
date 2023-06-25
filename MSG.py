@@ -770,6 +770,16 @@ def testFind(string):
     print(hex)
     return hex
 
+
+def testTextToHex(string):
+    dict= readFont("font-inject.txt",0, INSERTION)
+    hex = convertTextToRaw(dict, string).hex()
+    print(hex)
+    return hex
+
+
+#testTextToHex("Testing")
+
 #testFind("はっぴい")
 #testRaw("""""")
 

@@ -8,7 +8,7 @@ import MSG
 import UNPACK
 import TIM2
 import reprint
-
+import voice
 
 MAP_PO_PATH = "boku-no-natsuyasumi-2\\m_a01000\\MAP\\en"
 IMG_PO_PATH = "boku-no-natsuyasumi-2\\fishing-msg\\IMG\\en"
@@ -42,6 +42,22 @@ def injectMAPs(compaction_map):
             MSG.injectPO(bin_path,po_path, MSG.MAP_MODE, inject_dict, compaction_map)
     return
 
+def packOnMemEvent():
+    dir = "IMG_RIP_EDITS\\data\\map\\evt\\~on_mem_event"
+    
+    msg = []
+    for filename in sorted(os.listdir(dir)):
+        f = os.path.join(dir, filename)
+        
+        if os.path.isfile(f):
+            file = open(f,'rb')
+            data = file.read()
+            msg.append(data)
+    
+    bytes = MSG.repackMsg(msg, MSG.MSG_MODE)
+    open("IMG_RIP_EDITS\\data\\map\\evt\on_mem_event.bin", "wb").write(bytes)
+    return
+
 def injectIMGs(compaction_map):
     for img_msg in MSG.IMG_MSG_FILES:
         po_path = os.path.join(IMG_PO_PATH, img_msg + ".po")
@@ -61,6 +77,8 @@ def injectIMGs(compaction_map):
         bin_path = os.path.join(IMG_EDITS_DIR, img_msg)
         print("Injecting OFFSET ONLY IMG script:", img_msg)
         MSG.injectPO(bin_path,po_path, MSG.OFFSET_ONLY_MODE, inject_dict, compaction_map)
+    
+    packOnMemEvent()
     return
 
 def build_ISO(input, output):
@@ -134,6 +152,8 @@ def insertAllAdditions():
     fixFishOnMem()
     return
 
+
+
 def build(mode):
     if mode > 0:
         #Pull text from weblate
@@ -166,7 +186,11 @@ def build(mode):
         #Apply MAP ASM
         print("____BUILD: Applying MAP ASM patches")
         subprocess.call(['armips.exe', 'map.asm'])
-
+        
+        #Apply Event Scripts
+        print("____BUILD: Applying event scripts")
+        voice.applyEventScripts()
+        
         #Generate bin files
         print("____BUILD: Packing MAP files")
         UNPACK.packMaps("MAP_RIP_EDITS","ISO_EDITS\\map")
@@ -191,6 +215,7 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = ASM_ONLY
+mode = FULL
+
 build(mode)
 

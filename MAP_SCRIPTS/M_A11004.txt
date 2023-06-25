@@ -1,0 +1,706 @@
+
+--- MAP_RIP\M_A11004\1.bin:0xf4:0 ---
+0x6  PROG  : 32000000
+0x4  JMPM  : 1e0042303300
+0xa  MAP   : 000042303300ffff0000
+0x1e WAT   : 0500
+0x15 ANM   : 30003c000a00
+0x1e WAT   : 0c00
+0x1f MWT   : 0000
+0xf  SE    : 0009007fcdcd
+0xb  CMAP  : 42303300
+0xd  CMWT  : 
+0x3  JMP   : 2d00
+0xa  MAP   : 000041313100ffff0000
+0x17 LOOK  : 6c00000078000014
+0x15 ANM   : 30003c000a00
+0xf  SE    : 0005007fcdcd
+0x1e WAT   : 0c00
+0x1f MWT   : 0000
+0xb  CMAP  : 41313100
+0xd  CMWT  : 
+0x15 ANM   : 30003c000000
+0x1e WAT   : 0100
+0xf  SE    : 0009007fcdcd
+0x15 ANM   : 01003c000a00
+0x1e WAT   : 0a00
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x1a8:1 ---
+0x2  IPROG : 34000600
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x12 XA    : 01cd70170000ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600000
+--------------------------
+0x1b XWT   : 
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x25c:2 ---
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x16 BGANM : 0600
+0x12 XA    : 01cd71170001ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600100
+--------------------------
+0x1b XWT   : 
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x310:3 ---
+0x2  IPROG : 34000700
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x12 XA    : 01cd72170002ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600200
+--------------------------
+0x1b XWT   : 
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x3c4:4 ---
+0x2  IPROG : 34000800
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x12 XA    : 01cd73170003ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600300
+--------------------------
+0x1b XWT   : 
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x478:5 ---
+0x2  IPROG : 34000900
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x12 XA    : 01cd74170004ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600400
+--------------------------
+0x1b XWT   : 
+0x13 FLAG  : 1b000100
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x530:6 ---
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x16 BGANM : 0a00
+0x12 XA    : 01cd75170005ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600500
+--------------------------
+0x1b XWT   : 
+0x16 BGANM : 6e00
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x5e8:7 ---
+0x2  IPROG : 34000b00
+0x2  IPROG : 1b000000
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x12 XA    : 01cd76170006ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600600
+--------------------------
+0x1b XWT   : 
+0x5  JMPE  : 04006a000200
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x6a4:8 ---
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x6  PROG  : 46000100
+0x16 BGANM : 0500
+0x12 XA    : 01cd77170007ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600700
+--------------------------
+0x1b XWT   : 
+0x16 BGANM : 6900
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x7fc:9 ---
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x6  PROG  : 46000100
+0x16 BGANM : 0400
+0x12 XA    : 01cd78170008ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600800
+--------------------------
+0x1b XWT   : 
+0x16 BGANM : 6800
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x954:10 ---
+0x4  JMPM  : 100041333600
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x3  JMP   : 1d00
+0x15 ANM   : 01003cff1400
+0x17 LOOK  : e9000000e8fe0014
+0x1f MWT   : 0000
+0x15 ANM   : 14003cfe1400
+0x1e WAT   : 0a00
+0xf  SE    : 0007017fcdcd
+0x19 AWT   : 0000
+0x15 ANM   : 0a003cfe1400
+0x2  IPROG : 46000000
+0x6  PROG  : 46000100
+0x16 BGANM : 0300
+0x12 XA    : 01cd79170009ffcd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 01600900
+--------------------------
+0x1b XWT   : 
+0x16 BGANM : 6700
+0x6  PROG  : 46000000
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0xaac:11 ---
+0x15 ANM   : 0a003cff1400
+0x17 LOOK  : 5bfe000069020010
+0x1e WAT   : 1400
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『ここに来る途中、潮館の船の
+ 待合室に貼ってあったのと
+ 同じ地図… 』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 6500
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0xb54:12 ---
+0x17 LOOK  : 34000000a7020010
+0x1f MWT   : 0000
+0x15 ANM   : 0a003cff1400
+0x1e WAT   : 1400
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『テレビの上に
+ 民芸品が飾ってある』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 6500
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0xbdc:13 ---
+0x2  IPROG : 47000000
+0x5  JMPE  : 060041010000
+0x3  JMP   : 0400
+0x3  JMP   : 0f01
+0x15 ANM   : 30003cff1400
+0x17 LOOK  : 8bff0000eeff0010
+0x1e WAT   : 1400
+0x5  JMPE  : 180041010100
+0x5  JMPE  : 320041010200
+0x5  JMPE  : 4c0041010300
+0x5  JMPE  : 660041010400
+0x5  JMPE  : 800041010500
+0x5  JMPE  : 9a0041010600
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『おばちゃんのおにぎりが
+ 一個あります …食べますか?』
+--------------------------
+0x28 MSGWT : 3c00
+0x24 SELECT: 00000100
+-REPLACE  = FALSE
+-MSG ID   = 1
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 6500
+0x5  JMPE  : a500ff000100
+0x6  PROG  : 20001000
+0x6  PROG  : 2a00bffe
+0x6  PROG  : 1f000f00
+0x3  JMP   : a000
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000020000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 2
+-MSG:
+『おばちゃんのおにぎりが
+ 二個あります …食べますか?』
+--------------------------
+0x28 MSGWT : 3c00
+0x24 SELECT: 00000300
+-REPLACE  = FALSE
+-MSG ID   = 3
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 6500
+0x5  JMPE  : 8700ff000100
+0x6  PROG  : 20001100
+0x6  PROG  : 2a00bffe
+0x6  PROG  : 1f001000
+0x3  JMP   : 8200
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000040000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 4
+-MSG:
+『おばちゃんのおにぎりが
+ 三個あります …食べますか?』
+--------------------------
+0x28 MSGWT : 3c00
+0x24 SELECT: 00000500
+-REPLACE  = FALSE
+-MSG ID   = 5
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 6500
+0x5  JMPE  : 6900ff000100
+0x6  PROG  : 20001200
+0x6  PROG  : 2a00bffe
+0x6  PROG  : 1f001100
+0x3  JMP   : 6400
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000060000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 6
+-MSG:
+『おばちゃんのおにぎりが
+ 四個あります …食べますか?』
+--------------------------
+0x28 MSGWT : 3c00
+0x24 SELECT: 00000700
+-REPLACE  = FALSE
+-MSG ID   = 7
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 6500
+0x5  JMPE  : 4b00ff000100
+0x6  PROG  : 20001300
+0x6  PROG  : 2a00bffe
+0x6  PROG  : 1f001200
+0x3  JMP   : 4600
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000080000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 8
+-MSG:
+『おばちゃんのおにぎりが
+ 五個あります …食べますか?』
+--------------------------
+0x28 MSGWT : 3c00
+0x24 SELECT: 00000900
+-REPLACE  = FALSE
+-MSG ID   = 9
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 6500
+0x5  JMPE  : 2d00ff000100
+0x6  PROG  : 20001400
+0x6  PROG  : 2a00bffe
+0x6  PROG  : 1f001300
+0x3  JMP   : 2800
+0x1d WIN   : 6400
+0x11 MSG   : 00cd00000a0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 10
+-MSG:
+『おばちゃんのおにぎりが
+ 六個あります …食べますか?』
+--------------------------
+0x28 MSGWT : 3c00
+0x24 SELECT: 00000b00
+-REPLACE  = FALSE
+-MSG ID   = 11
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 6500
+0x5  JMPE  : 0f00ff000100
+0x6  PROG  : 20001500
+0x6  PROG  : 2a00bffe
+0x6  PROG  : 1f001400
+0x3  JMP   : 0a00
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x3  JMP   : 3000
+0x15 ANM   : 27003cff1400
+0x17 LOOK  : 1d0c008000000010
+0x1e WAT   : 1400
+0x1d WIN   : 6400
+0x11 MSG   : 00cd00000c0000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 12
+-MSG:
+『ボクはおばちゃんのおにぎりを
+ 食べた!』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 6500
+0x17 LOOK  : d8ff008000000010
+0x1f MWT   : 0000
+0x23 FACE  : 0d00
+0x15 ANM   : 13003cff1400
+0x1e WAT   : 3c00
+0x23 FACE  : 0000
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x10a0:14 ---
+0x17 LOOK  : 44ff000086ff0010
+0x1f MWT   : 0000
+0x15 ANM   : 30003cff1400
+0x1e WAT   : 1400
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『ほうじ茶の匂いがする』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 6500
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x111c:15 ---
+0x4  JMPM  : ec0041313100
+0x17 LOOK  : bcfb008000000014
+0x7  GO    : 0500a7ff0000e0010000
+0x15 ANM   : 02001efe0000
+0x1f MWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x1e WAT   : 1400
+0x15 ANM   : 30003cfe1400
+0xf  SE    : 00090040cdcd
+0x1e WAT   : 1400
+0x2  IPROG : 1f000700
+0x5  JMPE  : 6e0069000100
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『小さな赤い時計が置いてある
+ この時計を借りますか?』
+--------------------------
+0x28 MSGWT : 1e00
+0x24 SELECT: 00000100
+-REPLACE  = FALSE
+-MSG ID   = 1
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 6500
+0x5  JMPE  : 1000ff000200
+0x15 ANM   : 01003cff1400
+0xf  SE    : 00090040cdcd
+0x1e WAT   : 1400
+0x3  JMP   : e300
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000020000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 2
+-MSG:
+『ボクはこの時計を
+ しばらく借りることにした』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 6500
+0x15 ANM   : 0b003cfe1400
+0xf  SE    : 00090040cdcd
+0x1e WAT   : 1400
+0x15 ANM   : 25003cfe1400
+0x1e WAT   : 2800
+0x6  PROG  : 20000700
+0x13 FLAG  : 69000100
+0xf  SE    : 00010b7fcdcd
+0x1e WAT   : 2300
+0x15 ANM   : 0b003cfe1400
+0x1e WAT   : 1e00
+0x15 ANM   : 01003cfe1400
+0x17 LOOK  : 56ff008000000014
+0x1e WAT   : 1400
+0x23 FACE  : 0b00
+0x15 ANM   : 130028fe0a00
+0x1e WAT   : 2d00
+0x15 ANM   : 01003cfe1400
+0x1e WAT   : 0a00
+0x23 FACE  : 0000
+0x3  JMP   : 9800
+0x2  IPROG : 20000700
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000030000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 3
+-MSG:
+『ここから借りた時計を
+ 返しますか?』
+--------------------------
+0x28 MSGWT : 3c00
+0x24 SELECT: 00000400
+-REPLACE  = FALSE
+-MSG ID   = 4
+-SELECT:
+いいえ
+はい{STOP}
+--------------------------
+0x1d WIN   : 6500
+0x5  JMPE  : 0e00ff000200
+0x15 ANM   : 01003cfe1400
+0xf  SE    : 00090040cdcd
+0x3  JMP   : 7800
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000050000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 5
+-MSG:
+『ボクは時計を返した』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 6500
+0x15 ANM   : 0b003cfe1400
+0xf  SE    : 00090040cdcd
+0x1e WAT   : 1400
+0x15 ANM   : 25003cfe1400
+0x1e WAT   : 2800
+0x6  PROG  : 1f000700
+0x13 FLAG  : 69000000
+0xf  SE    : 00010b7fcdcd
+0x1e WAT   : 2300
+0x15 ANM   : 0b003cfe1400
+0x1e WAT   : 1e00
+0x15 ANM   : 01003cfe1400
+0x1e WAT   : 1400
+0x3  JMP   : 4200
+0x5  JMPE  : 220069000100
+0x2  IPROG : 1b000000
+0x5  JMPE  : 0c006a000000
+0x5  JMPE  : 0d006a000100
+0x5  JMPE  : 0e006a000200
+0x2  IPROG : 1f001600
+0x3  JMP   : 2a00
+0x2  IPROG : 1f000f00
+0x3  JMP   : 2500
+0x2  IPROG : 1f001800
+0x3  JMP   : 2000
+0x2  IPROG : 1b000000
+0x5  JMPE  : 0c006a000000
+0x5  JMPE  : 0d006a000100
+0x5  JMPE  : 0e006a000200
+0x2  IPROG : 20001600
+0x3  JMP   : 0c00
+0x2  IPROG : 20000f00
+0x3  JMP   : 0700
+0x2  IPROG : 20001800
+0x3  JMP   : 0200
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x1494:16 ---
+0x4  JMPM  : 0d0041313200
+0x0  POS   : fdfe000068ffbcf727010103
+0x3  JMP   : 0900
+0x0  POS   : f30000001504290327010103
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x1524:17 ---
+0x0  POS   : 6aff0000a000e8f625010202
+0x17 LOOK  : 1c02008000000014
+0x7  GO    : 0500a9ff00004f010000
+0x15 ANM   : 02001efe0000
+0x1f MWT   : 0000
+0x15 ANM   : 01003c001400
+0x5  JMPE  : 2900ffff0100
+0x13 FLAG  : ffff0100
+0x1d WIN   : 0000
+0x10 XAMSG : 0ecd327c003202cd
+-REPLACE  = FALSE
+-MSG ID   = 0
+-VOICE ID = 14021000
+-XAMSG:
+おば「ね! なかなか面白い
+ お坊さんだったでしょ」
+--------------------------
+0x15 ANM   : 2a023cff1400
+0x1e WAT   : 3c00
+0x15 ANM   : 25023cff1400
+0x1e WAT   : 7800
+0x15 ANM   : 130032fe0a00
+0x1e WAT   : 3200
+0x15 ANM   : 01003cff1400
+0x1b XWT   : 
+0x1d WIN   : 0100
+0x3  JMP   : 2200
+0x1d WIN   : 0000
+0x10 XAMSG : 0ecd327c013202cd
+-REPLACE  = FALSE
+-MSG ID   = 1
+-VOICE ID = 14021001
+-XAMSG:
+おば「そういえば去年は{WAIT=0x71}
+ お坊さんやってるのが
+ 楽しくてしょうがないって
+ 言ってたな～ 」
+--------------------------
+0x15 ANM   : 26023cff2800
+0x1e WAT   : 4600
+0x15 ANM   : 25023cff2800
+0x1e WAT   : 7800
+0x15 ANM   : 29023cff1400
+0x1e WAT   : 3c00
+0x15 ANM   : 25023cff1400
+0x1b XWT   : 
+0x1d WIN   : 0100
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x16e8:18 ---
+0x0  POS   : fb003200bb014ef835010102
+0x18 END   : 
+
+--- MAP_RIP\M_A11004\1.bin:0x1764:19 ---
+0x0  POS   : ef003700f9016af917000201
+0x18 END   : 

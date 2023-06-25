@@ -1365,6 +1365,12 @@ decision_line_2_y equ 0xb4;0x58
 	.word 0x300			;w
 	.word 0x50			;h
 
+;Name/class input cursor
+.org 0x001B4F08
+	addiu a1, fp, 0x164	;Cursor X
+	addiu a2, s7, 0x8e	;Cursor Y
+
+
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
