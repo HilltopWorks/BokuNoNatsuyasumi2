@@ -413,6 +413,77 @@ def applyEventScripts():
         
     return
 
+
+def genSumoVoiceBin():
+    TEXT_PATH = "VOICE\\sumo_script.txt"
+    BIN_PATH = "VOICE\\sumo_msg.bin"
+    msg_mode = MSG.MSG_MODE
+    
+    text_file = open(TEXT_PATH, "r", encoding="utf8")
+
+    voice_idx = 0
+    msgs = {0:[],1:[],2:[],3:[],4:[],5:[]}
+    
+    MAX_ENTRIES = 17
+    current_group = 0
+    dict= MSG.readFont("font-inject-menus.txt",0, MSG.INSERTION)
+    while True:
+        headerLine = text_file.readline()
+        if not headerLine:
+            #EOF
+            break
+        if not headerLine.startswith("&"):
+            #Filler line
+            continue
+        
+        voice_id_nub = headerLine[1:].rstrip("\n")
+        
+        group_number = int(headerLine[1:2])
+        entry_number = int(headerLine[2:4])
+        
+        string_buffer = ""
+
+        while True:
+            cursor = text_file.tell()
+            next_line = text_file.readline()
+            if not next_line:
+                #EOF
+                break
+            if not next_line.startswith("&"):
+                #Text line
+                string_buffer += next_line
+                continue
+            else:
+                #Next entry reached
+                text_file.seek(cursor)
+                break
+        
+        string_buffer = string_buffer.rstrip("\n")
+        
+        line = MSG.convertTextToRaw(dict, string_buffer)
+        msgs[group_number].append(line)
+        current_group = group_number
+        #print("Adding sumo line ", voice_idx)
+        
+        
+        
+        voice_idx += 1
+    msg = []
+    for x in range(6):
+        n_blanks = MAX_ENTRIES - len(msgs[x])
+        for y in range(n_blanks):
+            msgs[x].append(b'')
+        msg += msgs[x]
+    msg_bin = MSG.repackMsg(msg, msg_mode)
+    out_file = open(BIN_PATH, "wb")
+    out_file.write(msg_bin)
+    out_file.close()
+    text_file.close()
+    return
+
+
+
+#genSumoVoiceBin()    
 #applyEventScripts()
 #eventScriptToBin("MISC\\voice_logs\\M_A11103.txt", "MAP_RIP\\M_A11103\\1.bin")
 #logAllMapEvents()

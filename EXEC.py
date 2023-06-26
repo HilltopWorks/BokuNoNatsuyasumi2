@@ -191,13 +191,16 @@ def build(mode):
         print("____BUILD: Applying event scripts")
         voice.applyEventScripts()
         
+        
         #Generate bin files
         print("____BUILD: Packing MAP files")
         UNPACK.packMaps("MAP_RIP_EDITS","ISO_EDITS\\map")
         print("____BUILD: Packing IMG")
         UNPACK.packIMG("IMG_RIP_EDITS", "ISO_EDITS")
     
-
+    #Generate sumo text
+    print("____BUILD: Generating sumo text bin")
+    voice.genSumoVoiceBin()  
     #Apply EXE ASM
     print("____BUILD: Applying ASM patches")
     os.remove("ISO_EDITS\\scps_150.26")
@@ -215,7 +218,7 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = FULL
+mode = ASM_ONLY
 
 build(mode)
 

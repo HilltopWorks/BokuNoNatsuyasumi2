@@ -1,15 +1,97 @@
 .ps2
 .erroronwarning on
 
-.open "ISO_EDITS\boku2.crc",0
+; ----------------         CRC AREA START               --------------------
+.open "ISO_EDITS\boku2.crc",0x6fc7b0
 ; ################		   Load vwf table				####################
-.definelabel crc_hash_offset, 0x16374
+.definelabel crc_hash_offset, 0x6fc7b0 + 0x16374
 .org crc_hash_offset
 .import "font_kerning.bin"
+.align
+; ################		   Sumo voice	    			####################
+sumo_msg:
+.import "VOICE\sumo_msg.bin"
+
+.align
+
+.definelabel sumo_voice, 0x0192360
+.definelabel sumo_voice_is_on, 0x0354c44
+.definelabel current_sumo_voice_id, 0x0354c68
+.definelabel sumo_screen_x, 0x00362274
+.definelabel sumo_screen_y, 0x00364928
+.definelabel print, 0x015a418
+sumo_sub_x equ 0x80
+sumo_sub_y equ 0x20
+ra_stash equ 0x0295610
+voice_and_sub:
+	sw ra, ra_stash
+	jal sumo_voice			;Do the regular JAL we're adding to
+	nop
+	;if !mem_sumo_voice_is_on{
+	;	return;
+	;}
+	lw ra, ra_stash
+	la v0, sumo_voice_is_on			;v0 = &is_voice_on
+	lw v0, 0x0(v0)					;v0 = is_voice_on
+	li v1, 0xff						;v1 = voice_on_code
+	bnel v0, v1, voice_and_sub_end	;GOTO end if voice off
+	nop
+	;uint id = * (mem_current_sumo_voice_id + 4) 		//i.e. "2514"
+	la a0, current_sumo_voice_id	;a0 = &current_sumo_voice_id
+	lw v0, 0x4(a0)					;SET v0 = current_sumo_voice_id last 4 digits 
+	nop
+	;char group_idx = (id & 0x00000f00) >> 8 	//i.e. 5
+	andi v1, v0, 0x0f00					;SET v1 = group id 
+	srl v1, 8
+	;char entry_idx_ones =  id & 0x0f000000 >>24		//i.e. 4
+	li a0, 0x0f000000				;a0 = group mask
+	and a0, v0, a0					;SET a0 = entry ones
+	srl a0, 24
+	;char entry_idx_tens = (id & 0x00000f00)>>8 	//i.e. 1
+	li a1, 0x000f0000
+	and a1, v0, a1
+	srl a1, 16						;SET a1 = entry tens
+	;int entry_idx = entry_idx_ones + 10*entry_idx_tens
+	li a2, 0xA						;a2 = 10
+	mult a2, a1						;
+	mflo a1							;SET a1 = entry tens offset
+	addu a0, a0, a1					;SET a0 = entry_idx, FREE a1, v0
+									;SETS v1 = group idx, a0 = entry_idx
+	
+	;int text_file_idx = (group_idx * 17) + entry_idx
+	li v0, 17
+	mult v1, v0
+	mflo v1							
+	addu a0, v1, a0					;SET a0 = text_file_idx FREE v1, a1
+	
+	;char* text_base = SUMO_TEXT_BASE
+	li v0, sumo_msg			;SET v0 = text_base
+	;//0x015a418 void print(char *text_base_param,undefined8 line_number,uint max_newlines,int X,uint Y,
+	;//          	char is_drop_shadow,char TEXT_DIRECTION)
+	addiu a1, a0, 0						;param 2 text_line_idx
+	addiu a0, v0, 0						;param 1 text_base
+	li a2, 0x20						;param 3 max_newlines
+	li a3, sumo_sub_x				;param 4 subtitle X
+	li t0, sumo_sub_y				;param 5 subtitle Y
+	li t1, 1						;param 6 drop shadow
+	jal print
+	li t2, 0						;param 7 horizontal
+	lw ra, ra_stash
+	
+voice_and_sub_end:
+	jr ra
+	nop
 
 .close
 
+
+; ----------------         CRC AREA END                 --------------------
+
 .open "ISO_EDITS\scps_150.26", 0xFF000
+
+.org 0x001CF15C
+	jal voice_and_sub
+
 
 ; ################         Enable debug mode            ####################
 .org 0x020a970
