@@ -460,7 +460,7 @@ def genSumoVoiceBin():
         
         string_buffer = string_buffer.rstrip("\n")
         
-        line = MSG.convertTextToRaw(dict, string_buffer)
+        line = MSG.convertTextToRaw(dict, string_buffer, alt_mode=True)
         msgs[group_number].append(line)
         current_group = group_number
         #print("Adding sumo line ", voice_idx)

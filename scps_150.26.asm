@@ -20,9 +20,10 @@ sumo_msg:
 .definelabel sumo_screen_x, 0x00362274
 .definelabel sumo_screen_y, 0x00364928
 .definelabel set_color, 0x0015a2d0
-.definelabel print, 0x015a418
-sumo_sub_x equ 0x80
-sumo_sub_y equ 0x20
+.definelabel print, 0x0015a3f8
+.definelabel print_subs, 0x0019d1e8
+sumo_sub_x equ 0xC0
+sumo_sub_y equ 0x18
 ra_stash equ 0x0295610
 voice_and_sub:
 	sw ra, ra_stash
@@ -39,7 +40,7 @@ voice_and_sub:
 	nop
 	
 	;SET_COLOR(WHITE)
-	li a0, 0xFF				;Set font color white
+	li a0, 0xFF						;Set font color white
 	li a1, 0xFF
 	li a2, 0xFF
 	jal set_color
@@ -50,7 +51,7 @@ voice_and_sub:
 	lw v0, 0x4(a0)					;SET v0 = current_sumo_voice_id last 4 digits 
 	nop
 	;char group_idx = (id & 0x00000f00) >> 8 	//i.e. 5
-	andi v1, v0, 0x0f00					;SET v1 = group id 
+	andi v1, v0, 0x0f00				;SET v1 = group id 
 	srl v1, 8
 	;char entry_idx_ones =  id & 0x0f000000 >>24		//i.e. 4
 	li a0, 0x0f000000				;a0 = group mask
@@ -74,17 +75,17 @@ voice_and_sub:
 	addu a0, v1, a0					;SET a0 = text_file_idx FREE v1, a1
 	
 	;char* text_base = SUMO_TEXT_BASE
-	li v0, sumo_msg			;SET v0 = text_base
+	li v0, sumo_msg					;SET v0 = text_base
 	;//0x015a418 void print(char *text_base_param,undefined8 line_number,uint max_newlines,int X,uint Y,
 	;//          	char is_drop_shadow,char TEXT_DIRECTION)
-	addiu a1, a0, 0						;param 2 text_line_idx
-	addiu a0, v0, 0						;param 1 text_base
-	li a2, 0x4						;param 3 max_newlines
-	li a3, sumo_sub_x				;param 4 subtitle X
-	li t0, sumo_sub_y				;param 5 subtitle Y
-	li t1, 1						;param 6 drop shadow
+	
+	addiu a1, a0, 0					;param 2 text_line_idx
+	addiu a0, v0, 0					;param 1 text_base
+	li a2, sumo_sub_x				;param 3 subtitle X
+	li a3, sumo_sub_y				;param 4 subtitle Y
+	li t0, 1						;param 5 drop shadow
 	jal print
-	li t2, 0						;param 7 horizontal
+	li t1, 0						;param 6 horizontal
 	
 	
 voice_and_sub_end:
@@ -728,9 +729,9 @@ vert_menu_y_dist equ 0xF
 	addiu s3, mfw	;Vert to hori
 
 .org 0x0019d210		;Whiten text
-	addiu a0, 0x255	
-	addiu a1, 0x255
-	addiu a2, 0x255
+	li a0, 0xFF	
+	li a1, 0xFF
+	li a2, 0xFF
 
 underwater_spacing equ 0x18
 
