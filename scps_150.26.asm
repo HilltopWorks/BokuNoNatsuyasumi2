@@ -19,6 +19,7 @@ sumo_msg:
 .definelabel current_sumo_voice_id, 0x0354c68
 .definelabel sumo_screen_x, 0x00362274
 .definelabel sumo_screen_y, 0x00364928
+.definelabel set_color, 0x0015a2d0
 .definelabel print, 0x015a418
 sumo_sub_x equ 0x80
 sumo_sub_y equ 0x20
@@ -27,15 +28,23 @@ voice_and_sub:
 	sw ra, ra_stash
 	jal sumo_voice			;Do the regular JAL we're adding to
 	nop
+
 	;if !mem_sumo_voice_is_on{
 	;	return;
 	;}
-	lw ra, ra_stash
 	la v0, sumo_voice_is_on			;v0 = &is_voice_on
 	lw v0, 0x0(v0)					;v0 = is_voice_on
 	li v1, 0xff						;v1 = voice_on_code
 	bnel v0, v1, voice_and_sub_end	;GOTO end if voice off
 	nop
+	
+	;SET_COLOR(WHITE)
+	li a0, 0xFF				;Set font color white
+	li a1, 0xFF
+	li a2, 0xFF
+	jal set_color
+	li a3, 0x7F
+
 	;uint id = * (mem_current_sumo_voice_id + 4) 		//i.e. "2514"
 	la a0, current_sumo_voice_id	;a0 = &current_sumo_voice_id
 	lw v0, 0x4(a0)					;SET v0 = current_sumo_voice_id last 4 digits 
@@ -70,15 +79,16 @@ voice_and_sub:
 	;//          	char is_drop_shadow,char TEXT_DIRECTION)
 	addiu a1, a0, 0						;param 2 text_line_idx
 	addiu a0, v0, 0						;param 1 text_base
-	li a2, 0x20						;param 3 max_newlines
+	li a2, 0x4						;param 3 max_newlines
 	li a3, sumo_sub_x				;param 4 subtitle X
 	li t0, sumo_sub_y				;param 5 subtitle Y
 	li t1, 1						;param 6 drop shadow
 	jal print
 	li t2, 0						;param 7 horizontal
-	lw ra, ra_stash
+	
 	
 voice_and_sub_end:
+	lw ra, ra_stash
 	jr ra
 	nop
 
