@@ -1,0 +1,253 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"PO-Revision-Date: 2023-04-16 08:25+0000\n"
+"Last-Translator: Hilltop <hilltopmailer@gmail.com>\n"
+"Language-Team: img (generated) <https://translations.yuvi.app/projects/"
+"boku-no-natsuyasumi-2/techniquemsg/img/>\n"
+"Language: IMG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12.2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Table:0-Line:0
+msgid "両者、引き分け\n{STOP}"
+msgstr ""
+"Draw\n"
+"{STOP}"
+
+#. Table:0-Line:1
+msgid "押し出し\n {STOP}"
+msgstr ""
+"Oshidashi\nFrontal Push Out"
+"{STOP}"
+
+#. Table:0-Line:2
+msgid "スタミナ勝ち\n {STOP}"
+msgstr ""
+"Stamina\n"
+"{STOP}"
+
+#. Table:0-Line:3
+msgid "自爆\n {STOP}"
+msgstr ""
+"Self-destruct\n"
+"{STOP}"
+
+#. Table:0-Line:4
+msgid "巴投げ\n{STOP}"
+msgstr ""
+"Tomoenage\nCircular Throw"
+"{STOP}"
+
+#. Table:0-Line:5
+msgid "首投げ\n{STOP}"
+msgstr ""
+"Kubinage\nNeck Throw"
+"{STOP}"
+
+#. Table:0-Line:6
+msgid "張り手\n{STOP}"
+msgstr ""
+"Harite\nPalm Slap"
+"{STOP}"
+
+#. Table:0-Line:7
+msgid "しっぺ\n{STOP}"
+msgstr ""
+"Wrist Slap\n"
+"{STOP}"
+
+#. Table:0-Line:8
+msgid "足引き\n{STOP}"
+msgstr ""
+"Leg pull\n"
+"{STOP}"
+
+#. Table:0-Line:9
+msgid "つっぱり\n {STOP}"
+msgstr ""
+"Tsuppari\nThrusting Strike"
+"{STOP}"
+
+#. Table:0-Line:10
+msgid "つり出し\n {STOP}"
+msgstr ""
+"Tsuridashi\nFrontal Lift Out"
+"{STOP}"
+
+#. Table:0-Line:11
+msgid "大張り手\n {STOP}"
+msgstr ""
+"Dai Harite\nGiga Palm Slap"
+"{STOP}"
+
+#. Table:0-Line:12
+msgid "突き出し\n {STOP}"
+msgstr ""
+"Tsukidashi\nFrontal Thrust Out"
+"{STOP}"
+
+#. Table:0-Line:13
+msgid "カサ回し\n {STOP}"
+msgstr ""
+"Kasa Mawashi\nSpin Toss"
+"{STOP}"
+
+#. Table:0-Line:14
+msgid "タイマン\n {STOP}"
+msgstr ""
+"Mano-a-mano\n"
+"{STOP}"
+
+#. Table:0-Line:15
+msgid "サバ折り\n {STOP}"
+msgstr ""
+"Saba-ori\nForward Force Down"
+"{STOP}"
+
+#. Table:0-Line:16
+msgid "上手投げ\n {STOP}"
+msgstr ""
+"Uwatenage\nOver Arm Throw"
+"{STOP}"
+
+#. Table:0-Line:17
+msgid "叩きつけ\n {STOP}"
+msgstr ""
+"Powerslam\n"
+"{STOP}"
+
+#. Table:0-Line:18
+msgid "うっちゃり\n{STOP}"
+msgstr ""
+"Utchari\nBackward Pivot Throw"
+"{STOP}"
+
+#. Table:0-Line:19
+msgid "がぶりより\n{STOP}"
+msgstr ""
+"Gaburi Yori\nTorso Push"
+"{STOP}"
+
+#. Table:0-Line:20
+msgid "一本背負い\n{STOP}"
+msgstr ""
+"Ipponzeoi\nOne-Armed Shoulder Throw"
+"{STOP}"
+
+#. Table:0-Line:21
+msgid "弾き飛ばし\n{STOP}"
+msgstr ""
+"Knock down\n"
+"{STOP}"
+
+#. Table:0-Line:22
+msgid "やりすごし\n{STOP}"
+msgstr ""
+"Overreach\n"
+"{STOP}"
+
+#. Table:0-Line:23
+msgid "すそはらい\n{STOP}"
+msgstr ""
+"Suso-Harai\nRear Foot Sweep"
+"{STOP}"
+
+#. Table:0-Line:24
+msgid "すくい投げ\n{STOP}"
+msgstr ""
+"Sukui Nage\nScooping Throw"
+"{STOP}"
+
+#. Table:0-Line:25
+msgid "ぶちかまし\n{STOP}"
+msgstr ""
+"Buchikamashi\nFace Strike"
+"{STOP}"
+
+#. Table:0-Line:26
+msgid "あびせ倒し\n{STOP}"
+msgstr ""
+"Abisetaoshi\nBackward Force-Down"
+"{STOP}"
+
+#. Table:0-Line:27
+msgid "引き落とし\n{STOP}"
+msgstr ""
+"Hikiotoshi\nHand Pull Down"
+"{STOP}"
+
+#. Table:0-Line:28
+msgid "ツノ刈り投げ\n {STOP}"
+msgstr ""
+"Horn Chopper\n"
+"{STOP}"
+
+#. Table:0-Line:29
+msgid "大ぶちかまし\n {STOP}"
+msgstr ""
+"Dai Buchikamashi\nGreat Face Strike"
+"{STOP}"
+
+#. Table:0-Line:30
+msgid "大うっちゃり\n {STOP}"
+msgstr ""
+"Dai Utchari\nGreat Backward Pivot Throw"
+"{STOP}"
+
+#. Table:0-Line:31
+msgid "どぶちかまし\n {STOP}"
+msgstr ""
+"Illegal Strike\n"
+"{STOP}"
+
+#. Table:0-Line:32
+msgid "ひっくり返し\n {STOP}"
+msgstr ""
+"Overturn\n"
+"{STOP}"
+
+#. Table:0-Line:33
+msgid "プリマドンナ\n {STOP}"
+msgstr ""
+"Prima Donna\n"
+"{STOP}"
+
+#. Table:0-Line:34
+msgid "自分ボンバ一\n {STOP}"
+msgstr ""
+"Blunder\n"
+"{STOP}"
+
+#. Table:0-Line:35
+msgid "うっちゃり投げ\n{STOP}"
+msgstr ""
+"Utchari\nBackward Pivot Throw"
+"{STOP}"
+
+#. Table:0-Line:36
+msgid "ブレンバスタ一\n{STOP}"
+msgstr ""
+"Brain Buster\n"
+"{STOP}"
+
+#. Table:0-Line:37
+msgid "カマきりバスタ一\n {STOP}"
+msgstr ""
+"Mantis Buster\n"
+"{STOP}"
+
+#. Table:0-Line:38
+msgid "グレ一トつっぱり\n {STOP}"
+msgstr ""
+"Great Tsuppari\nGreat Thrusting Strike"
+"{STOP}"
+
+#. Table:0-Line:39
+msgid "フジミヤマドロップ\n{STOP}"
+msgstr ""
+"Fuji Drop\n"
+"{STOP}"
