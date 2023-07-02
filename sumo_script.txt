@@ -1,0 +1,246 @@
+&000
+I call first match!{STOP}
+
+&001
+I get to go first!{STOP}
+
+&002
+It's my turn next!{STOP}
+
+&003
+Now I get to play!{STOP}
+
+&004
+Alright, how 'bout this{BREAK}
+one?{STOP}
+
+&005
+This one oughta do it!{STOP}
+
+&006
+Ah, I've got none left.{STOP}
+
+&007
+Sorry, I'm all out.{STOP}
+
+&008
+Neither of us have any of{BREAK}
+those left.{STOP}
+
+&009
+Queen Rhino, go for it!{STOP}
+
+&010
+Hehehehe...{BREAK}
+The Great Giga-King rises{BREAK}
+to battle!{STOP}
+
+&011
+Jyaaan!{BREAK}
+Time for the main event!{BREAK}
+Presenting, my ultimate{BREAK}
+top-secret weapon!{STOP}
+
+&012
+C'mon! You gotta clobber{BREAK}
+Boku's bug!{STOP}
+
+&013
+Hehe, this one's got this{BREAK}
+in the bag!{STOP}
+
+&014
+Bro, you got this!{STOP}
+
+&100
+Wha-!
+It really did it...{STOP}
+
+&101
+Duh-gyah!{BREAK}
+Oh, fiddlesticks...{STOP}
+
+&102
+Hehe, that bug just won't{BREAK}
+cut it.{STOP}
+
+&103
+Your bug is a bit on the{BREAK}
+weenie side.{STOP}
+
+&104
+Geh! Yours is so strong!{STOP}
+
+&105
+Oh, yours learned all of{BREAK}
+its moves, huh?{STOP}
+
+&200
+Get 'em!{STOP}
+
+&201
+You can do it!{STOP}
+
+&202
+Yeah, yeah, yeah, yeah!{STOP}
+
+&203
+Woo, this might finish it!{STOP}
+
+&204
+You can do it!{STOP}
+
+&205
+Waaah! It's on the ropes!{STOP}
+
+&206
+Keep it together,{BREAK}
+you bum!{STOP}
+
+&207
+Hang in there!{STOP}
+
+&208
+Finish it!{BREAK}
+Just a little more!{STOP}
+
+&209
+Push it out!{STOP}
+
+&300
+Hehe, whaddya think of{BREAK}
+that?{STOP}
+
+&301
+Oh? I won!{STOP}
+
+&302
+Woohoo, I win!{STOP}
+
+&303
+I'm the winner!{STOP}
+
+&304
+Waah, I lost this one...{STOP}
+
+&305
+Ah, I lost.{STOP}
+
+&306
+Gah, this blows!{STOP}
+
+&307
+Aww, I wish I was better{BREAK}
+at this...{STOP}
+
+&400
+Boku, maybe you oughta{BREAK}
+try the weaker ranks.{BREAK}
+It'll give you a chance{BREAK}
+to level up your bench.{BREAK}
+You aren't getting{BREAK}
+anywhere like this!{STOP}
+
+&401
+Don't you think that{BREAK}
+last match was a little{BREAK}
+bit one-sided?{STOP}
+
+&402
+Damn, I think the{BREAK}
+sawtooth's mortal enemy{BREAK}
+might be the oni stag...{STOP}
+
+&403
+I knew a red-foot could{BREAK}
+never beat a little stag!{STOP}
+
+&404
+Aiya! My little stag{BREAK}
+turned out to be a loser!{STOP}
+
+&405
+What the-? A miyama can{BREAK}
+beat a mantis?{STOP}
+
+&406
+Fwaa, who knew a miyama{BREAK}
+could be so strong.{STOP}
+
+&407
+Aww, the giant stag I{BREAK}
+raised is a dud.{STOP}
+
+&408
+Hehe, don't forget that{BREAK}
+even the mighty fuji{BREAK}
+can still face defeat.{STOP}
+
+&409
+A shrimp like that has no{BREAK}
+chance against a female{BREAK}
+rhino!{STOP}
+
+&410
+My rhino had no shot{BREAK}
+against a beefed up bug{BREAK}
+like that...{STOP}
+
+&411
+Whoa, the awesome power{BREAK}
+of the oni stag...{STOP}
+
+&412
+I can't believe I lost{BREAK}
+with an oni stag!{STOP}
+
+&413
+Heehee, now you've tasted{BREAK}
+the power of my secret{BREAK}
+weapon!{STOP}
+
+&414
+Hehe, piece of cake!{STOP}
+
+&415
+I'm not done for yet!{STOP}
+
+&416
+I-I slipped up...{STOP}
+
+&500
+Wow! You've finally{BREAK}
+racked up ten wins on{BREAK}
+that bug!{STOP}
+
+&501
+You've gotta give it a{BREAK}
+name!{STOP}
+
+&502
+Go, go, go!{STOP}
+
+&503
+Be strong!{STOP}
+
+&504
+Oh? You've gone up a{BREAK}
+skill level!{STOP}
+
+&505
+You've discovered a new{BREAK}
+ability!{STOP}
+
+&506
+Your skill level just{BREAK}
+went up!{STOP}
+
+&507
+Which cool move did you{BREAK}
+learn?{STOP}
+
+&508
+Alright, it's a deal.{STOP}
+
+&509
+Ah, thanks for the trade!{STOP}
