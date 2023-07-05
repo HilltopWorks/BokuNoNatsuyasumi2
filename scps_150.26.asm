@@ -22,8 +22,8 @@ sumo_msg:
 .definelabel set_color, 0x0015a2d0
 .definelabel print, 0x0015a3f8
 .definelabel print_subs, 0x0019d1e8
-sumo_sub_x equ 0xC0
-sumo_sub_y equ 0x18
+sumo_sub_x equ 0x110
+sumo_sub_y equ 0x4E
 ra_stash equ 0x0295610
 voice_and_sub:
 	sw ra, ra_stash
@@ -35,14 +35,14 @@ voice_and_sub:
 	;}
 	la v0, sumo_voice_is_on			;v0 = &is_voice_on
 	lw v0, 0x0(v0)					;v0 = is_voice_on
-	li v1, 0xff						;v1 = voice_on_code
-	bnel v0, v1, voice_and_sub_end	;GOTO end if voice off
+	li v1, 0xffffffff				;v1 = voice_off_code
+	beql v0, v1, voice_and_sub_end	;GOTO end if voice off
 	nop
 	
-	;SET_COLOR(WHITE)
-	li a0, 0xFF						;Set font color white
+	;SET_COLOR(YELLOW)
+	li a0, 0xFF						;Set font color yellow
 	li a1, 0xFF
-	li a2, 0xFF
+	li a2, 0x00
 	jal set_color
 	li a3, 0x7F
 
@@ -57,7 +57,7 @@ voice_and_sub:
 	li a0, 0x0f000000				;a0 = group mask
 	and a0, v0, a0					;SET a0 = entry ones
 	srl a0, 24
-	;char entry_idx_tens = (id & 0x00000f00)>>8 	//i.e. 1
+	;char entry_idx_tens = (id & 0x000f0000)>>16 	//i.e. 1
 	li a1, 0x000f0000
 	and a1, v0, a1
 	srl a1, 16						;SET a1 = entry tens
@@ -226,8 +226,8 @@ vert_menu_y_dist equ 0xF
 	li a0, 0x136	;Big X pos
 	li a1, 0x14		;Big Y pos
 
-;.org 0x01F6180		;Rare Star Y pos
-;	li a1, 0x12
+.org 0x01F61C8		;Rare Star Y pos
+	li a1, 0x13
 
 .org 0x001f62ec
 	li a1, 0x19a	;Wins ones Y
@@ -241,6 +241,9 @@ vert_menu_y_dist equ 0xF
 	li a1, 0x19a	;Losses tens Y
 .org 0x001f6390
 	li a1, 0x19a	;Losses hundreds Y
+
+.org 0x001fb788
+	li a3, 0xff		;Shadow mess fix
 
 ;Shops
 
@@ -311,7 +314,7 @@ vert_menu_y_dist equ 0xF
 	li a0, 0x1c8	
 
 .org 0x001e9f94		;Rare star Y
-	li a1, 0x170
+	li a1, 0x172
 
 .org 0x001E9F60		;BIG Y
 	li a1, 0x190
@@ -371,6 +374,22 @@ vert_menu_y_dist equ 0xF
 .org 0x27a188		;Inject tutorial 2 BG width
 	.word 0xf8
 
+.org 0x27a1a0		;Cage is full
+	.word 0x130
+	.word 0x70
+	.word 0x113
+	.word 0x2C
+
+.org 0x0027a1e0 	;Please move from in box? bg
+	.word 0xf4
+	.word 0x58
+	.word 0xc8
+	.word 0x7c
+
+.org 0x0027a238		;Please move from in box? text
+	.word 0x107		;X
+	.word 0x63		;Y
+
 ;Insect delete confirmation
 .org 0x027a1c0		
 	.word 0x1e8		;BG coords x
@@ -416,6 +435,9 @@ vert_menu_y_dist equ 0xF
 .org 0x001f8ed0
 	addiu a1, s1, 0x2	;Date tens Y
 
+.org 0x001F8EA8
+	addiu a1, s1, 0x2	;Date ones Y
+
 .org 0x001f8f00
 	addiu a1, s1, 0x2	;Date ones Y
 
@@ -457,6 +479,9 @@ vert_menu_y_dist equ 0xF
 
 .org 0x001f8f20
 	li a1, 0x20a		;slash X
+
+.org 0x001F8B58
+	addiu a1, s0, 0x46	;Rare star Y
 
 ;Insect box screen
 
@@ -1000,6 +1025,17 @@ underwater_spacing equ 0x18
 .org 0x001ce4d0
 	li a1, 0xc8			;X Red
 
+;;Text crawl
+
+.org 0x001fb3fc			;Text spacing
+	li a0, mfw
+.org 0x001fb488
+	li a1, mfw
+.org 0x001fb4e8
+	li v0, mfw
+.org 0x001fb528
+	li a1, mfw
+
 ;Cancel bug tutorial text
 .org 0x27a1f0
 	.word 0x4b			;X
@@ -1057,6 +1093,9 @@ underwater_spacing equ 0x18
 .org 0x001cc580
 	li a1, 0xac			;Value tenths Y
 
+.org 0x001cc544	
+	li a1, 0xac			;Value tenths Y 2
+
 ;;Boku
 .org 0x001CC894			;L's X
 	li a1, 0x232
@@ -1098,8 +1137,15 @@ underwater_spacing equ 0x18
 .org 0x001CC744
 	li a1, 0x181		;Value tenths Y
 
+.org 0x001CC714
+	li a1, 0x181		;Value tenths Y 2
+
 .org 0x001cc72c
 	li a1, 0x181		;Value ones Y
+
+.org 0x001CC69C
+	li a0, 0x12C		;Rarity Star X
+	li a1, 0xEF			;Rarity Star Y
 
 ;Bug report
 .org 0x001cbe2c
@@ -1457,6 +1503,11 @@ decision_line_2_y equ 0xb4;0x58
 	.word 0x96;0x3A			;y
 	.word 0x300			;w
 	.word 0x50			;h
+; Free bug cursor
+	.word 0xf4
+	.word 0x68
+	.word 0x154
+	.word 0x68
 
 ;Name/class input cursor
 .org 0x001B4F08

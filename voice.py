@@ -413,6 +413,62 @@ def applyEventScripts():
         
     return
 
+def genSumoTextTXT(path):
+    text_file = open(path, "r")
+    text_buffer = text_file.read()
+    text_file.seek(0)
+    while True:
+        nextLine = text_file.readline()
+        
+        if not nextLine:
+            break
+        
+        if not nextLine.startswith("&"):
+            continue
+        
+        number = nextLine[1:].strip()
+        text_buffer = text_buffer.replace(number + "\n", number + "\n" + "Voice ID: " + number + " ")
+
+    return text_buffer
+
+LEFT = 0
+CENTER = 1
+RIGHT = 2
+
+LINE_LENGTH = 25
+
+def genSpaceSumoTXT(path, ALIGNMENT=LEFT):
+    if ALIGNMENT == LEFT:
+        return
+    
+    text_file = open(path, "r")
+    text_buffer = ""
+    text_file.seek(0)
+    while True:
+        nextLine = text_file.readline()
+        nextLine = nextLine.lstrip(" ")
+        if not nextLine:
+            break
+        
+        if nextLine.startswith("&"):
+            text_buffer += nextLine
+            continue
+        
+        if nextLine == "\n":
+            text_buffer += nextLine
+            continue
+        
+        length = len(nextLine[:nextLine.find("{")])
+        
+        if ALIGNMENT == CENTER:
+            spaces_to_add = (25 - length)//2
+        elif ALIGNMENT == RIGHT:
+            spaces_to_add = 25 - length
+        
+        spaced_line = " "*spaces_to_add + nextLine
+        text_buffer += spaced_line
+
+    return text_buffer
 
 def genSumoVoiceBin():
     TEXT_PATH = "VOICE\\sumo_script.txt"
@@ -482,7 +538,9 @@ def genSumoVoiceBin():
     return
 
 
-
+text = genSpaceSumoTXT("VOICE\\sumo_script.txt", RIGHT)
+text_path = open("VOICE\\sumo_script_test.txt", "w")
+text_path.write(text)
 #genSumoVoiceBin()    
 #applyEventScripts()
 #eventScriptToBin("MISC\\voice_logs\\M_A11103.txt", "MAP_RIP\\M_A11103\\1.bin")
