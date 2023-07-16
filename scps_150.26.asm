@@ -390,6 +390,13 @@ vert_menu_y_dist equ 0xF
 	.word 0x107		;X
 	.word 0x63		;Y
 
+.org 0x001EBFD4		;Please move from in box?
+	li t1, 0x0		;Hori
+.org 0x001EC018
+	li t1, 0x0
+.org 0x001ebf94
+	li t1, 0x0
+
 ;Insect delete confirmation
 .org 0x027a1c0		
 	.word 0x1e8		;BG coords x
@@ -482,6 +489,9 @@ vert_menu_y_dist equ 0xF
 
 .org 0x001F8B58
 	addiu a1, s0, 0x46	;Rare star Y
+
+.org 0x001F8DC4
+	addiu a1, s0, 0x4C	;Big/King Y
 
 ;Insect box screen
 
@@ -641,7 +651,7 @@ vert_menu_y_dist equ 0xF
 
 .org 0x0027bc08		;bg x y w h 
 	.word 0x20
-	.word 0x20
+	.word 0x28
 	.word 0x240
 	.word 0x78
 
@@ -651,11 +661,11 @@ vert_menu_y_dist equ 0xF
 	.word 0xe0		;Mid X
 	.word 0x5c		;Mid Y
 	.word 0x180		;Right X
-	.word 0x46		;Right Y
+	.word 0x72		;Right Y
 
 .org 0x0027bcd0		;Cursor
 	.word 0x2D		;Left X
-	.word 0x14		;Left Y
+	.word 0x3c		;Left Y
 	.word 0xe0		;Mid X
 	.word 0x28		;Mid Y
 	.word 0x180		;Right X
@@ -1277,22 +1287,22 @@ underwater_spacing equ 0x18
 ;item decription
 
 .org 0x001e7b04
-	li a2, 0x15A		;description X
-	li a3, 0xEC			;description Y
+	li a2, 0x158		;description X
+	li a3, 0xE6			;description Y
 
 .org 0x001E7C20
-	li a2, 0x15A		;description2 X
-	li a3, 0xEC			;description2 Y
+	li a2, 0x158		;description2 X
+	li a3, 0xE6			;description2 Y
 
 .org 0x001E798C			;Bottle caps
-	li a2, 0x15a		;X
+	li a2, 0x158		;X
 .skip 0xC
-	li a3, 0xec			;Y
+	li a3, 0xe6			;Y
 
 .org 0x001e7a60			;Photos
-	li a2, 0x15a		;X
+	li a2, 0x158		;X
 .skip 0xC
-	li a3, 0xec			;Y
+	li a3, 0xe6			;Y
 
 ;release bug from cage
 .org 0x27af18			;bg x y h w
@@ -1398,6 +1408,28 @@ underwater_spacing equ 0x18
 	lbu t0, 0x8(s0)		;Filler
 	li a1, 0x106		;Avg hundreds Y
 
+;Tackle
+
+.org 0x001F1978			;Tackle description position x,y
+	li a2, 0x36
+	li a3, 0x148
+.org 0x001f1a18
+	li a2, 0x36
+	.skip 4
+	li a3, 0x148
+.org 0x001F1D60			;Catches
+	li a2, 0x36
+	.skip 4
+	li a3, 0x148	
+
+.org 0x001F136C			;BG box
+	li t0, 0x218		;W
+	li t1, 0x42			;H
+.org 0x001f143c
+	li t0, 0x218		;W
+	.skip 4
+	li t1, 0x42			;H
+
 ;Belongings
 .org 0x001E8FE0
 	li a1, 0x24			;Header label X
@@ -1441,10 +1473,6 @@ underwater_spacing equ 0x18
 
 .org 0x001B14E8
 	li a3, 0xb2			;X count x
-
-;Bottle caps
-.org 0x001E798C
-	li a2, 0x160		;Description X
 
 ;Bike
 .org 0x0027bbd8			;BG dimensions

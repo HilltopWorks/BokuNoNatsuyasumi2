@@ -538,9 +538,9 @@ def genSumoVoiceBin():
     return
 
 
-text = genSpaceSumoTXT("VOICE\\sumo_script.txt", RIGHT)
-text_path = open("VOICE\\sumo_script_test.txt", "w")
-text_path.write(text)
+#text = genSpaceSumoTXT("VOICE\\sumo_script.txt", RIGHT)
+#text_path = open("VOICE\\sumo_script_test.txt", "w")
+#text_path.write(text)
 #genSumoVoiceBin()    
 #applyEventScripts()
 #eventScriptToBin("MISC\\voice_logs\\M_A11103.txt", "MAP_RIP\\M_A11103\\1.bin")

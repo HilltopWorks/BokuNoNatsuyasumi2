@@ -828,6 +828,7 @@ def injectAll():
     print("Copying clean IMG files before image injection...")
     for subdir, dirs, files in os.walk(IMG_GFX_FOLDER):
         for file in files:
+            
             # checking if it is a file
             ref_PNG_path = os.path.join(subdir, file)
             edit_PNG_path = ref_PNG_path.replace(IMG_GFX_FOLDER, IMG_GFX_EDITS)

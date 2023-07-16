@@ -759,7 +759,7 @@ dict2[0x8001] = "\n"
 def testRaw(hex_string):
     
     text = convertRawToText(dict2, bytes.fromhex(hex_string), alt_mode=False)
-    #print(text)
+    print(text)
     #print(text.count("END"))
     #print(hex_string.count("00 80"))
     return text
@@ -778,6 +778,9 @@ def testTextToHex(string):
     return hex
 
 
+
+testRaw("""
+""")
 #testTextToHex("Testing")
 
 #testFind("はっぴい")
