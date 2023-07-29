@@ -115,6 +115,25 @@ def unpackMapMSG(path):
 
     return msgs
 
+def unpackMapMSGVoice(path):
+    '''Converts a binary MAP MSG file into a list of MSG list objects [[Table params],[MSG LIST]]'''
+    f = open(path, 'rb')
+
+    numTables = resource.readInt(f)
+    msgs = []
+    for x in range(numTables):
+        f.seek(4 + x*0xC)
+        magic1 = resource.readInt(f)
+        tableSize = resource.readShort(f)
+        magic2 = resource.readShort(f)
+        tableOffset = resource.readShort(f)
+        f.seek(tableOffset)
+        msg = readMSG(path, tableOffset, tableSize, MAP_MODE)
+        msgs.append(msg)
+    f.close()
+
+    return msgs
+
 def unpackMSG(path, mode = MSG_MODE):
     '''Converts a binary IMG MSG file into a MSG list object '''
     tableSize = os.stat(path).st_size
@@ -351,7 +370,7 @@ def convertMapFile(path):
 #-----------OBSOLETE END---------------
 
 
-def convertToPO(path, mode):
+def convertToPO(path, mode, voice = False):
     '''Converts binary text file to .PO for Weblate'''
     dict = readFont("font.txt",0, EXTRACTION)
     dict[0x8001] = "\\n"
@@ -385,8 +404,10 @@ def convertToPO(path, mode):
                 #Skip null entries
                 msg_number += 1
                 continue
-
-            if filename in ALT_NEWLINE_FILES:
+            
+            if voice == True and isVoice(msg):
+                text = msg.decode("ascii")
+            elif filename in ALT_NEWLINE_FILES:
                 text = convertRawToText(dict, msg, alt_mode=True)
             else:
                 text = convertRawToText(dict, msg)
@@ -671,7 +692,7 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
             
             if len(raw_line) % 4 == 2:
                 #PADDING
-                #raw_line += b"\xCD\xCD"
+                raw_line += b"\xCD\xCD"
                 pass
             map[table_number][1][line_number] = raw_line
         
@@ -699,7 +720,7 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
                 raw_line = convertTextToRaw(dict, entry.msgstr,compaction_map)
             if len(raw_line) % 4 == 2:
                 #PADDING
-                #raw_line += b"\xCD\xCD"
+                raw_line += b"\xCD\xCD"
                 pass
             msg[line_number] = raw_line
 
@@ -721,7 +742,7 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
                 raw_line = convertTextToRaw(dict, entry.msgstr,compaction_map)
             if len(raw_line) % 4 == 2:
                 #PADDING
-                #raw_line += b"\xCD\xCD"
+                raw_line += b"\xCD\xCD"
                 pass
             msg[line_number] = raw_line
 
@@ -731,7 +752,7 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
         bin = convertTextToRaw(dict, po[0].msgstr)
         if len(bin) % 4 == 2:
             #PADDING
-            #bin += b"\xCD\xCD"
+            bin += b"\xCD\xCD"
             pass
     source.close()
     out = open(binary_path, 'wb')
@@ -784,7 +805,6 @@ testRaw("""
 #testTextToHex("Testing")
 
 #testFind("はっぴい")
-#testRaw("""""")
 
 #my_dict = readFont("font-inject.txt", 0, INSERTION)
 
@@ -837,6 +857,40 @@ def genSaveText(txt):
     dict = readFont("font-inject-menus.txt",0, INSERTION)
     print(convertTextToRaw(dict, txt).hex())
 
+def getAllMSGPaths():
+    paths = []
+    for x in os.walk(MAP_DIR):
+        msg_path = os.path.join(x[0], "1.bin")
+        if not os.path.exists(msg_path):
+            continue
+        
+        paths.append(msg_path)
+    
+    return paths
+  
+def isVoice(msg):
+    if len(msg) != 8:
+        return False
+    
+    for x in msg:
+        if x < 0x30 or x > 0x39:
+            return False
+    
+    return True
+
+#getAllMSGPaths()
+
+def convertAllVoice():
+    paths = getAllMSGPaths()
+    
+    for path in paths:
+        text = convertToPO(path, MAP_MODE, voice = True)
+        stem = path.split("\\")[1]
+        file = open("VOICE\\MSG\\" + stem + ".txt", "w", encoding="utf8")
+        file.write(text)
+    return
+
+#convertAllVoice()
 #genSaveText("Menu\nWalk")
 
 #genSaveText("Game")

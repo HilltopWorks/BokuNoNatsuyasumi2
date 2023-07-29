@@ -105,10 +105,10 @@ voice_and_sub_end:
 
 
 ; ################         Enable debug mode            ####################
-.org 0x020a970
-	lui 	a0,0x28
-.org 0x20a978
-	addiu	a0, a0, -0x11b0
+;.org 0x020a970
+;	lui 	a0,0x28
+;.org 0x20a978
+;	addiu	a0, a0, -0x11b0
 
 
 ; ################         Removing the CRC Check            ####################
@@ -623,7 +623,7 @@ vert_menu_y_dist equ 0xF
 	li a0, 0x2		;2 is down, 0 is right
 
 ; Hikari No cursor X
-.org 0x27bc18
+.org 0x27bc18       ;SHARED!!
 	.word 0x108
 
 ; Hikari No cursor Y
@@ -657,11 +657,11 @@ vert_menu_y_dist equ 0xF
 
 .org 0x002616a0		;quiz options
 	.word 0x30		;Left X
-	.word 0x46		;Left Y
+	.word 0x72		;Left Y
 	.word 0xe0		;Mid X
 	.word 0x5c		;Mid Y
 	.word 0x180		;Right X
-	.word 0x72		;Right Y
+	.word 0x46		;Right Y
 
 .org 0x0027bcd0		;Cursor
 	.word 0x2D		;Left X
@@ -1384,10 +1384,10 @@ underwater_spacing equ 0x18
 	li a0, 0x17e		;Total tens X
 
 .org 0x001F1C34
-	li a1, 0xea			;date tens Y
+	li a1, 0xeb			;date tens Y
 
 .org 0x001F1C54
-	li a1, 0xea			;date ones Y
+	li a1, 0xeb			;date ones Y
 
 .org 0x001F1C3C
 	li a0, 0x1f8		;Date tens X
@@ -1481,10 +1481,10 @@ underwater_spacing equ 0x18
 	.word 0x7c
 	.word 0x30
 
-.org 0x0027bc18			;Cursor dims (Lx,Ly,Rx,Ry)
-	.word 0x112
+.org 0x27bc18			;Cursor dims (Lx,Ly,Rx,Ry)
+	.word 0x102
 	.word 0x60
-	.word 0x150
+	.word 0x140
 	.word 0x60
 
 .org 0x002615e0			;Label dims BUT SHARED

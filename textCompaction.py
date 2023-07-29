@@ -231,12 +231,14 @@ def mapCompactions(po, table_num):
                 print("Saved:",best_compactions[0][1],"bytes", "Total Savings:", total_savings , "bytes")
                 break
 
-            elif row_number == END_ROW - START_ROW:
+            elif row_number == (END_ROW - START_ROW - 1):
                 #No space for compaction, skip it
+                po = remove_string_from_po(po, next_string)
                 best_compactions.pop(0)
             else:
                 #Try next row
                 continue
+        
         
         if len(best_compactions) == 0:
             #print("Total Savings:", total_savings , "bytes")
