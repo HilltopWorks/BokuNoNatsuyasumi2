@@ -1,0 +1,9 @@
+gametitle=Boku no Natsuyasumi 2 English Patch
+comment=Fixes text in high resolution render modes
+
+PCSX2 High Resolution Fix
+patch=1,EE,2018077c,extended,24C30016
+patch=1,EE,20180794,extended,24820016
+patch=1,EE,20290588,extended,00000000
+patch=1,EE,2029057C,extended,24C50016
+patch=1,EE,202905D0,extended,244200B0
