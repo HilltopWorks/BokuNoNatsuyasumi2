@@ -121,7 +121,8 @@ def copy_POs():
 ADDITIONS = {               #Addition file,                             parent file,        offset
             "diary":        ["ADDS\\diary-1.bin",               "IMG_RIP_EDITS\\diary.bin", 0x80 ],
             "saveload-0":   ["ADDS\\saveload-0.bin", "IMG_RIP_EDITS\\system\\saveload.bin", 0x100],
-            "saveload-1":   ["ADDS\\saveload-1.bin", "IMG_RIP_EDITS\\system\\saveload.bin", 0x180]
+            "saveload-1":   ["ADDS\\saveload-1.bin", "IMG_RIP_EDITS\\system\\saveload.bin", 0x180],
+            "saveload-2":   ["ADDS\\saveload-2.bin", "IMG_RIP_EDITS\\system\\saveload.bin", 0x700]
             }
 
 def insertAdditions(addition):
@@ -219,7 +220,7 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = FULL
+mode = ASM_ONLY
 
 
 build(mode)

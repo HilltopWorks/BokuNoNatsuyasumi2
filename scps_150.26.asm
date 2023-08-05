@@ -104,6 +104,19 @@ voice_and_sub_end:
 	jal voice_and_sub
 
 
+; ################			Fixing memory card text
+.org 0x001a04b0
+	sb v1, 0x1c(s1)
+.skip 4
+	sb a0, 0x5(t1)
+.org 0x001a04d0
+	sb v1, 0x1e(s1)
+.skip 0xC
+	sb v0, 0x1f(s1)
+
+.org 0x0029a058
+.import "ADDS\save_string.bin"
+
 ; ################         Enable debug mode            ####################
 ;.org 0x020a970
 ;	lui 	a0,0x28
@@ -166,14 +179,14 @@ mfw equ 0xa ;Menu font width
 
 ; Hori text texel 23->22 fix
 .org 0x018077c					;Actual Menus texel width
-	addiu v1, a2, 0x16
+	addiu v1, a2, 0x17			;EMULATOR PATCH THIS(16)
 .org 0x0180794					;Actual Menus texel height
-	addiu v0, a0, 0x16
+	addiu v0, a0, 0x17			;EMULATOR PATCH THIS(16)
 ; Char H/W 23->22 fix
 .org 0x01807d0 					;Actual Menus glyph width
-	addiu  v1,s2, 0x16
+	addiu  v1,s2, 0x16			
 .org 0x01807e4					;Actual Menus glyph height
-	addiu  v1,s3, 0x16
+	addiu  v1,s3, 0x16			
 
 ;Insect baselines
 
@@ -1704,9 +1717,10 @@ font_loop:
 	nop					;-
 
 texel_width:
-	addiu	a1,a2,0x16	; a1 = v_bottom
+	addiu	a1,a2,0x17	; a1 = v_bottom			;EMULATOR(16): Change this to 0x17
 	sll		a3,a3,0x04	; a3 = u_gpu
 	addu	a0,a3,v1	; a0 = u_gpu_right
+	addiu 	a0,a0,0x10	; EMULATOR PATCH THIS(NOP) restore PS2 char width
 	sll		a1,a1,0x04	; a1 = v_gpu_bottom
 	;sll		a0,a0,0x04  ; a0 = u_gpu_right
 
@@ -1728,7 +1742,7 @@ texel_width:
 	sh	v0,0x12(gpu_call)	; STORE y_gpu
 	addiu	v0, v0, -shadow_y
 	sh	v0, 0x3A(gpu_call)	; STORE y_gpu SHADOW
-	addiu	v0,v0,0xB0		; v0 = y_gpu + 0xb8 aka y_gpu_bottom
+	addiu	v0,v0,0xB8		; v0 = y_gpu + 0xb8 aka y_gpu_bottom EMULATOR?(b0)?
 	sh  v0, 0x4A(gpu_call)	; STORE y_gpu_bottom SHADOW
 	addiu	v0, v0, shadow_y
 	jal	get_fb_x			; v0 = frame_buffer_x
