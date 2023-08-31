@@ -905,7 +905,7 @@ def convertAllVoice():
 #print(len(n))
 #print(n.hex())
 #injectPO("binary_path", "boku-no-natsuyasumi-2/m_a01000/MAP/en/M_A01000.po")
-#print(convertTextToRaw(readFont("font.txt",0, INSERTION), "降りる").hex())
+#print(convertTextToRaw(readFont("font.txt",0, INSERTION), "この風景").hex())
 #dict = readFont("font.txt",0)
 #testMAPs()
 #extractMAPs()

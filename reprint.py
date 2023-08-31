@@ -419,7 +419,7 @@ def getBoundedStringImage(string,im_font,baseline_adj = 0, emphasis = 1.0, max_c
     #test_field_im.show()
     return test_field_im
 
-def printFont(font_im, font_map, im_font, kern=False, monospace=-1, baseline_adj=0, emphasis=1.0):
+def printFont(font_im, font_map, im_font, kern=False, monospace=-1, baseline_adj=0, emphasis=1.0, max_width=-1):
     '''Prints the given font text and compaction map into an image'''
     #src_img = Image.open(img_path)
 
@@ -433,8 +433,14 @@ def printFont(font_im, font_map, im_font, kern=False, monospace=-1, baseline_adj
         x_coord = column * CELL_WIDTH
         y_coord = row * CELL_WIDTH
 
-
+        
         entry_im = getBoundedStringImage(entry,im_font,baseline_adj, emphasis)
+        
+        #Crop char if too wide
+        if max_width > 0 and entry_im.width > max_width:
+            print(entry + " is too wide")
+            entry_im = entry_im.crop((0,0,max_width, entry_im.height))
+        
         if kern == True:
             kerningIndex = column + row*N_COLUMNS
             if monospace == -1:
@@ -454,13 +460,14 @@ def printAllFonts():
     font_im = Image.new("RGBA", font_size, (0, 0, 0, 0))
 
     for entry in FONTS:
+        print(entry)
         entry = FONTS[entry]
         imFont = ImageFont.truetype(entry["typeface"], entry["font_size"], layout_engine=ImageFont.LAYOUT_RAQM)
         map = getFontMap(entry["font_map"], entry["row_offset"])
         printFont(font_im, map, imFont, kern=entry["kern"],
                              monospace=entry["monospace"], 
                              baseline_adj=entry["baseline_adjust"],
-                             emphasis=entry["emphasis"])
+                             emphasis=entry["emphasis"], max_width=22)
         
         #font_im.paste(font_im, (0,0))
     #font_im.show()
@@ -610,7 +617,7 @@ my bed, I can hear
 the sound of the
 waves."""
 
-
+printAllFonts()
 #printSumo(TestOutput=True)
 #previewSumo()
 #printAllBugInfo()

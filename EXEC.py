@@ -98,6 +98,10 @@ def pullScript():
     os.system("git fetch")
     os.system("git reset --hard HEAD")
     os.system("git merge origin/main")
+    os.chdir("..\\m_a01000")
+    os.system("git fetch")
+    os.system("git reset --hard HEAD")
+    os.system("git merge origin/main")
     os.chdir("..\\..")
     return
 
@@ -220,7 +224,7 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = ASM_ONLY
+mode = FULL
 
 
 build(mode)
