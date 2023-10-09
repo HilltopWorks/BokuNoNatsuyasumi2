@@ -617,7 +617,7 @@ my bed, I can hear
 the sound of the
 waves."""
 
-printAllFonts()
+#printAllFonts()
 #printSumo(TestOutput=True)
 #previewSumo()
 #printAllBugInfo()

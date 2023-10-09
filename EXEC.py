@@ -176,7 +176,7 @@ def build(mode):
 
         #Pack graphics
         print("____BUILD: Injecting graphics")
-        TIM2.injectAll()
+        #TIM2.injectAll()
 
         #Pack text
         print("____BUILD: Injecting MAP scripts")
