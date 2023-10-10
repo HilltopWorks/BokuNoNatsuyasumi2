@@ -1,0 +1,189 @@
+
+--- MAP_RIP\M_A27002\1.bin:0x58:0 ---
+0x6  PROG  : 32000000
+0x4  JMPM  : 420041323700
+0xa  MAP   : 000041323700ffff0000
+0x15 ANM   : 02003cff1400
+0x17 LOOK  : b6f4008000000014
+0x1f MWT   : 0000
+0x7  GO    : 040085ff0000b1000000
+0x1f MWT   : 0000
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0xf  SE    : 000405ffcdcd
+0x16 BGANM : 0000
+0x1a BWT   : 00000100
+0x1e WAT   : 1e00
+0xb  CMAP  : 41323700
+0xd  CMWT  : 
+0x16 BGANM : 0000
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 0a00
+0xf  SE    : 000406ffcdcd
+0x16 BGANM : 6400
+0x3  JMP   : 3e00
+0xa  MAP   : 000041313900ffff0000
+0x15 ANM   : 02003cff1400
+0x17 LOOK  : c409008000000014
+0x1f MWT   : 0000
+0x7  GO    : 0400a4ff000037010000
+0x1f MWT   : 0000
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0xf  SE    : 000405ffcdcd
+0x16 BGANM : 0000
+0x1a BWT   : 00000100
+0x1e WAT   : 1e00
+0xb  CMAP  : 41313900
+0xd  CMWT  : 
+0x16 BGANM : 0000
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 0a00
+0xf  SE    : 000406ffcdcd
+0x16 BGANM : 6400
+0x15 ANM   : 01003cff0500
+0x1e WAT   : 0500
+0x18 END   : 
+
+--- MAP_RIP\M_A27002\1.bin:0x180:1 ---
+0x17 LOOK  : 0801000033020010
+0x1f MWT   : 0000
+0x15 ANM   : 30003cff1400
+0x1e WAT   : 1400
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『ス—パ—のレシ—トが
+ 捨てられている{WAIT=0xb4}
+ ジェットサイダ—
+ 三十八円 と書いてある』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 6500
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_A27002\1.bin:0x23c:2 ---
+0x2  IPROG : 34006400
+0x2  IPROG : 34006500
+0x2  IPROG : 4a000400
+0x5  JMPE  : 2c009c000100
+0x2  IPROG : 4a000300
+0x5  JMPE  : 25009c000100
+0x17 LOOK  : 4e010000fb010010
+0x1f MWT   : 0000
+0x15 ANM   : 30003cff1400
+0x1e WAT   : 1400
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『1時間↓二十円 と書いてある』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 6500
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x3  JMP   : 1C00
+0x2  IPROG : 34000000
+0x2  IPROG : 34000100
+0x15 ANM   : 07003cff1400
+0x19 AWT   : 0000
+0x15 ANM   : 01003cfe1400
+0x1d WIN   : 0000
+0x10 XAMSG : 01cd7a17010affcd
+-REPLACE  = TRUE
+-MSG ID   = 1
+-VOICE ID = 01601000
+-XAMSG:
+*BONG*
+Quiz Show Host:
+So sorry, that's incorrect."{WAIT=0xE6}
+Contestant:
+"Oh well. Can I go home now?"
+--------------------------
+0x1b XWT   : 
+0x1d WIN   : 0100
+0x18 END   : 
+
+--- MAP_RIP\M_A27002\1.bin:0x328:3 ---
+0x17 LOOK  : 24fa008000000014
+0x1f MWT   : 0000
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 3200
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『風にゆれる
+ 公園の木々が見える』
+--------------------------
+0x28 MSGWT : 2c01
+0x1d WIN   : 6500
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_A27002\1.bin:0x3b0:4 ---
+0x2  IPROG : 1f000c00
+0xa  MAP   : 000049343000ffff0000
+0x15 ANM   : 02003cff0000
+0x7  GO    : 03001b00000039010000
+0x17 LOOK  : 0ffa008000000014
+0x1f MWT   : 0000
+0x15 ANM   : 30003cff1400
+0x1e WAT   : 1400
+0xb  CMAP  : 49343000
+0x2b CMPOS : 00000000000000000000ff00
+0xd  CMWT  : 
+0x13 FLAG  : 1a000100
+0x6  PROG  : 19001900
+0xa  MAP   : 000041323700ffff0000
+0x6  PROG  : 14000000
+0xb  CMAP  : 41323700
+0x2b CMPOS : 00000000000000000000ff01
+0xd  CMWT  : 
+0x15 ANM   : 0b003cff1400
+0x1e WAT   : 1400
+0xf  SE    : 00010b7fcdcd
+0x1d WIN   : 6400
+0x11 MSG   : 00cd0000000000cd0100
+-REPLACE  = FALSE
+-MSG ID   = 0
+-MSG:
+『静江が置いていった鍵 を
+ 手に入れた』
+--------------------------
+0x28 MSGWT : 7800
+0x1d WIN   : 6500
+0x15 ANM   : 0b003cfe1400
+0x1e WAT   : 1e00
+0x15 ANM   : 01003cfe1400
+0x17 LOOK  : aa00008000000014
+0x1e WAT   : 1400
+0x23 FACE  : 0b00
+0x15 ANM   : 130028fe0a00
+0x1e WAT   : 2d00
+0x15 ANM   : 01003cfe1400
+0x1e WAT   : 0a00
+0x23 FACE  : 0000
+0x15 ANM   : 01003cff1400
+0x1e WAT   : 1400
+0x18 END   : 
+
+--- MAP_RIP\M_A27002\1.bin:0x534:5 ---
+0x2  IPROG : 1b000200
+0x5  JMPE  : 0d006a001800
+0x0  POS   : 640000006a0039f422010402
+0x3  JMP   : 0900
+0x0  POS   : 640000006a0039f41c010402
+0x18 END   : 
+
+--- MAP_RIP\M_A27002\1.bin:0x5e0:6 ---
+0x0  POS   : 460000005b00530615010402
+0x18 END   : 

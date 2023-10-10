@@ -75,12 +75,23 @@
 0x15 ANM   : 0a003cfe1400
 0x2  IPROG : 46000000
 0x16 BGANM : 0600
-0x12 XA    : 01cd71170001ffcd
--REPLACE  = FALSE
+0x1d WIN   : 0000
+0x10 XAMSG : 01cd71170001ffcd
+-REPLACE  = TRUE
 -MSG ID   = 0
 -VOICE ID = 01600100
+-XAMSG:
+Announcer:
+"After the second inning, Asozan South
+managed to respond to Senboku High's
+ace pitcher Hoshigaki's mixup pitches.{WAIT=0x1D0}
+They scored big and cinched a clear
+victory 7 to 2. We will be live again
+tomorrow at Koushien Stadium for the
+All Japan Summer Baseball Tournament."
 --------------------------
 0x1b XWT   : 
+0x1d WIN   : 0100
 0x6  PROG  : 46000000
 0x18 END   : 
 
@@ -100,12 +111,22 @@
 0x15 ANM   : 0a003cfe1400
 0x2  IPROG : 46000000
 0x16 BGANM : 0a00
-0x12 XA    : 01cd75170005ffcd
--REPLACE  = FALSE
+0x1d WIN   : 0000
+0x10 XAMSG : 01cd75170005ffcd
+-REPLACE  = TRUE
 -MSG ID   = 0
 -VOICE ID = 01600500
+-XAMSG:
+Reporter:
+"Our next story, the unsolved
+robbery of gold ingots in transit
+in Yokosuka seven years ago{WAIT=0x1F4}
+will reach the statute of limitations
+on the twenty-ninth of this month
+with no arrests thus far."
 --------------------------
 0x1b XWT   : 
+0x1d WIN   : 0100
 0x16 BGANM : 6e00
 0x6  PROG  : 46000000
 0x18 END   : 
@@ -127,12 +148,27 @@
 0x19 AWT   : 0000
 0x15 ANM   : 0a003cfe1400
 0x2  IPROG : 46000000
-0x12 XA    : 01cd76170006ffcd
--REPLACE  = FALSE
+0x1d WIN   : 0000
+0x10 XAMSG : 01cd76170006ffcd
+-REPLACE  = TRUE
 -MSG ID   = 0
 -VOICE ID = 01600600
+-XAMSG:
+Reporter:
+"Next on the news, the suspect
+behind the Yokosuka Bank robbery
+was arrested yesterday evening.{WAIT=0x16a}
+Seven years ago, the suspect
+attacked a bank vehicle with a
+flare gun, making off with
+50,000,000 yen worth of gold bars.{WAIT=0x292}
+For crimes of robbery without
+injury or death, the statute of
+limitations is set at seven years,
+which happens to be today, the 29th."
 --------------------------
 0x1b XWT   : 
+0x1d WIN   : 0100
 0x5  JMPE  : 04006a000200
 0x6  PROG  : 46000000
 0x18 END   : 
@@ -154,12 +190,18 @@
 0x2  IPROG : 46000000
 0x6  PROG  : 46000100
 0x16 BGANM : 0500
-0x12 XA    : 01cd77170007ffcd
--REPLACE  = FALSE
+0x1d WIN   : 0000
+0x10 XAMSG : 01cd77170007ffcd
+-REPLACE  = TRUE
 -MSG ID   = 0
 -VOICE ID = 01600700
+-XAMSG:
+Robot Pilot:
+"F-Father, this robot
+is incredible!"
 --------------------------
 0x1b XWT   : 
+0x1d WIN   : 0100
 0x16 BGANM : 6900
 0x6  PROG  : 46000000
 0x18 END   : 
@@ -208,12 +250,19 @@
 0x2  IPROG : 46000000
 0x6  PROG  : 46000100
 0x16 BGANM : 0300
-0x12 XA    : 01cd79170009ffcd
--REPLACE  = FALSE
+0x1d WIN   : 0000
+0x10 XAMSG : 01cd79170009ffcd
+-REPLACE  = TRUE
 -MSG ID   = 0
 -VOICE ID = 01600900
+-XAMSG:
+Announcer:
+"And he's down! That's gotta hurt!
+Death Ray Machine's already got
+him in the camel clutch, folks!"
 --------------------------
 0x1b XWT   : 
+0x1d WIN   : 0100
 0x16 BGANM : 6700
 0x6  PROG  : 46000000
 0x18 END   : 
