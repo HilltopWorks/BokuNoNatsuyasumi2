@@ -162,21 +162,21 @@ def insertAllAdditions():
 def build(mode):
     if mode > 0:
         #Pull text from weblate
-        pullScript()
-        copy_POs()
+        #pullScript()
+        #copy_POs()
 
         #Print automated graphics
         print("____BUILD: Printing graphics")
         reprint.printAllCalendars()
         reprint.printAllBottleCaps()
         reprint.printAllDiary()
-        reprint.printAllBugInfo()
+        #reprint.printAllBugInfo()
         reprint.printSumo()
         compaction_map = reprint.printAllFonts()
 
         #Pack graphics
         print("____BUILD: Injecting graphics")
-        #TIM2.injectAll()
+        TIM2.injectAll()
 
         #Pack text
         print("____BUILD: Injecting MAP scripts")
@@ -206,6 +206,7 @@ def build(mode):
     #Generate sumo text
     print("____BUILD: Generating sumo text bin")
     voice.genSumoVoiceBin()  
+    
     #Apply EXE ASM
     print("____BUILD: Applying ASM patches")
     os.remove("ISO_EDITS\\scps_150.26")
@@ -224,7 +225,7 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = FULL
+mode = ASM_ONLY
 
 
 build(mode)

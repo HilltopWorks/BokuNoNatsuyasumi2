@@ -35,7 +35,7 @@ diary_base_path = "FONT/diary_base.png"
 
 #Font
 SPACING = 2
-SPACE_WIDTH = 6
+SPACE_WIDTH = 5
 
 START_ROW = 15
 END_ROW = 45
