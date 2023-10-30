@@ -68,15 +68,22 @@ MENU_FONT_FILES = [ "fishing.msg","system.msg", "namemsg.msg", "quiz.msg", "memo
                     "nick_name_menu.msg","item.msg","item_info.msg","item_name.msg","okan_info.msg","phot_info.msg",
                     "config.msg","technique.msg"]
 
-MENU_TEXT_EXCEPTIONS = ["いいえ\nはい\n{STOP}", "「\n買いもの\n買う\nやめる\nふつうの牛乳\n40円\nコ一ヒ一牛乳\n40円\nジェットサイダ一\n40円\n」",
+MENU_TEXT_EXCEPTIONS = ["いいえ\nはい\n{STOP}",
+                        "晩御飯クイズ\n拾った百円を返す\n{STOP}",
+                        "「\n買いもの\n買う\nやめる\nふつうの牛乳\n40円\nコ一ヒ一牛乳\n40円\nジェットサイダ一\n40円\n」",
                         "「\n買いもの\n買う\nやめる\nチュ一チュ一アイス\n10円\nオレンジガム\n10円\nベ一スボ一ルバ一\n10円\n串イカ\n10円\n串カステラ\n10円\nカツ\n10円\nボ一ルガム\n10円\nクリ一ム\n10円\n梅ジャム・せんべい\n20円\nベビ一スタ一ラ一メン\n20円\n北極バ一\n30円\nタマゴアイス\n30円\nしらゆめ\n50円\nメロンアイス\n50円\nバニラアイス\n50円\n戦艦大和のプラモデル\n350円\n」",
                         "「\n買いもの\n買う\nやめる\nふつうの牛乳\n40円\nコ一ヒ一牛乳\n40円\nジェットサイダ一\n40円\n」",
-                        "絵日記\n昆虫採集セット\n{STOP}", "「\n何が訊きたい?\nノコギリクワガタ\nコクワガタ\nオニクワガタ\nキンオニクワガタ\nキンオニの相性\nアカアシクワガタ\nネブトクワガタ\nミヤマクワガタ\nミヤマクワガタの技\nヒラタクワガタ\nフジミヤマクワガタ\nカブトムシ♀\nカブトムシ♀の相性\nカブトムシ\nオオクワガタ♀\nオオクワガタ\nコカマキリ\nオオカマキリ\nオレのオオクワガタ\n」",
+                        "絵日記\n昆虫採集セット\n{STOP}",
+                        "「\n何が訊きたい?\nノコギリクワガタ\nコクワガタ\nオニクワガタ\nキンオニクワガタ\nキンオニの相性\nアカアシクワガタ\nネブトクワガタ\nミヤマクワガタ\nミヤマクワガタの技\nヒラタクワガタ\nフジミヤマクワガタ\nカブトムシ♀\nカブトムシ♀の相性\nカブトムシ\nオオクワガタ♀\nオオクワガタ\nコカマキリ\nオオカマキリ\nオレのオオクワガタ\n」",
                         "「\n何が訊きたい?\n基地にタケシたちを呼ぶ\n虫相撲に出せるのは\n甲虫の採り方\n砂糖水の作り方\n虫は成長する\n虫を叩く\n負けた虫はどうなるの\n虫交換ノ一ト\n虫交換のコツ\n虫ランクとは\n10勝したら\n虫のムズムズ\n技レベルとは\nキングとは\nダッシュ!\n虫の相性とその研究\n」"]
 
 BUGGED_LINES = {"グレ一ト\n {STOP}"     :"Great\n{STOP}",
                 "黒い\n {STOP}"         :"Black\n {STOP}",
-                "ハリケ一ン\n{STOP}"    :"Hurricane\n{STOP}"}
+                "ハリケ一ン\n{STOP}"    :"Hurricane\n{STOP}",
+                "マシンガン\n{STOP}"     :"Machine Gun\n{STOP}",
+                "大将\n {STOP}"       :"Captain\n {STOP}",
+                "ちゃん\n{STOP}"     :"-chan\n{STOP}"
+                }
 
 ALT_NEWLINE_FILES = ["turi_info.msg", "phot_info.msg", "okan_info.msg", "item_info.msg", "insect_menu.msg",
                      "fishing.msg", "fish_info.msg"]
@@ -665,6 +672,8 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
     file_name = binary_path.split("\\")[-1]
     all_lines = {}
 
+    logfile = open("log\\" + po_path.split("\\")[-1], "w", encoding="utf-8")
+    
     for entry in po:
         if entry.msgstr != "":
             all_lines[entry.msgid] = entry.msgstr
@@ -678,8 +687,11 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
             table_number = int(split_table[0].split(":")[1])
             line_number = int(split_table[1].split(":")[1])
 
-            if entry.msgid in all_lines:
+            if entry.msgid in all_lines and entry.msgstr == "":
                 entry.msgstr = all_lines[entry.msgid]
+                logfile.write(f"Map Line {table_number} of table {table_number} in file {po_path}\n")
+                logfile.write(entry.msgid + "\n")
+                logfile.write(entry.msgstr + "\n")
 
             if entry.msgstr == "":
                 continue
@@ -709,6 +721,14 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
             split_table = table_line.split("-")
             table_number = int(split_table[0].split(":")[1])
             line_number = int(split_table[1].split(":")[1])
+            
+            if entry.msgid in all_lines and entry.msgstr == "":
+                entry.msgstr = all_lines[entry.msgid]
+                logfile.write(f"MSG Line {table_number} of table {table_number} in file {po_path}\n")
+                logfile.write(entry.msgid + "\n")
+                logfile.write(entry.msgstr + "\n")
+                
+            
 
             if entry.msgstr == "":
                 continue
@@ -734,6 +754,12 @@ def injectPO(binary_path, po_path, mode, dict, compaction_map = -1):
             table_number = int(split_table[0].split(":")[1])
             line_number = int(split_table[1].split(":")[1])
 
+            if entry.msgid in all_lines and entry.msgstr == "":
+                entry.msgstr = all_lines[entry.msgid]
+                logfile.write(f"Offset Line {table_number} of table {table_number} in file {po_path}\n")
+                logfile.write(entry.msgid + "\n")
+                logfile.write(entry.msgstr + "\n")
+            
             if entry.msgstr == "":
                 continue
             

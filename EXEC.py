@@ -162,15 +162,15 @@ def insertAllAdditions():
 def build(mode):
     if mode > 0:
         #Pull text from weblate
-        #pullScript()
-        #copy_POs()
+        ####pullScript()
+        ####copy_POs()
 
         #Print automated graphics
         print("____BUILD: Printing graphics")
         reprint.printAllCalendars()
         reprint.printAllBottleCaps()
         reprint.printAllDiary()
-        #reprint.printAllBugInfo()
+        reprint.printAllBugInfo()
         reprint.printSumo()
         compaction_map = reprint.printAllFonts()
 
@@ -225,7 +225,7 @@ def build(mode):
 FULL = 1
 ASM_ONLY = 0
 
-mode = ASM_ONLY
+mode = FULL
 
 
 build(mode)

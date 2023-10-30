@@ -934,6 +934,9 @@ underwater_spacing equ 0x18
 .org 0x001C7328			;Cust name
 	li v0, 0xA			;Text kern position
 
+.org 0x001c73b8			;Cust name opponent
+	li v0, 0xA			;Text kern position
+
 .org 0x001C7450			
 	li a1, 0x38			;Size hundreds Y
 .org 0x001c7488
@@ -1025,7 +1028,7 @@ underwater_spacing equ 0x18
 	addiu a1, s6, 0x2 	;Sumo custom name count ones Y
 
 .org 0x001CE12C			;Engine assembling
-	addiu a1, 0x6c		;X (right aligned)
+	addiu a1, 0x74		;X (right aligned)
 .org 0x001CE0FC		
 	li v1, mfw			;spacing
 
@@ -1151,10 +1154,11 @@ underwater_spacing equ 0x18
 
 ;;;Red
 .org 0x001cc8f0
-	li a1, 0x1a8		;"Lvl" X
+	li a0, 0x1a8		;"Lvl" X
 	li a1, 0x131		;"Lvl" Y
 
 .org 0x001cbea8
+.org 0x001cc90c
 	li a1, 0x1c6		;level digit X
 
 .org 0x001CC744
@@ -1204,6 +1208,9 @@ underwater_spacing equ 0x18
 	li a1, 0x1c8		;level digit x white
 .org 0x001cbf40
 	li a1, 0x1c8		;level digit x red
+
+.org 0x001cbc0c
+	li a1, 0x100		;Value tens Y
 
 .org 0x001CBC44
 	li a1, 0x100		;Value tenths Y
@@ -1555,6 +1562,19 @@ decision_line_2_y equ 0xb4;0x58
 	addiu a1, fp, 0x164	;Cursor X
 	addiu a2, s7, 0x8e	;Cursor Y
 
+;Coin Return/Quiz Menu
+;;Lettering
+.org 0x2615F0
+	.word 0x6E
+	.word 0x78
+	.skip 4
+	.word 0x78
+;;Cursor
+.org 0x27bc28
+	.word 0x88
+	.word 0x48
+	.word 0x19a
+	.word 0x48
 
 ;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -1717,7 +1737,7 @@ font_loop:
 	nop					;-
 
 texel_width:
-	addiu	a1,a2,0x17	; a1 = v_bottom			;EMULATOR(16): Change this to 0x17
+	addiu	a1,a2,0x17	; a1 = v_bottom			;EMULATOR PATCH THIS(16): Change this to 0x17
 	sll		a3,a3,0x04	; a3 = u_gpu
 	addu	a0,a3,v1	; a0 = u_gpu_right
 	addiu 	a0,a0,0x10	; EMULATOR PATCH THIS(NOP) restore PS2 char width
@@ -1794,7 +1814,7 @@ x_right:
 	
 	sll v1, v1, 0x4			;1 pixel = 0x10 value
 	jr a0					;return
-	nop
+	nop						;EMULATOR PATCH THIS addiu v1, v1, -0x10
 
 
 .org set_kerning
