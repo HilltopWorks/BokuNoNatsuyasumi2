@@ -169,7 +169,7 @@ def build(mode):
         print("____BUILD: Printing graphics")
         reprint.printAllCalendars()
         reprint.printAllBottleCaps()
-        reprint.printAllDiary()
+        #reprint.printAllDiary()
         reprint.printAllBugInfo()
         reprint.printSumo()
         compaction_map = reprint.printAllFonts()
